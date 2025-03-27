@@ -13,6 +13,7 @@ kotlin {
             dependencies {
                 //Modules
                 implementation(projects.shared.utils)
+                implementation(projects.shared.resources)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)

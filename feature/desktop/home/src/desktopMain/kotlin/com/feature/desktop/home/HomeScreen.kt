@@ -44,6 +44,9 @@ import com.shared.utils.routes.RoutesHome
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import com.shared.resources.Res
+import com.shared.resources.*
+import com.shared.ui.TextFieldCustom
 
 @Composable
 fun HomeScreen(

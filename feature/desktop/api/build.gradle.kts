@@ -14,6 +14,7 @@ kotlin {
                 //Modules
                 implementation(projects.shared.utils)
                 implementation(projects.feature.desktop.start)
+                implementation(projects.feature.desktop.home)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)

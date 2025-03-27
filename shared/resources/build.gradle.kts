@@ -11,7 +11,9 @@ compose.resources {
 }
 
 kotlin {
+    jvm("desktop")
     sourceSets {
+        val desktopMain by getting
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
@@ -23,12 +25,6 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtime.compose)
-                implementation(libs.androidx.navigation)
-                implementation(libs.qr.kit)
-                implementation(libs.koalaplot.core)
-                implementation(libs.koin.core)
-                implementation(libs.koin.compose)
-                implementation(libs.koin.composeVM)
                 implementation(compose.uiTooling)
             }
         }
@@ -37,6 +33,10 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
             }
+        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
