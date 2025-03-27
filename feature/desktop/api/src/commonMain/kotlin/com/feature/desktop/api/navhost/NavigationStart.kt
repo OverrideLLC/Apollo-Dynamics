@@ -1,4 +1,4 @@
-package com.feature.desktop.api
+package com.feature.desktop.api.navhost
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

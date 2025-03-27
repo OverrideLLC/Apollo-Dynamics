@@ -34,6 +34,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(projects.feature.desktop.api)
+            implementation(projects.shared.resources)
         }
         androidMain.dependencies {
             implementation(compose.preview)

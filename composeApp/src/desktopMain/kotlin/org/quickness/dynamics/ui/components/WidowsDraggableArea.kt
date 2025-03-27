@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -16,14 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
+import com.shared.resources.LogoBlancoQuickness
+import com.shared.resources.Res
+import com.shared.resources.check_box_outline_blank_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.remove_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
-import org.quickness.dynamics.ui.theme.onBackground
-import org.quickness.dynamics.ui.theme.tertiary
-import quicknessdynamics.composeapp.generated.resources.LogoBlancoQuickness
-import quicknessdynamics.composeapp.generated.resources.Res
-import quicknessdynamics.composeapp.generated.resources.check_box_outline_blank_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.remove_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 
 @Composable
 fun TopWindows(
