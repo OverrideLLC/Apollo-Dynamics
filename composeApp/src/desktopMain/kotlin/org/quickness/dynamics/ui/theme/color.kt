@@ -3,24 +3,24 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xFF5ce1e6) // Mantenido como está
+val primary: Color = Color(0xFF66ff66) // Mantenido como está
 val onPrimary: Color = Color(0xFF003f43) // Contraste para Primary, tono oscuro relacionado
 val primaryContainer: Color = Color(0xFF004f53) // Más oscuro que Primary, para fondos contenedores
 val onPrimaryContainer: Color = Color(0xFFb6eff3) // Contraste claro sobre el contenedor primario
 val inversePrimary: Color = Color(0xFFb6eff3) // Similar a onPrimaryContainer, usado en inversiones
 
-val secondary: Color = Color(0xFF64a1a3) // Un tono relacionado pero más apagado
+val secondary: Color = Color(0xff000000) // Un tono relacionado pero más apagado
 val onSecondary: Color = Color(0xFFfefefe) // Mantenido como está
 val secondaryContainer: Color = Color(0xFF004d51) // Tono oscuro relacionado con Secondary
 val onSecondaryContainer: Color = Color(0xFFcfe8e8) // Contraste claro para contenedores secundarios
 
-val tertiary: Color = Color(0xFFFFFFFF) // Mantenido como está
+val tertiary: Color = Color(0xff000000) // Mantenido como está
 val onTertiary: Color = Color(0xFF4a4a4a) // Buen contraste con blanco, tono neutro oscuro
 val tertiaryContainer: Color = Color(0xFFd9d9d9) // Tono gris claro para contenedores terciarios
 val onTertiaryContainer: Color = Color(0xFF2a2a2a) // Contraste oscuro para contenedores claros
 
-val background: Color = Color(0xFF0f0f0f) // Color de fondo oscuro agradable
-val onBackground: Color = Color(0xFF121212) // Mantenido como está
+val background: Color = Color(0xffffffff) // Color de fondo oscuro agradable
+val onBackground: Color = Color(0xFFfefefe) // Mantenido como está
 
 val surface: Color = Color(0xFF1e1e1e) // Superficie ligeramente más clara que el fondo
 val onSurface: Color = Color(0xFFe0e0e0) // Texto claro sobre superficie

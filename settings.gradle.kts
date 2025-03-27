@@ -31,3 +31,9 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":feature:desktop:start")
+include(":shared:utils")
+include(":feature:desktop:api")
+include(":feature:desktop:home")
+include(":shared:ui")
+include(":shared:resources")

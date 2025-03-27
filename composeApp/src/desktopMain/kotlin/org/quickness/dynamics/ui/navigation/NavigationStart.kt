@@ -5,7 +5,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.quickness.dynamics.ui.screens.home.HomeScreen
-import org.quickness.dynamics.ui.screens.login.LoginScreen
 import org.quickness.dynamics.utils.routes.RoutesStart
 
 @Composable
@@ -15,9 +14,6 @@ fun NavigationStart() {
         navController = navHost,
         startDestination = RoutesStart.Login.route
     ) {
-        composable(RoutesStart.Login.route) {
-            LoginScreen(navHost)
-        }
         composable(RoutesStart.Home.route) {
             HomeScreen()
         }
