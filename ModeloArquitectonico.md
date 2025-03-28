@@ -41,9 +41,8 @@ El proyecto está organizado en los siguientes módulos Gradle:
 * **`feature`:**
 * Módulo contenedor para las funcionalidades específicas de la aplicación.
     * **`desktop`:**
-* *Rol a clarificar:* ¿Lógica específica de Desktop para features? ¿Componentes UI de Compose compartidos solo en Desktop? ¿Coordinación de features en Desktop?
+* * Desktop:
     * **`api`:** (Dentro de `feature/desktop`)
-    * *Rol a clarificar:* ¿Define interfaces/contratos que las features exponen? ¿APIs específicas consumidas/provistas por `feature/desktop`?
     * **`home`:**
 * Módulo de la funcionalidad "Home".
     * Contiene UI (Composables), ViewModel, Casos de Uso y lógica de datos específicos para esta feature.
