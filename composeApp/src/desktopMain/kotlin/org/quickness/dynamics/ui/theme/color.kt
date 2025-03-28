@@ -3,7 +3,7 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xFF66ff66) // Mantenido como está
+val primary: Color = Color(0xff75cd61) // Mantenido como está
 val onPrimary: Color = Color(0xFF003f43) // Contraste para Primary, tono oscuro relacionado
 val primaryContainer: Color = Color(0xFF004f53) // Más oscuro que Primary, para fondos contenedores
 val onPrimaryContainer: Color = Color(0xFFb6eff3) // Contraste claro sobre el contenedor primario

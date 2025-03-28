@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.feature.desktop.home.ai.AiScreen
+import com.feature.desktop.home.dashboard.DashboardScreen
 import com.shared.utils.routes.RoutesHome
 
 @Composable
@@ -30,21 +32,10 @@ fun NavigationHome(navHost: NavHostController) {
         },
     ) {
         composable(RoutesHome.Dashboard.route) {
-            //DashboardScreen()
+            DashboardScreen()
         }
         composable(RoutesHome.Ai.route) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                Text(
-                    text = "AI",
-                    color = colorScheme.tertiary,
-                    fontSize = 50.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
+            AiScreen()
         }
         composable(RoutesHome.Settings.route) {
             Box(

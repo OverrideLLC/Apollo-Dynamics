@@ -16,11 +16,15 @@ import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.api.navhost.NavigationStart
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.swing.Swing
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
 import org.quickness.dynamics.ui.components.TopWindows
 import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
+import java.util.concurrent.Executors
 
 fun main() = application {
     initKoin()
@@ -39,7 +43,7 @@ fun main() = application {
     ) {
         KoinContext {
             QuicknessDynamicsTheme(
-                darkTheme = true
+                darkTheme = false
             ){
                 Column(
                     modifier = Modifier.fillMaxSize().background(colorScheme.background),

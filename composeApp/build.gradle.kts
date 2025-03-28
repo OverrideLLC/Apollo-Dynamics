@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(projects.feature.desktop.api)
             implementation(projects.shared.resources)
+            implementation(projects.network)
         }
         androidMain.dependencies {
             implementation(compose.preview)

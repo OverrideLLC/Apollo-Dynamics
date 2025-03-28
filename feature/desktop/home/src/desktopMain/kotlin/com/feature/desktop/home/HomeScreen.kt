@@ -71,7 +71,7 @@ private fun Screen(
             .background(
                 brush = BackgroundAnimated(
                     colorBackground = colorScheme.background,
-                    colorAnimated = colorScheme.primaryContainer
+                    colorAnimated = colorScheme.primary.copy(alpha = 0.7f)
                 )
             )
     )
@@ -114,7 +114,7 @@ private fun BottomBar(navController: NavHostController) {
                 .wrapContentHeight()
                 .width(width)
                 .background(
-                    color = colorScheme.primaryContainer.copy(alpha = 0.7f),
+                    color = colorScheme.onBackground.copy(alpha = 0.7f),
                     shape = RoundedCornerShape(32.dp)
                 )
                 .padding(16.dp)
@@ -201,14 +201,14 @@ private fun TopBar() {
         content = {
             Row(
                 modifier = Modifier
-                    .wrapContentHeight()
+                    .height(70.dp)
                     .width(width)
                     .hoverable(
                         interactionSource = hover,
                         enabled = true
                     )
                     .background(
-                        color = colorScheme.primaryContainer.copy(alpha = 0.7f),
+                        color = colorScheme.onBackground.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(32.dp)
                     ),
                 verticalAlignment = Alignment.CenterVertically,
@@ -288,7 +288,7 @@ private fun FloatingAction() {
                     .wrapContentWidth()
                     .height(size)
                     .background(
-                        color = colorScheme.primaryContainer.copy(alpha = 0.7f),
+                        color = colorScheme.onBackground.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(32.dp)
                     )
                     .padding(16.dp)
