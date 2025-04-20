@@ -1,7 +1,6 @@
 package com.feature.desktop.home.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
@@ -21,10 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.feature.desktop.home.ai.AiScreen
 
 @Composable
-internal fun Content(padding: PaddingValues) {
+internal fun Content(
+    padding: PaddingValues,
+    workspace: @Composable () -> Unit
+) {
     Column( // Cambia LazyColumn a Column
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +40,7 @@ internal fun Content(padding: PaddingValues) {
         ) {
             Spacer(modifier = Modifier.padding(16.dp))
             Task(modifier = Modifier.weight(0.3f).fillMaxHeight())
-            WorkSpace(modifier = Modifier.weight(0.4f).fillMaxHeight())
+            WorkSpace(modifier = Modifier.weight(0.4f).fillMaxHeight(), workspace = workspace)
             Tools(modifier = Modifier.weight(0.3f).fillMaxHeight())
             Spacer(modifier = Modifier.padding(16.dp))
         }
@@ -49,6 +49,7 @@ internal fun Content(padding: PaddingValues) {
 
 @Composable
 internal fun WorkSpace(
+    workspace: @Composable () -> Unit,
     modifier: Modifier
 ) {
     Box(
@@ -59,9 +60,7 @@ internal fun WorkSpace(
                 color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(10.dp)
             ),
-        content = {
-            AiScreen()
-        }
+        content = { workspace() }
     )
 }
 

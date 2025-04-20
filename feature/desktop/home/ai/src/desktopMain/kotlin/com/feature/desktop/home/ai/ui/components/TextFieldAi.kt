@@ -1,4 +1,4 @@
-package com.feature.desktop.home.components
+package com.feature.desktop.home.ai.ui.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -29,13 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.ai.AiViewModel
+import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.shared.resources.Res
 import com.shared.resources.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun TextFieldAi(
+internal fun TextFieldAi(
     value: String,
     state: AiViewModel.AiState,
     modifier: Modifier = Modifier,

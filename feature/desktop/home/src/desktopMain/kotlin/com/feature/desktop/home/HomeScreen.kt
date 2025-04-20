@@ -15,17 +15,23 @@ import com.shared.ui.BackgroundAnimated
 
 @Composable
 fun HomeScreen(
-    navigationHome: @Composable (navController: NavHostController) -> Unit
-) = Screen(navigationHome = navigationHome)
+    workspace: @Composable () -> Unit,
+) = Screen(
+    workspace = { workspace() }
+)
 
 @Composable
 internal fun Screen(
-    navigationHome: @Composable (navController: NavHostController) -> Unit
+    workspace: @Composable () -> Unit
 ) {
-    val navController = rememberNavController()
     Scaffold(
         floatingActionButton = { },
-        content = { padding -> Content(padding = padding) },
+        content = { padding ->
+            Content(
+                padding = padding,
+                workspace = { workspace() }
+            )
+        },
         topBar = { TopBar() },
         containerColor = Color.Transparent,
         modifier = Modifier

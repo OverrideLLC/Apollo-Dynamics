@@ -1,4 +1,4 @@
-package com.feature.desktop.home.components
+package com.feature.desktop.home.ai.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.utils.copyToClipboard
+import com.feature.desktop.home.ai.utils.copyToClipboard
 import com.shared.resources.Res
 import com.shared.resources.content_copy_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.terminal_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
@@ -46,7 +46,7 @@ import org.commonmark.parser.Parser
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MarkdownText(
+internal fun MarkdownText(
     markdown: String,
     color: Color,
     onRunCode: (String) -> Unit
@@ -75,7 +75,7 @@ fun MarkdownText(
 }
 
 @Composable
-private fun RenderNode(
+internal fun RenderNode(
     node: Node,
     textColor: Color,
     indentLevel: Int = 0,
@@ -245,7 +245,7 @@ private fun RenderNode(
 
 // Nuevo Composable para renderizar un elemento de lista (ListItem)
 @Composable
-private fun RenderListItem(itemNode: ListItem, marker: String, textColor: Color, indentLevel: Int) {
+internal fun RenderListItem(itemNode: ListItem, marker: String, textColor: Color, indentLevel: Int) {
     Row { // Usar Row para alinear marcador y contenido
         // Marcador (viñeta o número)
         Text(
@@ -275,9 +275,9 @@ private fun RenderListItem(itemNode: ListItem, marker: String, textColor: Color,
 
 
 // Función para nodos inline (sin cambios respecto a la versión anterior)
-private fun RenderInlineNode(node: Node, builder: AnnotatedString.Builder, textColor: Color) {
+internal fun RenderInlineNode(node: Node, builder: AnnotatedString.Builder, textColor: Color) {
     when (node) {
-        is org.commonmark.node.Text -> { // Asegurarse que es el Text de commonmark
+        is Text -> { // Asegurarse que es el Text de commonmark
             builder.pushStyle(
                 SpanStyle(
                     color = textColor,

@@ -1,4 +1,4 @@
-package com.feature.desktop.home.components
+package com.feature.desktop.home.ai.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -16,11 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.ai.AiViewModel
-
+import com.feature.desktop.home.ai.ui.screen.AiViewModel
 
 @Composable
-fun MessageBubble(
+internal fun MessageBubble(
     message: AiViewModel.Message,
     viewModel: AiViewModel
 ) {

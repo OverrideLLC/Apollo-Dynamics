@@ -1,4 +1,4 @@
-package com.feature.desktop.home.ai
+package com.feature.desktop.home.ai.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.AwtWindow
-import com.feature.desktop.home.components.Chat
-import com.feature.desktop.home.components.SelectedFilesPreview
-import com.feature.desktop.home.components.TextFieldAi
-import com.feature.desktop.home.components.fileChooserDialog
+import com.feature.desktop.home.ai.ui.components.Chat
+import com.feature.desktop.home.ai.ui.components.SelectedFilesPreview
+import com.feature.desktop.home.ai.ui.components.TextFieldAi
+import com.feature.desktop.home.ai.ui.components.fileChooserDialog
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import java.awt.Frame
@@ -29,7 +29,7 @@ import java.awt.Frame
 fun AiScreen() = Screen()
 
 @Composable
-private fun Screen(
+internal fun Screen(
     viewModel: AiViewModel = koinViewModel()
 ) {
     LaunchedEffect(Unit) { viewModel.loadData() }

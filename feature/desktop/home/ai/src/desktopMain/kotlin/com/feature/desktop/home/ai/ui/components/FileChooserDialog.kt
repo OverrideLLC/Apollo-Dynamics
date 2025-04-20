@@ -1,4 +1,4 @@
-package com.feature.desktop.home.components
+package com.feature.desktop.home.ai.ui.components
 
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.LocalScrollbarStyle
@@ -35,7 +35,7 @@ import javax.swing.JOptionPane
 
 private const val MAX_FILES_LIMIT = 4
 
-fun fileChooserDialog(
+internal fun fileChooserDialog(
     parent: Frame? = null,
     onResult: (result: List<File>) -> Unit
 ) {
@@ -60,7 +60,7 @@ fun fileChooserDialog(
 }
 
 @Composable
-fun SelectedFilesPreview(
+internal fun SelectedFilesPreview(
     files: List<File>,
     onRemoveFile: (File) -> Unit,
     modifier: Modifier = Modifier

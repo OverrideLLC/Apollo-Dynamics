@@ -1,4 +1,4 @@
-package com.feature.desktop.home.components
+package com.feature.desktop.home.ai.ui.components
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
@@ -26,14 +26,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.ai.AiViewModel
+import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.shared.resources.Res
 import com.shared.resources.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun Chat(
+internal fun Chat(
     messages: List<AiViewModel.Message>,
     isLoading: Boolean,
     modifier: Modifier = Modifier,

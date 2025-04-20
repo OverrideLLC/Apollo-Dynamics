@@ -1,4 +1,4 @@
-package com.feature.desktop.home.ai
+package com.feature.desktop.home.ai.ui.screen
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
@@ -7,10 +7,7 @@ import com.network.interfaces.GeminiRepository
 import dev.shreyaspatil.ai.client.generativeai.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
