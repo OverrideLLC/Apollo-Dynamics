@@ -12,6 +12,7 @@ import com.shared.resources.Raleway_Bold
 import com.shared.resources.Raleway_Medium
 import com.shared.resources.Raleway_Thin
 import com.shared.resources.Res
+import com.shared.resources.Roboto_Condensed_Regular
 import org.jetbrains.compose.resources.Font
 
 private val DarkColorScheme = darkColorScheme(
@@ -105,6 +106,7 @@ fun Typography(): Typography {
     val ralewayBold = FontFamily(Font(Res.font.Raleway_Bold))
     val ralewayMedium = FontFamily(Font(Res.font.Raleway_Medium))
     val ralewayThin = FontFamily(Font(Res.font.Raleway_Thin))
+    val robotoNormal = FontFamily(Font(Res.font.Roboto_Condensed_Regular))
 
     return Typography(
         titleLarge = TextStyle(fontFamily = ralewayBold),
@@ -117,7 +119,7 @@ fun Typography(): Typography {
         labelMedium = TextStyle(fontFamily = ralewayMedium),
         labelSmall = TextStyle(fontFamily = ralewayThin),
         displayLarge = TextStyle(fontFamily = ralewayBold),
-        displayMedium = TextStyle(fontFamily = ralewayMedium),
+        displayMedium = TextStyle(fontFamily = robotoNormal),
         displaySmall = TextStyle(fontFamily = ralewayThin),
         headlineLarge = TextStyle(fontFamily = ralewayBold),
         headlineMedium = TextStyle(fontFamily = ralewayMedium),

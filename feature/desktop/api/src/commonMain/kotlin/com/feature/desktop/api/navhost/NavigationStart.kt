@@ -10,7 +10,7 @@ import com.shared.utils.routes.RoutesStart
 
 @Composable
 fun NavigationStart(navController: NavHostController) {
-    NavHost(navController, startDestination = RoutesStart.Start.route) {
+    NavHost(navController, startDestination = RoutesStart.Home.route) {
         composable(RoutesStart.Start.route) { StartScreen(navController) }
         composable(RoutesStart.Home.route) {
             HomeScreen { navController ->

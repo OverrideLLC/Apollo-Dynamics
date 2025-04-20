@@ -13,7 +13,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.generativeai)
-                implementation(libs.generativeai.google.wasm.js)
+                api(libs.generativeai.google.wasm.js)
                 implementation(libs.koin.core)
             }
         }

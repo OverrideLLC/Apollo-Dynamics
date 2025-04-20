@@ -46,7 +46,9 @@ fun main() = application {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TopWindows(windowState = windowState) { windowState.isMinimized = true }
+                    TopWindows(windowState = windowState) {
+                        exitApplication()
+                    }
                     NavigationStart(
                         navController = rememberNavController()
                     )
