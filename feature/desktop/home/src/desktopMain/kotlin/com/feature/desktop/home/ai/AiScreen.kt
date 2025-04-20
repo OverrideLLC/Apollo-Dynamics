@@ -1,26 +1,19 @@
 package com.feature.desktop.home.ai
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -45,9 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.feature.desktop.home.components.MarkdownText
 import com.shared.resources.Res
 import com.shared.resources.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import kotlinx.coroutines.launch
@@ -65,28 +59,17 @@ private fun Screen(
     val messages = state.messages
     val newMessage = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                top = 70.dp,
-                bottom = 157.dp,
-                start = 100.dp,
-                end = 100.dp
-            ),
-        contentAlignment = Alignment.BottomCenter
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Chat(messages)
-    }
-    Box(
-        modifier = Modifier.fillMaxSize().padding(bottom = 100.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
+        Chat(messages, modifier = Modifier.weight(.9f))
         TextFieldAi(
             value = newMessage.value,
             onValueChange = { newMessage.value = it },
             state = state,
+            modifier = Modifier.weight(.1f).padding(bottom = 8.dp),
             onSend = {
                 if (newMessage.value.isNotBlank()) {
                     scope.launch {
@@ -101,70 +84,62 @@ private fun Screen(
 
 @Composable
 private fun Chat(
-    messages: List<AiViewModel.Message>
+    messages: List<AiViewModel.Message>,
+    modifier: Modifier
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        reverseLayout = true
     ) {
+        item { Spacer(modifier = Modifier.height(8.dp)) }
+
         items(
-            items = messages
+            items = messages.reversed()
         ) { message ->
-            AnimatedVisibility(
-                visible = true,
-                enter = slideInHorizontally(
-                    animationSpec = remember {
-                        tween(durationMillis = 500)
-                    }
-                ) + fadeIn(),
-                exit = shrinkVertically() + fadeOut(),
-                modifier = Modifier.animateItem()
-            ) {
-                MessageBubble(message)
-            }
+            MessageBubble(message)
         }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
     }
 }
 
 @Composable
 private fun MessageBubble(message: AiViewModel.Message) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (message.isUser) colorScheme.onBackground else colorScheme.secondary,
+        targetValue = if (message.isUser) colorScheme.primary else colorScheme.onBackground,
         animationSpec = tween(durationMillis = 300)
     )
 
     val textColor by animateColorAsState(
-        targetValue = if (message.isUser) colorScheme.tertiary else colorScheme.onSecondary,
+        targetValue = if (message.isUser) colorScheme.background else colorScheme.secondary, // Colores de texto correspondientes
         animationSpec = tween(durationMillis = 300)
     )
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .pointerInput(Unit) {
-                detectTransformGestures { _, _, _, _ ->
-                    // Disable pointer input for bubble
-                }
-            },
+            .padding(horizontal = 8.dp),
         horizontalArrangement = if (message.isUser) Arrangement.End else Arrangement.Start
     ) {
-        AnimatedContent(
-            targetState = message,
-            transitionSpec = {
-                (fadeIn() + expandVertically()).togetherWith(fadeOut() + shrinkVertically())
-            }
-        ) { targetMessage ->
-            Text(
-                text = targetMessage.text,
-                color = textColor,
-                modifier = Modifier
-                    .shadow(4.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(backgroundColor)
-                    .padding(12.dp)
-                    .animateContentSize()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(if (message.isUser) 0.8f else 1f)
+                .shadow(2.dp, RoundedCornerShape(16.dp))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = if (message.isUser) 16.dp else 0.dp,
+                        topEnd = if (message.isUser) 0.dp else 16.dp,
+                        bottomStart = 16.dp,
+                        bottomEnd = 16.dp
+                    )
+                )
+                .background(backgroundColor)
+                .padding(12.dp)
+        ) {
+            MarkdownText(
+                markdown = message.text,
+                color = textColor
             )
         }
     }
@@ -174,22 +149,23 @@ private fun MessageBubble(message: AiViewModel.Message) {
 private fun TextFieldAi(
     value: String,
     state: AiViewModel.AiState,
+    modifier: Modifier,
     onValueChange: (String) -> Unit,
     onSend: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
             value = value,
             onValueChange = { onValueChange(it) },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp),
+            modifier = Modifier.weight(1f),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            shape = RoundedCornerShape(16.dp),
-            maxLines = 7,
+            shape = RoundedCornerShape(24.dp),
+            maxLines = 5,
             placeholder = { Text(text = "Type your message here") },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = colorScheme.onBackground,

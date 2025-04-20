@@ -33,6 +33,9 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.composeVM)
                 implementation(compose.uiTooling)
+
+                //UTILS
+                implementation("org.commonmark:commonmark:0.24.0")
             }
         }
 
