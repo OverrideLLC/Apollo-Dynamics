@@ -13,14 +13,17 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import androidx.navigation.compose.rememberNavController
-import com.feature.desktop.api.NavigationStart
+import com.feature.desktop.api.navhost.NavigationStart
+import com.shared.resources.LogoBlancoQuickness
+import com.shared.resources.Res
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.KoinContext
+import org.quickness.dynamics.di.initKoin
 import org.quickness.dynamics.ui.components.TopWindows
 import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
-import quicknessdynamics.composeapp.generated.resources.LogoBlancoQuickness
-import quicknessdynamics.composeapp.generated.resources.Res
 
 fun main() = application {
+    initKoin()
     val windowState = rememberWindowState(
         width = 1280.dp,
         height = 720.dp,
@@ -34,18 +37,20 @@ fun main() = application {
         resizable = true,
         undecorated = true,
     ) {
-        QuicknessDynamicsTheme(
-            darkTheme = true
-        ){
-            Column(
-                modifier = Modifier.fillMaxSize().background(colorScheme.background),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+        KoinContext {
+            QuicknessDynamicsTheme(
+                darkTheme = false
             ) {
-                TopWindows(windowState = windowState) { windowState.isMinimized = true }
-                NavigationStart(
-                    navController = rememberNavController()
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize().background(colorScheme.background),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TopWindows(windowState = windowState) { windowState.isMinimized = true }
+                    NavigationStart(
+                        navController = rememberNavController()
+                    )
+                }
             }
         }
     }

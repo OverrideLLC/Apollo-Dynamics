@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import com.shared.resources.Raleway_Bold
+import com.shared.resources.Raleway_Medium
+import com.shared.resources.Raleway_Thin
+import com.shared.resources.Res
 import org.jetbrains.compose.resources.Font
-import quicknessdynamics.composeapp.generated.resources.Raleway_Bold
-import quicknessdynamics.composeapp.generated.resources.Raleway_Medium
-import quicknessdynamics.composeapp.generated.resources.Raleway_Thin
-import quicknessdynamics.composeapp.generated.resources.Res
 
 private val DarkColorScheme = darkColorScheme(
     primary = primary,

@@ -25,7 +25,7 @@ internal fun InfoContent() {
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
-            text = "Inicia sesión en Quickness Dynamics",
+            text = "Inicia sesión en TaskTec",
             style = TextStyle(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,

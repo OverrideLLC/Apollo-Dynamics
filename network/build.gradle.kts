@@ -4,28 +4,17 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
-compose.resources {
-    publicResClass = true
-    packageOfResClass = "com.shared.resources"
-    generateResClass = auto
-}
-
 kotlin {
     jvm("desktop")
     sourceSets {
         val desktopMain by getting
+
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                api(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtime.compose)
-                implementation(compose.uiTooling)
+                implementation(libs.generativeai)
+                implementation(libs.generativeai.google.wasm.js)
+                implementation(libs.koin.core)
             }
         }
 

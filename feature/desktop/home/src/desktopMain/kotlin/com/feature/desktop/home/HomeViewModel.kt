@@ -1,16 +1,12 @@
 package com.feature.desktop.home
 
 import androidx.lifecycle.ViewModel
+import com.shared.resources.Res
+import com.shared.resources.*
+import com.shared.utils.routes.RoutesHome
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.jetbrains.compose.resources.DrawableResource
-import org.quickness.dynamics.utils.routes.RoutesHome
-import quicknessdynamics.composeapp.generated.resources.Res
-import quicknessdynamics.composeapp.generated.resources.add_business_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.chat_bubble_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.dashboard_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.person_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-import quicknessdynamics.composeapp.generated.resources.settings_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 
 class HomeViewModel : ViewModel() {
     data class HomeState(
