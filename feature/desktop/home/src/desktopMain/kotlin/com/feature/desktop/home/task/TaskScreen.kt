@@ -17,7 +17,7 @@ import com.shared.resources.dock_to_left_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun TaskScreen(
+fun TasksScreen(
     onDockToLeft: () -> Unit
 ) = Screen(
     onDockToLeft = onDockToLeft

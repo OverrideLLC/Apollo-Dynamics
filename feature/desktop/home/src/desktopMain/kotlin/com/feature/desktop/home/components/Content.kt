@@ -2,7 +2,6 @@ package com.feature.desktop.home.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,15 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.feature.desktop.home.HomeViewModel
-import com.feature.desktop.home.task.TaskScreen
+import com.feature.desktop.home.task.TasksScreen
 import com.feature.desktop.home.tools.ToolsScreen
 
 @Composable
@@ -74,7 +71,10 @@ internal fun Content(
         ) {
             Spacer(modifier = Modifier.padding(16.dp))
             Task(modifier = Modifier.weight(sizeTask).fillMaxHeight(), viewModel = viewModel)
-            WorkSpace(modifier = Modifier.weight(sizeWorkspace).fillMaxHeight(), workspace = workspace)
+            WorkSpace(
+                modifier = Modifier.weight(sizeWorkspace).fillMaxHeight(),
+                workspace = workspace
+            )
             Tools(modifier = Modifier.weight(sizeTools).fillMaxHeight(), viewModel = viewModel)
             Spacer(modifier = Modifier.padding(16.dp))
         }
@@ -91,7 +91,7 @@ internal fun WorkSpace(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
             ),
         content = { workspace() }
@@ -108,11 +108,11 @@ internal fun Task(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {
-            TaskScreen {
+            TasksScreen {
                 viewModel.dockToLeft()
             }
         }
@@ -129,11 +129,13 @@ internal fun Tools(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = colorScheme.onBackground,
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {
-            ToolsScreen {
+            ToolsScreen(
+                isExpanded = viewModel.state.value.dockToRight,
+            ) {
                 viewModel.dockToRight()
             }
         }

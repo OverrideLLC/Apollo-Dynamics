@@ -114,9 +114,9 @@ internal fun TopBar(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height (70.dp)
+                    .height(70.dp)
                     .background(
-                        color = colorScheme.onBackground.copy(alpha = 0.7f),
+                        color = colorScheme.onBackground,
                         shape = RoundedCornerShape(30.dp)
                     )
                     .padding(horizontal = 10.dp),

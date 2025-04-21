@@ -3,7 +3,7 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xff75cd61) // Mantenido como está
+val primary: Color = Color(0xff78926d) // Mantenido como está
 val onPrimary: Color = Color(0xFF003f43) // Contraste para Primary, tono oscuro relacionado
 val primaryContainer: Color = Color(0xFF004f53) // Más oscuro que Primary, para fondos contenedores
 val onPrimaryContainer: Color = Color(0xFFb6eff3) // Contraste claro sobre el contenedor primario
@@ -20,7 +20,7 @@ val tertiaryContainer: Color = Color(0xFFd9d9d9) // Tono gris claro para contene
 val onTertiaryContainer: Color = Color(0xFF2a2a2a) // Contraste oscuro para contenedores claros
 
 val background: Color = Color(0xffffffff) // Color de fondo oscuro agradable
-val onBackground: Color = Color(0xff45bb46) // Mantenido como está
+val onBackground: Color = Color(0xffadd09d) // Mantenido como está0xffadd09d
 
 val surface: Color = Color(0xFF1e1e1e) // Superficie ligeramente más clara que el fondo
 val onSurface: Color = Color(0xFFe0e0e0) // Texto claro sobre superficie
@@ -39,7 +39,7 @@ val outline: Color = Color(0xFF525252) // Tono gris intermedio para bordes
 val outlineVariant: Color = Color(0xFF3a3a3a) // Variante más oscura del outline
 val scrim: Color = Color(0xFF000000) // Fondo transparente/oscuro
 
-val surfaceBright: Color = Color(0xFF292929) // Ligeramente más claro que el Surface
+val surfaceBright: Color = Color(0xffadd09d) // Ligeramente más claro que el Surface
 val surfaceContainer: Color = Color(0xFF1c1c1c) // Contenedor similar a Surface pero algo más claro
 val surfaceContainerHigh: Color = Color(0xFF2e2e2e) // Contenedor más destacado que SurfaceContainer
 val surfaceContainerHighest: Color = Color(0xFF383838) // La variante más clara de los contenedores

@@ -107,7 +107,7 @@ internal fun TextFieldAi(
                             } else {
                                 Icon(
                                     painter = painterResource(Res.drawable.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
-                                    contentDescription = "Enviar mensaje",
+                                    contentDescription = "Send message...",
                                     tint = if (value.isNotBlank() && !state.isLoading) colorScheme.primary else colorScheme.primary,
                                     modifier = Modifier.size(20.dp)
                                 )

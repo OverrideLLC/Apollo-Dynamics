@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
+import com.shared.ui.BackgroundAnimated
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -41,7 +42,10 @@ internal fun Screen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.background
+                brush = BackgroundAnimated(
+                    colorAnimated = Color(0xffadd09d),
+                    colorBackground = colorScheme.background
+                )
             )
     )
 }
