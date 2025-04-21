@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
 import com.shared.ui.BackgroundAnimated
+import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
 fun HomeScreen(
@@ -22,14 +23,18 @@ fun HomeScreen(
 
 @Composable
 internal fun Screen(
+    viewModel: HomeViewModel = koinViewModel(),
     workspace: @Composable () -> Unit
 ) {
+    val state by viewModel.state.collectAsState()
     Scaffold(
         floatingActionButton = { },
         content = { padding ->
             Content(
                 padding = padding,
-                workspace = { workspace() }
+                workspace = { workspace() },
+                viewModel = viewModel,
+                state = state
             )
         },
         topBar = { TopBar() },

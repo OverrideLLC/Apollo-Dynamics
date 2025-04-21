@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.shared.resources.Res
 import com.shared.resources.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -58,7 +59,7 @@ internal fun TextFieldAi(
                 .background(colorScheme.primary, CircleShape)
         ) {
             Icon(
-                imageVector = Icons.Default.Add,
+                painter = painterResource(Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                 contentDescription = "Adjuntar archivo",
                 tint = colorScheme.background
             )
