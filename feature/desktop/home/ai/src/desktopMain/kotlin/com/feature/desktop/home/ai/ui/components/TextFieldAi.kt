@@ -15,8 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -56,12 +54,12 @@ internal fun TextFieldAi(
             onClick = onAttachFile,
             modifier = Modifier
                 .size(48.dp)
-                .background(colorScheme.primary, CircleShape)
+                .background(colorScheme.onTertiary, CircleShape)
         ) {
             Icon(
                 painter = painterResource(Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                 contentDescription = "Adjuntar archivo",
-                tint = colorScheme.background
+                tint = colorScheme.primary
             )
         }
         OutlinedTextField(
@@ -73,19 +71,15 @@ internal fun TextFieldAi(
             maxLines = 5,
             placeholder = { Text(text = "Escribe tu mensaje...") },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = colorScheme.onBackground,
-                unfocusedContainerColor = colorScheme.onBackground,
-                focusedIndicatorColor = colorScheme.onBackground,
-                unfocusedIndicatorColor = colorScheme.onBackground,
-                cursorColor = colorScheme.tertiary,
+                focusedContainerColor = colorScheme.onTertiary,
+                unfocusedContainerColor = colorScheme.onTertiary,
+                focusedIndicatorColor = colorScheme.primary,
+                unfocusedIndicatorColor = colorScheme.primary,
+                cursorColor = colorScheme.primary,
                 focusedTextColor = colorScheme.tertiary,
                 unfocusedTextColor = colorScheme.tertiary,
                 focusedPlaceholderColor = colorScheme.primary,
-                unfocusedPlaceholderColor = colorScheme.tertiary,
-                focusedTrailingIconColor = colorScheme.primary,
-                unfocusedTrailingIconColor = colorScheme.tertiary,
-                focusedLeadingIconColor = colorScheme.primary,
-                unfocusedLeadingIconColor = colorScheme.tertiary,
+                unfocusedPlaceholderColor = colorScheme.primary,
             ),
             trailingIcon = {
                 Box(modifier = Modifier.padding(end = 8.dp)) {
@@ -95,9 +89,7 @@ internal fun TextFieldAi(
                         modifier = Modifier
                             .size(40.dp)
                             .background(
-                                color = if (value.isNotBlank() && !state.isLoading) colorScheme.primary else colorScheme.background.copy(
-                                    alpha = 0.12f
-                                ),
+                                color = if (value.isNotBlank() && !state.isLoading) colorScheme.onTertiary else colorScheme.onTertiary,
                                 shape = RoundedCornerShape(16.dp)
                             )
                             .hoverable(interactionSource = interactionSource) // Añadir hoverable
@@ -116,9 +108,7 @@ internal fun TextFieldAi(
                                 Icon(
                                     painter = painterResource(Res.drawable.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                                     contentDescription = "Enviar mensaje",
-                                    tint = if (value.isNotBlank() && !state.isLoading) colorScheme.background else colorScheme.background.copy(
-                                        alpha = 0.3f
-                                    ),
+                                    tint = if (value.isNotBlank() && !state.isLoading) colorScheme.primary else colorScheme.primary,
                                     modifier = Modifier.size(20.dp)
                                 )
                             }

@@ -40,14 +40,14 @@ fun TopWindows(
         Modifier
             .fillMaxWidth()
             .height(38.dp)
-            .padding(start = 8.dp)
-            .background(colorScheme.onBackground),
+            .background(colorScheme.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(start = 8.dp)
         ) {
             IconButton(
                 onClick = { },

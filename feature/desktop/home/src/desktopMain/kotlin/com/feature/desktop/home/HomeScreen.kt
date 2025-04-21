@@ -6,13 +6,12 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
-import com.shared.ui.BackgroundAnimated
 import org.koin.compose.viewmodel.koinViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
 fun HomeScreen(
@@ -42,10 +41,7 @@ internal fun Screen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = BackgroundAnimated(
-                    colorBackground = colorScheme.background,
-                    colorAnimated = colorScheme.primary.copy(alpha = 0.7f)
-                )
+                color = colorScheme.background
             )
     )
 }

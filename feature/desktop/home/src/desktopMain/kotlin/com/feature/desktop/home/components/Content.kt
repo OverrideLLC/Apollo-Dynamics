@@ -62,7 +62,7 @@ internal fun Content(
     Column( // Cambia LazyColumn a Column
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding),
+            .padding(padding).padding(bottom = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(

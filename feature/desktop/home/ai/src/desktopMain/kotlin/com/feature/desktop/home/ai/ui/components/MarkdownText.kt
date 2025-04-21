@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,8 +26,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.ai.utils.copyToClipboard
+import com.feature.desktop.home.ai.utils.extractHostName
+import com.feature.desktop.home.ai.utils.openUrlInBrowser
 import com.shared.resources.Res
 import com.shared.resources.content_copy_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.terminal_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
@@ -35,6 +39,7 @@ import org.commonmark.node.Code
 import org.commonmark.node.Emphasis
 import org.commonmark.node.FencedCodeBlock
 import org.commonmark.node.HardLineBreak
+import org.commonmark.node.Link
 import org.commonmark.node.ListItem
 import org.commonmark.node.Node
 import org.commonmark.node.OrderedList
@@ -170,7 +175,7 @@ internal fun RenderNode(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = Color.Gray.copy(alpha = 0.3f),
+                                color = Color.Black,
                                 shape = MaterialTheme.shapes.small
                             ),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -179,7 +184,8 @@ internal fun RenderNode(
                         Text(
                             text = node.info,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Black,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 4.dp, start = 8.dp)
                         )
                         Row(
@@ -197,7 +203,7 @@ internal fun RenderNode(
                                     Icon(
                                         painter = painterResource(Res.drawable.content_copy_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                                         contentDescription = "Copiar código",
-                                        tint = Color.Black
+                                        tint = Color.White
                                     )
                                 }
                             )
@@ -211,7 +217,7 @@ internal fun RenderNode(
                                         Icon(
                                             painter = painterResource(Res.drawable.terminal_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                                             contentDescription = "Run Code",
-                                            tint = Color.Black
+                                            tint = Color.White
                                         )
                                     }
                                 )
@@ -245,7 +251,12 @@ internal fun RenderNode(
 
 // Nuevo Composable para renderizar un elemento de lista (ListItem)
 @Composable
-internal fun RenderListItem(itemNode: ListItem, marker: String, textColor: Color, indentLevel: Int) {
+internal fun RenderListItem(
+    itemNode: ListItem,
+    marker: String,
+    textColor: Color,
+    indentLevel: Int
+) {
     Row { // Usar Row para alinear marcador y contenido
         // Marcador (viñeta o número)
         Text(
@@ -274,7 +285,7 @@ internal fun RenderListItem(itemNode: ListItem, marker: String, textColor: Color
 }
 
 
-// Función para nodos inline (sin cambios respecto a la versión anterior)
+@Composable
 internal fun RenderInlineNode(node: Node, builder: AnnotatedString.Builder, textColor: Color) {
     when (node) {
         is Text -> { // Asegurarse que es el Text de commonmark
@@ -291,14 +302,14 @@ internal fun RenderInlineNode(node: Node, builder: AnnotatedString.Builder, text
         is StrongEmphasis -> {
             builder.pushStyle(
                 SpanStyle(
-                    fontWeight = FontWeight.Bold, // Aplicar negrita
-                    color = Color(0xff0d9b03) // Mantener el color base o especificar otro
+                    fontWeight = FontWeight.ExtraBold, // Aplicar negrita
+                    color = Color(0xff000000) // Mantener el color base o especificar otro
                 )
             )
             var child = node.firstChild
             while (child != null) {
                 // Pasar el color actual al renderizar hijos de StrongEmphasis
-                RenderInlineNode(node = child, builder = builder, textColor = Color(0xff0d9b03))
+                RenderInlineNode(node = child, builder = builder, textColor = Color(0xff000000))
                 child = child.next
             }
             builder.pop()
@@ -321,35 +332,60 @@ internal fun RenderInlineNode(node: Node, builder: AnnotatedString.Builder, text
         }
 
         is SoftLineBreak -> {
-            // Comportamiento estándar de Markdown: tratar como espacio
             builder.append(" ")
-            // O si prefieres un salto de línea real: builder.append("\n")
         }
 
         is HardLineBreak -> {
-            builder.append("\n") // Añade un salto de línea real
+            builder.append("\n")
         }
 
-        // Código inline (ej: `código`)
         is Code -> {
-            print(
-                "Code: ${node.literal}"
-            )
             builder.pushStyle(
                 SpanStyle(
-                    fontFamily = FontFamily.Monospace, // Fuente monoespaciada
-                    color = textColor, // Usar color base o uno específico para código
-                    background = Color.LightGray.copy(alpha = 0.3f) // Fondo sutil para código inline
+                    fontFamily = FontFamily.Monospace,
+                    color = textColor,
+                    background = Color.LightGray.copy(alpha = 0.3f)
                 )
             )
-            builder.append(node.literal) // Añadir el contenido del nodo Code
+            builder.append(node.literal)
             builder.pop()
         }
 
-        // is Link -> { /* Renderizar enlace */ }
+        is Link -> {
+            val fullUrl = node.destination
+            val displayText = extractHostName(fullUrl)
+
+            val annotatedString = buildAnnotatedString {
+                pushStringAnnotation(tag = "URL", annotation = fullUrl)
+                pushStyle(
+                    SpanStyle(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+                append(displayText)
+
+                pop()
+                pop()
+            }
+
+            ClickableText(
+                text = annotatedString,
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground), // Estilo base del texto
+                modifier = Modifier,
+                onClick = { offset ->
+                    // Encuentra si se hizo click en una anotación "URL" en la posición 'offset'
+                    annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
+                        .firstOrNull()?.let { annotation ->
+                            // Si se encontró, 'annotation.item' contiene la URL completa
+                            println("Link clicked: ${annotation.item}")
+                            openUrlInBrowser(annotation.item) // Abre la URL completa
+                        }
+                }
+            )
+        }
         // is Image -> { /* Renderizar imagen */ }
         else -> {
-            // Para cualquier otro nodo inline no manejado, renderiza sus hijos.
             var child = node.firstChild
             while (child != null) {
                 RenderInlineNode(node = child, builder = builder, textColor = textColor)
