@@ -1,6 +1,9 @@
 package org.quickness.dynamics.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,13 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,17 +37,20 @@ import com.shared.resources.menu_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.person_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.remove_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
+import androidx.compose.runtime.getValue
 
 @Composable
 fun TopWindows(
     windowState: WindowState,
     exitApplication: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered by interactionSource.collectIsHoveredAsState()
     Row(
         Modifier
             .fillMaxWidth()
-            .height(38.dp)
-            .background(colorScheme.background),
+            .wrapContentHeight()
+            .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -56,14 +66,14 @@ fun TopWindows(
                         painter = painterResource(Res.drawable.menu_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                         contentDescription = "Menu",
                         modifier = Modifier.size(24.dp),
-                        tint = colorScheme.tertiary
+                        tint = Color.Black
                     )
                 }
             )
             Text(
                 text = "TaskTec",
                 modifier = Modifier.padding(start = 8.dp),
-                color = colorScheme.tertiary,
+                color = Color.Black,
                 fontFamily = typography.bodyMedium.fontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 20.sp
@@ -72,7 +82,7 @@ fun TopWindows(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
-        ){
+        ) {
             IconButton(
                 onClick = {},
                 modifier = Modifier
@@ -96,7 +106,7 @@ fun TopWindows(
                         painter = painterResource(Res.drawable.remove_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                         contentDescription = "Minimize",
                         modifier = Modifier.height(24.dp),
-                        tint = colorScheme.tertiary
+                        tint = Color.Black
                     )
                 }
             )
@@ -113,18 +123,27 @@ fun TopWindows(
                         painter = painterResource(Res.drawable.check_box_outline_blank_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                         contentDescription = "Maximize",
                         modifier = Modifier.height(24.dp),
-                        tint = colorScheme.tertiary
+                        tint = Color.Black
                     )
                 }
             )
             IconButton(
                 onClick = { exitApplication() },
+                modifier = Modifier
+                    .background(
+                        color = if (isHovered) colorScheme.error else Color.Transparent,
+                        shape = CircleShape
+                    )
+                    .size(34.dp)
+                    .hoverable(
+                        interactionSource = interactionSource,
+                    ),
                 content = {
                     Icon(
                         painter = painterResource(Res.drawable.close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                         contentDescription = "Close",
                         modifier = Modifier.height(24.dp),
-                        tint = Color.Red
+                        tint = Color.Black
                     )
                 }
             )

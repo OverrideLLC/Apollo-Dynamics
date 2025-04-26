@@ -91,7 +91,7 @@ internal fun WorkSpace(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground,
+                color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = { workspace() }
@@ -108,7 +108,7 @@ internal fun Task(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground,
+                color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {
@@ -129,7 +129,7 @@ internal fun Tools(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground,
+                color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {

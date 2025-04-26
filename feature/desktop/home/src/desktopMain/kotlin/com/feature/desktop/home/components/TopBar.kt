@@ -48,60 +48,6 @@ internal fun TopBar(
             icon = Res.drawable.Google_Drive_logo,
             route = RouteServices.Drive
         ),
-        Services(
-            name = "ClassRoom",
-            description = "Open ClassRoom",
-            icon = Res.drawable.google_classroom,
-            route = RouteServices.ClassRoom
-        ),
-        Services(
-            name = "Moodle",
-            description = "Open Moodle",
-            icon = Res.drawable.moodle_logo,
-            route = RouteServices.Moodle
-        ),
-        Services(
-            name = "Drive",
-            description = "Open Drive",
-            icon = Res.drawable.Google_Drive_logo,
-            route = RouteServices.Drive
-        ),
-        Services(
-            name = "ClassRoom",
-            description = "Open ClassRoom",
-            icon = Res.drawable.google_classroom,
-            route = RouteServices.ClassRoom
-        ),
-        Services(
-            name = "Moodle",
-            description = "Open Moodle",
-            icon = Res.drawable.moodle_logo,
-            route = RouteServices.Moodle
-        ),
-        Services(
-            name = "Drive",
-            description = "Open Drive",
-            icon = Res.drawable.Google_Drive_logo,
-            route = RouteServices.Drive
-        ),
-        Services(
-            name = "ClassRoom",
-            description = "Open ClassRoom",
-            icon = Res.drawable.google_classroom,
-            route = RouteServices.ClassRoom
-        ),
-        Services(
-            name = "Moodle",
-            description = "Open Moodle",
-            icon = Res.drawable.moodle_logo,
-            route = RouteServices.Moodle
-        ),
-        Services(
-            name = "Drive",
-            description = "Open Drive",
-            icon = Res.drawable.Google_Drive_logo,
-            route = RouteServices.Drive
-        ),
     )
 ) {
     Box(
@@ -116,7 +62,7 @@ internal fun TopBar(
                     .fillMaxWidth()
                     .height(70.dp)
                     .background(
-                        color = colorScheme.onBackground,
+                        color = colorScheme.onBackground.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(30.dp)
                     )
                     .padding(horizontal = 10.dp),

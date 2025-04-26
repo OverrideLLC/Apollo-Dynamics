@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.feature.desktop.home.components.Content
@@ -43,8 +44,8 @@ internal fun Screen(
             .fillMaxSize()
             .background(
                 brush = BackgroundAnimated(
-                    colorAnimated = Color(0xffadd09d),
-                    colorBackground = colorScheme.background
+                    colorBackground = colorScheme.background,
+                    colorAnimated = colorScheme.onBackground
                 )
             )
     )

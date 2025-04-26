@@ -25,9 +25,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.rememberWindowState
+import com.feature.desktop.home.tools.navigation.NavigationTools
 import com.feature.desktop.home.utils.enum.Tools
 import com.shared.resources.Res
 import com.shared.resources.dock_to_right_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.ui.ScreenAction
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -46,6 +51,12 @@ internal fun Screen(
     viewModel: ToolViewModel = koinViewModel(),
     onDockToRight: () -> Unit
 ) {
+    val window = rememberWindowState(
+        width = 720.dp,
+        height = 300.dp,
+        placement = WindowPlacement.Floating,
+        position = WindowPosition(Alignment.Center)
+    )
     val state by viewModel.state.collectAsState()
     Box(
         modifier = Modifier
@@ -85,17 +96,29 @@ internal fun Screen(
                         .fillMaxSize()
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = if (!isExpanded) Arrangement.Top else Arrangement.Center,
                     content = {
                         items(state.tools) { tool ->
                             ItemTool(
                                 isExpanded = isExpanded,
                                 tool = tool,
-                                click = {},
+                                click = {
+                                    viewModel.toolSelection(tool)
+                                },
                             )
                         }
                     }
                 )
+
+                state.toolSelection?.let { tool ->
+                    ScreenAction(
+                        icon = tool.icon,
+                        name = tool.name,
+                        windowState = window,
+                        close = { viewModel.toolSelection(null) },
+                        content = { NavigationTools(tool.route) }
+                    )
+                } ?: run { }
             }
         }
     )
@@ -114,7 +137,7 @@ fun ItemTool(
                 .height(50.dp)
                 .clickable { click() }
                 .background(
-                    color = colorScheme.background,
+                    color = colorScheme.onTertiary,
                     shape = shapes.small
                 ),
             contentAlignment = Alignment.Center,

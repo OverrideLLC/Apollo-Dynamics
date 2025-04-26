@@ -8,10 +8,16 @@ import kotlin.enums.EnumEntries
 
 class ToolViewModel : ViewModel() {
     data class ToolState(
-        val tools: EnumEntries<Tools> = Tools.entries
+        val tools: EnumEntries<Tools> = Tools.entries,
+        val toolSelection: Tools? = null,
     )
 
     private val _state = MutableStateFlow(ToolState())
     val state = _state.asStateFlow()
 
+    fun toolSelection(tool: Tools?) {
+        _state.value = _state.value.copy(
+            toolSelection = tool,
+        )
+    }
 }
