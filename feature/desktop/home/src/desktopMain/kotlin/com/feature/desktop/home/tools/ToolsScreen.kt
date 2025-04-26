@@ -51,12 +51,6 @@ internal fun Screen(
     viewModel: ToolViewModel = koinViewModel(),
     onDockToRight: () -> Unit
 ) {
-    val window = rememberWindowState(
-        width = 720.dp,
-        height = 300.dp,
-        placement = WindowPlacement.Floating,
-        position = WindowPosition(Alignment.Center)
-    )
     val state by viewModel.state.collectAsState()
     Box(
         modifier = Modifier
@@ -113,8 +107,8 @@ internal fun Screen(
                 state.toolSelection?.let { tool ->
                     ScreenAction(
                         icon = tool.icon,
-                        name = tool.name,
-                        windowState = window,
+                        name = tool.nameString,
+                        size = tool.size,
                         close = { viewModel.toolSelection(null) },
                         content = { NavigationTools(tool.route) }
                     )

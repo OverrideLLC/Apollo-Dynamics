@@ -1,5 +1,7 @@
 package com.feature.desktop.home.utils.enum
 
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.utils.routes.ToolRoute
 import com.shared.resources.Res
 import com.shared.resources.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
@@ -9,10 +11,12 @@ enum class Tools(
     val icon: DrawableResource,
     val nameString: String,
     val route: String,
+    val size: DpSize = DpSize(width = 400.dp, height = 600.dp)
 ) {
     TAKE_ATTENDEES(
         icon = Res.drawable.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
         route = ToolRoute.TakeAttendees.route,
-        nameString = "Take Attendees"
+        nameString = "Take Attendees",
+        size = DpSize(width = 1200.dp, height = 720.dp)
     )
 }

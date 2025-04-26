@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.feature.desktop.home.tools.screens.TakeAttendeesScreen
+import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesScreen
 import com.feature.desktop.home.utils.routes.ToolRoute
 
 @Composable

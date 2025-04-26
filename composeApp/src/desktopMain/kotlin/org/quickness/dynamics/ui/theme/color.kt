@@ -19,17 +19,37 @@ val onTertiary: Color = Color(0xffffffff) // Buen contraste con blanco, tono neu
 val tertiaryContainer: Color = Color(0xFFd9d9d9) // Tono gris claro para contenedores terciarios
 val onTertiaryContainer: Color = Color(0xFF2a2a2a) // Contraste oscuro para contenedores claros
 
-val background: Color = Color(0xffffffff) // Color de fondo oscuro agradable
-val onBackground: Color = Color(0xffadce9c) // Mantenido como está0xffadd09d
+val background: Color = Color(0xffffffff)
+val onBackground: Color = Color(0xffadce9c)
 
-val surface: Color = Color(0xFF1e1e1e) // Superficie ligeramente más clara que el fondo
-val onSurface: Color = Color(0xFFe0e0e0) // Texto claro sobre superficie
-val surfaceVariant: Color = Color(0xFF2b2b2b) // Variante más clara de superficie
-val onSurfaceVariant: Color = Color(0xFFc4c4c4) // Contraste sobre superficie variante
-val surfaceTint: Color = primary // Relacionado con el color primario
-val inverseSurface: Color = Color(0xFFe0e0e0) // Color claro inverso para fondo oscuro
-val inverseOnSurface: Color = Color(0xFF1e1e1e) // Texto oscuro sobre colores claros
+// --- Recomendaciones para Superficies (Tema Claro) ---
 
+// Surface: Ligeramente distinto del fondo, con un toque de verde muy sutil.
+// Ideal para Cards, Menus, Sheets.
+val surface: Color = Color(0xFFF6FBF4) // Blanco con un tinte verde muy, muy claro
+
+// OnSurface: Texto/iconos sobre 'surface'. Necesita alto contraste.
+// Un gris oscuro casi negro, derivado de tonos verdes.
+val onSurface: Color = Color(0xFF191C19)
+
+// SurfaceVariant: Una variante para elementos como outlines, dividers, chip borders.
+// Un gris verdoso claro, notablemente diferente de 'surface'.
+val surfaceVariant: Color = Color(0xFFDDE5D9)
+
+// OnSurfaceVariant: Texto/iconos sobre 'surfaceVariant'.
+// Un gris verdoso más oscuro para buen contraste sobre 'surfaceVariant'.
+val onSurfaceVariant: Color = Color(0xFF414941)
+
+// SurfaceTint: Usado para indicar elevación, usualmente el color primario.
+val surfaceTint: Color = primary // Color(0xff0d9b03)
+
+// InverseSurface: Para elementos que necesitan destacar (ej. Snackbars), imita la superficie oscura.
+// Un gris verdoso oscuro.
+val inverseSurface: Color = Color(0xFF2E312D)
+
+// InverseOnSurface: Texto/iconos sobre 'inverseSurface'. Necesita alto contraste.
+// Un blanco roto con tinte verde claro.
+val inverseOnSurface: Color = Color(0xFFF0F1EC)
 val error: Color = Color(0xFFff3131) // Mantenido como está
 val onError: Color = Color(0xFFffffff) // Contraste claro para errores
 val errorContainer: Color = Color(0xFF93000a) // Contenedor oscuro para errores
