@@ -21,6 +21,9 @@ import org.jetbrains.compose.resources.painterResource
 fun ScreenAction(
     icon: DrawableResource,
     name: String,
+    resizable: Boolean = true,
+    undecorated: Boolean = false,
+    transparent: Boolean = false,
     size: DpSize = DpSize(width = 400.dp, height = 600.dp),
     close: () -> Unit,
     content: @Composable () -> Unit
@@ -37,9 +40,9 @@ fun ScreenAction(
         icon = icon,
         title = name,
         state = windowState,
-        resizable = true,
-        undecorated = false,
-        transparent = false,
+        resizable = resizable,
+        undecorated = undecorated,
+        transparent = transparent,
     ) {
         Column(
             modifier = Modifier.fillMaxSize().background(colorScheme.background),
