@@ -36,7 +36,6 @@ kotlin {
 
                 //UTILS
                 implementation("org.commonmark:commonmark:0.24.0")
-                implementation("network.chaintech:qr-kit:3.0.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
             }
         }
