@@ -36,6 +36,7 @@ kotlin {
 
                 //UTILS
                 implementation("org.commonmark:commonmark:0.24.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
             }
         }
 

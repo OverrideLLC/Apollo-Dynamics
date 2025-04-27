@@ -3,7 +3,7 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xff75cd61) // Mantenido como está
+val primary: Color = Color(0xff0d9b03) // Mantenido como está
 val onPrimary: Color = Color(0xFF003f43) // Contraste para Primary, tono oscuro relacionado
 val primaryContainer: Color = Color(0xFF004f53) // Más oscuro que Primary, para fondos contenedores
 val onPrimaryContainer: Color = Color(0xFFb6eff3) // Contraste claro sobre el contenedor primario
@@ -15,21 +15,41 @@ val secondaryContainer: Color = Color(0xFF004d51) // Tono oscuro relacionado con
 val onSecondaryContainer: Color = Color(0xFFcfe8e8) // Contraste claro para contenedores secundarios
 
 val tertiary: Color = Color(0xff000000) // Mantenido como está
-val onTertiary: Color = Color(0xFF4a4a4a) // Buen contraste con blanco, tono neutro oscuro
+val onTertiary: Color = Color(0xffffffff) // Buen contraste con blanco, tono neutro oscuro
 val tertiaryContainer: Color = Color(0xFFd9d9d9) // Tono gris claro para contenedores terciarios
 val onTertiaryContainer: Color = Color(0xFF2a2a2a) // Contraste oscuro para contenedores claros
 
-val background: Color = Color(0xffffffff) // Color de fondo oscuro agradable
-val onBackground: Color = Color(0xFFfefefe) // Mantenido como está
+val background: Color = Color(0xffffffff)
+val onBackground: Color = Color(0xffadce9c)
 
-val surface: Color = Color(0xFF1e1e1e) // Superficie ligeramente más clara que el fondo
-val onSurface: Color = Color(0xFFe0e0e0) // Texto claro sobre superficie
-val surfaceVariant: Color = Color(0xFF2b2b2b) // Variante más clara de superficie
-val onSurfaceVariant: Color = Color(0xFFc4c4c4) // Contraste sobre superficie variante
-val surfaceTint: Color = primary // Relacionado con el color primario
-val inverseSurface: Color = Color(0xFFe0e0e0) // Color claro inverso para fondo oscuro
-val inverseOnSurface: Color = Color(0xFF1e1e1e) // Texto oscuro sobre colores claros
+// --- Recomendaciones para Superficies (Tema Claro) ---
 
+// Surface: Ligeramente distinto del fondo, con un toque de verde muy sutil.
+// Ideal para Cards, Menus, Sheets.
+val surface: Color = Color(0xFFF6FBF4) // Blanco con un tinte verde muy, muy claro
+
+// OnSurface: Texto/iconos sobre 'surface'. Necesita alto contraste.
+// Un gris oscuro casi negro, derivado de tonos verdes.
+val onSurface: Color = Color(0xFF191C19)
+
+// SurfaceVariant: Una variante para elementos como outlines, dividers, chip borders.
+// Un gris verdoso claro, notablemente diferente de 'surface'.
+val surfaceVariant: Color = Color(0xFFDDE5D9)
+
+// OnSurfaceVariant: Texto/iconos sobre 'surfaceVariant'.
+// Un gris verdoso más oscuro para buen contraste sobre 'surfaceVariant'.
+val onSurfaceVariant: Color = Color(0xFF414941)
+
+// SurfaceTint: Usado para indicar elevación, usualmente el color primario.
+val surfaceTint: Color = primary // Color(0xff0d9b03)
+
+// InverseSurface: Para elementos que necesitan destacar (ej. Snackbars), imita la superficie oscura.
+// Un gris verdoso oscuro.
+val inverseSurface: Color = Color(0xFF2E312D)
+
+// InverseOnSurface: Texto/iconos sobre 'inverseSurface'. Necesita alto contraste.
+// Un blanco roto con tinte verde claro.
+val inverseOnSurface: Color = Color(0xFFF0F1EC)
 val error: Color = Color(0xFFff3131) // Mantenido como está
 val onError: Color = Color(0xFFffffff) // Contraste claro para errores
 val errorContainer: Color = Color(0xFF93000a) // Contenedor oscuro para errores
@@ -39,7 +59,7 @@ val outline: Color = Color(0xFF525252) // Tono gris intermedio para bordes
 val outlineVariant: Color = Color(0xFF3a3a3a) // Variante más oscura del outline
 val scrim: Color = Color(0xFF000000) // Fondo transparente/oscuro
 
-val surfaceBright: Color = Color(0xFF292929) // Ligeramente más claro que el Surface
+val surfaceBright: Color = Color(0xffadd09d) // Ligeramente más claro que el Surface
 val surfaceContainer: Color = Color(0xFF1c1c1c) // Contenedor similar a Surface pero algo más claro
 val surfaceContainerHigh: Color = Color(0xFF2e2e2e) // Contenedor más destacado que SurfaceContainer
 val surfaceContainerHighest: Color = Color(0xFF383838) // La variante más clara de los contenedores

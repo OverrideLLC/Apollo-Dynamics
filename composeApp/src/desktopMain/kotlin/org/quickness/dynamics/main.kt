@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,34 +21,36 @@ import com.shared.resources.Res
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
-import org.quickness.dynamics.ui.components.TopWindows
 import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
 
 fun main() = application {
     initKoin()
+    val viewModel = ApplicationViewModel()
+    val state by viewModel.state.collectAsState()
     val windowState = rememberWindowState(
         width = 1280.dp,
         height = 720.dp,
         placement = WindowPlacement.Maximized
     )
+
     Window(
-        onCloseRequest = ::exitApplication,
+        onCloseRequest = { viewModel.update { copy(isOpened = false) } },
         icon = painterResource(Res.drawable.LogoBlancoQuickness),
-        title = "Quickness Dynamics",
+        title = state.name,
         state = windowState,
         resizable = true,
-        undecorated = true,
+        undecorated = false,
+        transparent = false,
     ) {
         KoinContext {
             QuicknessDynamicsTheme(
-                darkTheme = false
+                darkTheme = state.darkTheme
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().background(colorScheme.background),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TopWindows(windowState = windowState) { windowState.isMinimized = true }
                     NavigationStart(
                         navController = rememberNavController()
                     )

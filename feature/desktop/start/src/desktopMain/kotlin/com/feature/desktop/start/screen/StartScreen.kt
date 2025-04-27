@@ -1,4 +1,4 @@
-package com.feature.desktop.start
+package com.feature.desktop.start.screen
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
