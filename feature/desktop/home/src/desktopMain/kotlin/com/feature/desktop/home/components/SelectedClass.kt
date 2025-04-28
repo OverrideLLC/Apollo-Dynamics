@@ -26,10 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.components.class_widget.ClassWidget
+import com.feature.desktop.home.tools.screens.add_class.AddClassScreen
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
+import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.ScreenAction
+import org.jetbrains.compose.resources.DrawableResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -82,23 +85,10 @@ fun SelectedClass(
         modifier = modifier.fillMaxWidth(),
         adapter = rememberScrollbarAdapter(scrollHorizontalState)
     )
-    ShowWindows(state = state)
-}
-
-@Composable
-private fun ShowWindows(
-    state: TakeAttendeesViewModel.TakeAttendeesState,
-    viewModel: TakeAttendeesViewModel = koinViewModel()
-) {
     state.qr?.let { qr ->
-        ScreenAction(
-            size = DpSize(
-                width = 500.dp,
-                height = 500.dp
-            ),
+        ShowWindows(
             name = "Qr Attendance",
             icon = Res.drawable.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
-            close = { viewModel.closeQr() },
             content = {
                 Image(
                     painter = qr,
@@ -108,4 +98,33 @@ private fun ShowWindows(
             }
         )
     }
+    if (state.newClass == true) {
+        ShowWindows(
+            name = "New Class",
+            content = {
+                AddClassScreen()
+            }
+        )
+    }
+}
+
+@Composable
+private fun ShowWindows(
+    name: String = "",
+    icon: DrawableResource? = null,
+    viewModel: TakeAttendeesViewModel = koinViewModel(),
+    content: @Composable () -> Unit = {}
+) {
+    ScreenAction(
+        size = DpSize(
+            width = 500.dp,
+            height = 500.dp
+        ),
+        name = name,
+        icon = icon ?: Res.drawable.LogoBlancoQuickness,
+        close = { viewModel.closeQr() },
+        content = {
+            content()
+        }
+    )
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import com.shared.resources.Google_Drive_logo
 import com.shared.resources.Res
 import com.shared.resources.google_classroom
 import com.shared.resources.moodle_logo
+import com.shared.ui.onBackground
 import com.shared.utils.routes.RouteServices
 import org.jetbrains.compose.resources.painterResource
 
@@ -62,10 +64,9 @@ internal fun TopBar(
                     .fillMaxWidth()
                     .height(70.dp)
                     .background(
-                        color = colorScheme.onBackground.copy(alpha = 0.7f),
-                        shape = RoundedCornerShape(30.dp)
-                    )
-                    .padding(horizontal = 10.dp),
+                        color = onBackground(),
+                        shape = shapes.small
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {

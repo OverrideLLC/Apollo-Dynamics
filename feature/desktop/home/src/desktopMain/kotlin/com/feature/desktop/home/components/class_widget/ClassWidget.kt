@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.utils.data.ClassData
+import com.override.data.utils.data.ClassData
 
 @OptIn(ExperimentalMaterial3Api::class) // Necesario para Card onClick
 @Composable

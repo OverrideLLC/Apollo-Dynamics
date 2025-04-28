@@ -16,6 +16,7 @@ kotlin {
                 implementation(projects.shared.ui)
                 implementation(projects.shared.resources)
                 implementation(projects.network)
+                implementation(projects.data)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)
@@ -35,8 +36,8 @@ kotlin {
                 implementation(compose.uiTooling)
 
                 //UTILS
-                implementation("org.commonmark:commonmark:0.24.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+                implementation(libs.commonmark)
+                implementation(libs.kotlinx.datetime)
             }
         }
 

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+
 kotlin {
     jvm("desktop")
 
@@ -18,6 +19,7 @@ kotlin {
             implementation(projects.feature.desktop.api)
             implementation(projects.shared.resources)
             implementation(projects.network)
+            implementation(projects.data)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
-import com.feature.desktop.home.utils.data.ClassData
+import com.override.data.utils.data.ClassData
 import com.shared.resources.Res
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
