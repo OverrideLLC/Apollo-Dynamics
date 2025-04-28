@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.utils.routes.ToolRoute
 import com.shared.resources.Res
+import com.shared.resources.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -17,6 +18,12 @@ enum class Tools(
         icon = Res.drawable.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
         route = ToolRoute.TakeAttendees.route,
         nameString = "Take Attendees",
+        size = DpSize(width = 1200.dp, height = 720.dp)
+    ),
+    ADD_CLASS(
+        icon = Res.drawable.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+        route = ToolRoute.AddClass.route,
+        nameString = "Add Class",
         size = DpSize(width = 1200.dp, height = 720.dp)
     )
 }

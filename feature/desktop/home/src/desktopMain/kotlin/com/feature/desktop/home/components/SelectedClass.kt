@@ -89,6 +89,13 @@ fun SelectedClass(
         ShowWindows(
             name = "Qr Attendance",
             icon = Res.drawable.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+            dpSize = DpSize(
+                width = 500.dp,
+                height = 500.dp
+            ),
+            close = {
+                viewModel.closeQr()
+            },
             content = {
                 Image(
                     painter = qr,
@@ -97,32 +104,41 @@ fun SelectedClass(
                 )
             }
         )
-    }
-    if (state.newClass == true) {
+    } ?: run { }
+    state.newClass?.let {
         ShowWindows(
             name = "New Class",
+            dpSize = DpSize(
+                width = 1200.dp,
+                height = 720.dp,
+            ),
+            close = {
+                viewModel.closeNewClass()
+            },
             content = {
-                AddClassScreen()
+                AddClassScreen(
+                    onCompletion = {
+                        viewModel.closeNewClass()
+                    }
+                )
             }
         )
-    }
+    } ?: run { }
 }
 
 @Composable
 private fun ShowWindows(
     name: String = "",
     icon: DrawableResource? = null,
-    viewModel: TakeAttendeesViewModel = koinViewModel(),
+    dpSize: DpSize,
+    close: () -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
     ScreenAction(
-        size = DpSize(
-            width = 500.dp,
-            height = 500.dp
-        ),
+        size = dpSize,
         name = name,
         icon = icon ?: Res.drawable.LogoBlancoQuickness,
-        close = { viewModel.closeQr() },
+        close = { close() },
         content = {
             content()
         }

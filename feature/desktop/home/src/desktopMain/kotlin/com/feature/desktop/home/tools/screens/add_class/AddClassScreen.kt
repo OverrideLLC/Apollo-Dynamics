@@ -35,17 +35,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun AddClassScreen(
-    viewModel: AddClassViewModel = koinViewModel()
+    viewModel: AddClassViewModel = koinViewModel(),
+    onCompletion: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
     // Mostrar mensaje de éxito si aplica
     LaunchedEffect(state.saveSuccess) {
         if (state.saveSuccess) {
-            // Aquí podrías mostrar un Snackbar o navegar hacia atrás
-            println("¡Clase guardada exitosamente!")
-            // Por ahora, solo imprimimos en consola.
-            // Considera añadir un callback onSaveSuccess: () -> Unit a AddClassScreen
+            onCompletion()
         }
     }
 

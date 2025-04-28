@@ -319,6 +319,6 @@ class TakeAttendeesViewModel(
     }
 
     fun closeNewClass() {
-        _state.update { it.copy(newClass = false) }
+        _state.update { it.copy(newClass = null) }
     }
 }
