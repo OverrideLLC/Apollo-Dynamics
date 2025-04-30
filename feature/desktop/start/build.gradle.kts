@@ -14,6 +14,7 @@ kotlin {
                 //Modules
                 implementation(projects.shared.utils)
                 implementation(projects.shared.resources)
+                implementation(projects.network)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)

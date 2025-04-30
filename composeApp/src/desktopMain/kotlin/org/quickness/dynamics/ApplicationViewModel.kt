@@ -12,7 +12,7 @@ class ApplicationViewModel: ViewModel() {
         val name: String = "TaskTec",
         val isOpened: Boolean = true,
         val windows: List<Window> = emptyList(),
-        val darkTheme: Boolean = false
+        val darkTheme: Boolean = true
     )
 
     private val _state = MutableStateFlow(ApplicationState())

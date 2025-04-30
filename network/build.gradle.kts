@@ -26,6 +26,11 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation("com.google.firebase:firebase-admin:9.4.3")
+            implementation("com.google.guava:guava:31.1-jre")
+            implementation(project.dependencies.platform(libs.google.cloud.bom))
+            implementation(libs.google.cloud.firestore)
+            implementation(libs.google.cloud.secretmanager)
         }
     }
 }

@@ -23,6 +23,8 @@ generativeai = "0.9.0"
 generativeaiGoogleWasmJs = "0.9.0-1.0.1-wasm"
 ksp = "2.1.0-1.0.29"
 
+google-cloud-bom = "26.45.0"
+
 [libraries]
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
@@ -43,6 +45,9 @@ generativeai = { module = "com.google.ai.client.generativeai:generativeai", vers
 generativeai-google-wasm-js = { module = "dev.shreyaspatil.generativeai:generativeai-google", version.ref = "generativeaiGoogleWasmJs" }
 androidx-sqliteBundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "androidx-sqliteBundled" }
 androidx-room-compailer = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+google-cloud-bom = { module = "com.google.cloud:libraries-bom", version.ref = "google-cloud-bom" }
+google-cloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager" }
+google-cloud-firestore = { module = "com.google.cloud:google-cloud-firestore" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

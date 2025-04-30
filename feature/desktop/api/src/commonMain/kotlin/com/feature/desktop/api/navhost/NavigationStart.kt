@@ -13,10 +13,6 @@ import com.shared.utils.routes.RoutesStart
 fun NavigationStart(navController: NavHostController) {
     NavHost(navController, startDestination = RoutesStart.Home.route) {
         composable(RoutesStart.Start.route) { StartScreen(navController) }
-        composable(RoutesStart.Home.route) {
-            HomeScreen(
-                workspace = { AiScreen() }
-            )
-        }
+        composable(RoutesStart.Home.route) { HomeScreen(workspace = { AiScreen() }) }
     }
 }

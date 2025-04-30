@@ -5,6 +5,7 @@ import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.feature.desktop.home.tools.ToolViewModel
 import com.feature.desktop.home.tools.screens.add_class.AddClassViewModel
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
+import com.feature.desktop.start.screen.StartViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -16,4 +17,5 @@ val viewModelModule: Module
         viewModelOf(::ToolViewModel)
         viewModelOf(::TakeAttendeesViewModel)
         viewModelOf(::AddClassViewModel)
+        viewModelOf(::StartViewModel)
     }
