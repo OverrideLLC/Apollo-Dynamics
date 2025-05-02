@@ -16,10 +16,10 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.api.navhost.NavigationStart
-import com.network.initFirebase
 import com.network.initGcloudFromPath
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
+import com.shared.resources.TTNegro
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
@@ -27,9 +27,7 @@ import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
 
 fun main() = application {
     initKoin()
-    initGcloudFromPath(
-        credentialsPath = "C:/Users/chris/Downloads/quickness-backend-7f4ac-ada0c820e672.json"
-    )
+    initGcloudFromPath("/home/christopher-cop787-gmail-com/Documentos/Credentials/Google Cloud/quickness-backend-gc.json")
     val viewModel = ApplicationViewModel()
     val state by viewModel.state.collectAsState()
     val windowState = rememberWindowState(
@@ -40,7 +38,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = { viewModel.update { copy(isOpened = false) } },
-        icon = painterResource(Res.drawable.LogoBlancoQuickness),
+        icon = painterResource(Res.drawable.TTNegro),
         title = state.name,
         state = windowState,
         resizable = true,

@@ -35,6 +35,18 @@ interface AttendanceDao {
     """)
     suspend fun getSpecificAttendanceRecord(classId: String, studentId: String, date: LocalDate): AttendanceEntity?
 
+    @Query(
+        """
+            SELECT * FROM attendance_records
+            WHERE record_class_id = :classId AND record_student_id = :studentId
+            ORDER BY record_date DESC
+        """
+    )
+    suspend fun getSpecificAttendanceStudent(
+        classId: String,
+        studentId: String
+    ): List<AttendanceEntity>
+
      // Borrar todos los registros para una clase en una fecha específica
      @Query("DELETE FROM attendance_records WHERE record_class_id = :classId AND record_date = :date")
      suspend fun deleteAttendanceForClassOnDate(classId: String, date: LocalDate)

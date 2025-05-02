@@ -17,7 +17,7 @@ import java.io.IOException
 fun initGcloudFromPath(credentialsPath: String?) {
     // 1. Validar que la ruta no sea nula o vacía
     if (credentialsPath.isNullOrBlank()) {
-        throw IllegalArgumentException("La ruta al archivo de credenciales no puede ser nula o estar vacía.")
+        throw java.lang.IllegalArgumentException("La ruta al archivo de credenciales no puede ser nula o estar vacía.")
     }
 
     println("Intentando cargar credenciales desde la ruta: $credentialsPath") // Ayuda para depurar

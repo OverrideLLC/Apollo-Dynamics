@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.home.tools.screens.add_class.AddClassScreen
+import com.feature.desktop.home.tools.screens.add_student.AddStudentScreen
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesScreen
 import com.feature.desktop.home.utils.routes.ToolRoute
 
@@ -24,7 +25,7 @@ fun NavigationTools(
             AddClassScreen(onCompletion = {})
         }
         composable(route = ToolRoute.AddStudent.route) {
-            TakeAttendeesScreen()
+            AddStudentScreen(onCompletion = {})
         }
     }
 }

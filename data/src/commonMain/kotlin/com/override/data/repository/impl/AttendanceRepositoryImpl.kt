@@ -95,6 +95,18 @@ class AttendanceRepositoryImpl(
         }
     }
 
+    override suspend fun getAttendanceHistoryForStudent(
+        studentId: String,
+        classId: String
+    ): List<AttendanceEntity> {
+        return withContext(Dispatchers.Swing) {
+            attendanceDao.getSpecificAttendanceStudent(
+                studentId = studentId,
+                classId = classId
+            )
+        }
+    }
+
     override suspend fun updateStudentAttendanceStatus(classId: String, studentId: String, date: LocalDate, newStatus: AttendanceStatus) {
         withContext(Dispatchers.Swing) {
             // Simplemente insertamos un nuevo registro. Gracias a OnConflictStrategy.REPLACE,

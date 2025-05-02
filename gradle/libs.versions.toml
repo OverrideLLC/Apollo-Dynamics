@@ -22,7 +22,6 @@ jetbrainsKotlinJvm = "2.1.0"
 generativeai = "0.9.0"
 generativeaiGoogleWasmJs = "0.9.0-1.0.1-wasm"
 ksp = "2.1.0-1.0.29"
-
 google-cloud-bom = "26.45.0"
 
 [libraries]
@@ -48,6 +47,7 @@ androidx-room-compailer = { group = "androidx.room", name = "room-compiler", ver
 google-cloud-bom = { module = "com.google.cloud:libraries-bom", version.ref = "google-cloud-bom" }
 google-cloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager" }
 google-cloud-firestore = { module = "com.google.cloud:google-cloud-firestore" }
+koi = { module = "com.s.s:sj", version = "2.0.0" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

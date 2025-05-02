@@ -5,14 +5,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.feature.desktop.start.screen.QrLoginState
+import com.feature.desktop.start.screen.QrUiState
 import com.feature.desktop.start.screen.StartViewModel
+import com.shared.resources.Res
+import com.shared.resources.TTNegro
 import com.shared.utils.routes.RoutesStart
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 // Asume que tienes un factory o Koin/Hilt configurado para instanciar StartViewModel
@@ -58,76 +67,89 @@ internal fun Content(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp)
+            .fillMaxSize(0.5f)
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.6f),
+                color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            InfoContent()
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier.fillMaxHeight().weight(2f), // Ocupa espacio disponible
-                contentAlignment = Alignment.Center
-            ) {
-                // Muestra contenido diferente según el estado del login QR
-                when (uiState.loginState) {
-                    QrLoginState.IDLE, QrLoginState.GENERATING -> {
-                        // Muestra un indicador de carga mientras se genera
-                        CircularProgressIndicator(color = colorScheme.primary)
-                    }
+            InfoContent(
+                modifier = Modifier.weight(2f)
+            )
+            VerticalDivider(modifier = Modifier.fillMaxHeight().width(1.dp),)
+            qr(
+                modifier = Modifier.weight(2f),
+                uiState = uiState
+            )
+        }
+    }
+}
 
-                    QrLoginState.DISPLAYING -> {
-                        // Muestra el QR si el contenido está listo
-                        if (uiState.qrContent != null) {
-                            // Llama al composable renombrado que solo muestra el QR
-                            QrDisplay(qrData = uiState.qrContent!!)
-                        } else {
-                            // Estado inconsistente, muestra error o reintenta
-                            Text("Generando código QR...", color = colorScheme.onSurface)
-                        }
-                    }
+@Composable
+private fun qr(modifier: Modifier, uiState: QrUiState, viewModel: StartViewModel = koinViewModel()) {
+    Box(
+        modifier = modifier.fillMaxHeight(), // Ocupa espacio disponible
+        contentAlignment = Alignment.Center
+    ) {
+        // Muestra contenido diferente según el estado del login QR
+        when (uiState.loginState) {
+            QrLoginState.IDLE, QrLoginState.GENERATING -> {
+                // Muestra un indicador de carga mientras se genera
+                CircularProgressIndicator(color = colorScheme.primary)
+            }
 
-                    QrLoginState.ERROR -> {
-                        // Muestra mensaje de error y un botón para reintentar
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = uiState.errorMessage ?: "Error desconocido",
-                                color = colorScheme.error,
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                            Button(onClick = { viewModel.startQrLoginProcess() }) {
-                                Text("Reintentar")
-                            }
-                        }
-                    }
+            QrLoginState.DISPLAYING -> {
+                // Muestra el QR si el contenido está listo
+                if (uiState.qrContent != null) {
+                    // Llama al composable renombrado que solo muestra el QR
+                    QrDisplay(qrData = uiState.qrContent!!)
+                } else {
+                    // Estado inconsistente, muestra error o reintenta
+                    Text("Generando código QR...", color = colorScheme.onSurface)
+                }
+            }
 
-                    QrLoginState.LOGGING_IN -> { // Podrías tener este estado si hay un paso intermedio
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            CircularProgressIndicator(color = colorScheme.primary)
-                            Text(
-                                "Verificando inicio de sesión...",
-                                color = colorScheme.onSurface,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                        }
-                    }
-
-                    QrLoginState.SUCCESS -> {
-                        // Muestra un mensaje de éxito brevemente antes de navegar (la navegación se maneja en LaunchedEffect)
-                        Text("¡Inicio de sesión exitoso!", color = colorScheme.primary)
+            QrLoginState.ERROR -> {
+                // Muestra mensaje de error y un botón para reintentar
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = uiState.errorMessage ?: "Error desconocido",
+                        color = colorScheme.error,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Button(onClick = { viewModel.startQrLoginProcess() }) {
+                        Text("Reintentar")
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
+
+            QrLoginState.LOGGING_IN -> { // Podrías tener este estado si hay un paso intermedio
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(color = colorScheme.primary)
+                    Text(
+                        "Verificando inicio de sesión...",
+                        color = colorScheme.onSurface,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+
+            QrLoginState.SUCCESS -> {
+                // Muestra un mensaje de éxito brevemente antes de navegar (la navegación se maneja en LaunchedEffect)
+                Text("¡Inicio de sesión exitoso!", color = colorScheme.primary)
+            }
         }
     }
+}
+
+@Composable
+fun RowScope.VerticalDivider(modifier: Modifier = Modifier) {
+    Divider(
+        modifier = modifier.fillMaxHeight().width(1.dp),
+        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+    )
 }

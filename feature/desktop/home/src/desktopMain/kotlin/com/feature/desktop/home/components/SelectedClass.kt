@@ -76,7 +76,8 @@ fun SelectedClass(
             ClassWidget(
                 classData = classData,
                 isSelected = classData.id == state.selectedClassId,
-                onClick = { viewModel.selectClass(classData.id) }
+                onClick = { viewModel.selectClass(classData.id) },
+                delete = { viewModel.deletedClass(classData.id) },
             )
         }
     }

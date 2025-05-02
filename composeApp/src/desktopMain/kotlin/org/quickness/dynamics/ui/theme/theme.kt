@@ -114,7 +114,7 @@ fun Typography(): Typography {
         titleSmall = TextStyle(fontFamily = ralewayThin),
         bodyLarge = TextStyle(fontFamily = ralewayBold),
         bodyMedium = TextStyle(fontFamily = ralewayMedium),
-        bodySmall = TextStyle(fontFamily = ralewayThin),
+        bodySmall = TextStyle(fontFamily = ralewayMedium),
         labelLarge = TextStyle(fontFamily = ralewayBold),
         labelMedium = TextStyle(fontFamily = ralewayMedium),
         labelSmall = TextStyle(fontFamily = ralewayThin),

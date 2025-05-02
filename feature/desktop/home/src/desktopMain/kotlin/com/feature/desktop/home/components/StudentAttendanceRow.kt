@@ -3,6 +3,7 @@ package com.feature.desktop.home.components
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ fun StudentAttendanceRow(
     // *** Cambiado a StudentWithStatus ***
     studentWithStatus: StudentWithStatus,
     index: Int,
+    onClickListener: () -> Unit,
     onStatusChange: (AttendanceStatus) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +55,8 @@ fun StudentAttendanceRow(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
+            .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            .clickable { onClickListener() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Celda Número de Lista
@@ -178,6 +181,7 @@ fun RowScope.VerticalDivider(modifier: Modifier = Modifier) {
 fun AttendanceSheet(
     // *** Cambiado a List<StudentWithStatus> ***
     studentsWithStatus: List<StudentWithStatus>,
+    onClickListener: (String) -> Unit,
     onStudentStatusChange: (studentId: String, newStatus: AttendanceStatus) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -211,6 +215,7 @@ fun AttendanceSheet(
                         StudentAttendanceRow(
                             studentWithStatus = studentWithStatus, // Pasar el objeto combinado
                             index = index,
+                            onClickListener = { onClickListener(studentWithStatus.student.id) },
                             onStatusChange = { newStatus ->
                                 // Llamar al callback con el ID del estudiante y el nuevo estado
                                 onStudentStatusChange(studentWithStatus.student.id, newStatus)

@@ -7,7 +7,7 @@ import java.io.FileInputStream
 
 fun initFirebase(): FirebaseApp? {
     try {
-        val serviceAccount = FileInputStream("C:\\Users\\chris\\Desktop\\quickness-backend-7f4ac-firebase-adminsdk-szh6q-0978bc4d55.json") // ¡Cuidado con la ruta!
+        val serviceAccount = FileInputStream("/home/christopher-cop787-gmail-com/Documentos/Credentials/Firebase/quickness-backend-f.json") // ¡Cuidado con la ruta!
         val credentials = GoogleCredentials.fromStream(serviceAccount)
         val options = FirebaseOptions.builder()
             .setCredentials(credentials)
@@ -16,7 +16,6 @@ fun initFirebase(): FirebaseApp? {
         FirebaseApp
             .initializeApp(options)
         return FirebaseApp.getInstance()
-        println("Firebase Inicializado Correctamente.")
     } catch (e: Exception) {
         println("Error inicializando Firebase: ${e.message}")
     }

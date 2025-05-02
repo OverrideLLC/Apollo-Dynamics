@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shared.resources.LogoBlancoQuickness
 // import androidx.navigation.NavController // Eliminado
 import com.shared.resources.Res // Importado correctamente
 import com.shared.resources.logo_quickness_redondeado // Importado correctamente
@@ -28,10 +29,13 @@ import qrgenerator.qrkitpainter.QrKitBrush
 import qrgenerator.qrkitpainter.QrKitColors
 import qrgenerator.qrkitpainter.QrKitErrorCorrection
 import qrgenerator.qrkitpainter.QrKitLogo
+import qrgenerator.qrkitpainter.QrKitLogoKitShape
+import qrgenerator.qrkitpainter.QrKitLogoPadding
 import qrgenerator.qrkitpainter.QrKitOptions
 import qrgenerator.qrkitpainter.QrKitPixelShape
 import qrgenerator.qrkitpainter.QrKitShapes
 import qrgenerator.qrkitpainter.QrPainter
+import qrgenerator.qrkitpainter.createCircle
 import qrgenerator.qrkitpainter.createRoundCorners
 // import qrgenerator.qrkitpainter.rememberQrKitPainter // No necesario si creamos QrPainter directamente
 import qrgenerator.qrkitpainter.solidBrush
@@ -53,7 +57,7 @@ internal fun QrDisplay(qrData: String) { // Cambiado el nombre y parámetro
             modifier = Modifier
                 .size(300.dp) // Puedes ajustar el tamaño si es necesario
                 .background(
-                    color = colorScheme.background.copy(alpha = 0.7f),
+                    color = Color.Black,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(10.dp)
@@ -85,18 +89,20 @@ internal fun qr(
             colors = QrKitColors(
                 lightBrush = QrKitBrush.solidBrush(color = Color.Transparent),
                 ballBrush = QrKitBrush.solidBrush(
-                    color = Color(0xff2787C3)
+                    color = Color(0xffffffff)
                 ),
                 frameBrush = QrKitBrush.solidBrush(
-                    color = Color(0xff1165B7)
+                    color = Color(0xffffffff)
                 ),
                 darkBrush = QrKitBrush.solidBrush(
-                    color = Color(0xff1165B7)
+                    color = Color(0xffffffff)
                 )
             ),
             logo = QrKitLogo(
-                painter = painterResource(Res.drawable.logo_quickness_redondeado),
-                size = 0.4f
+                painter = painterResource(Res.drawable.LogoBlancoQuickness),
+                size = 0.4f,
+                padding = QrKitLogoPadding.Exact(0.1f),
+                shape = QrKitLogoKitShape.createCircle()
             )
         ),
     )

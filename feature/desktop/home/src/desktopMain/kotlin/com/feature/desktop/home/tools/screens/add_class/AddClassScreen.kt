@@ -120,7 +120,7 @@ internal fun AddClassScreen(
                         onClick = viewModel::saveClass,
                         enabled = !state.isLoading // Deshabilitar si está cargando
                     ) {
-                        Text("Save Class")
+                        Text("Save Class", color = Color.White)
                     }
                 }
 
@@ -167,4 +167,3 @@ fun ColorChip(
             )
     )
 }
-

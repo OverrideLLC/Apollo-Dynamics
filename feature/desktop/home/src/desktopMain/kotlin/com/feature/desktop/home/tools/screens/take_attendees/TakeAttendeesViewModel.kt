@@ -271,6 +271,14 @@ class TakeAttendeesViewModel(
         }
     }
 
+    fun deletedClass(
+        classId: String
+    ) {
+        viewModelScope.launch(Dispatchers.Swing) {
+            classRepository.deleteClass(classId)
+        }
+    }
+
 
     // --- Funciones de QR y Añadir Clase (requieren lógica adicional) ---
 

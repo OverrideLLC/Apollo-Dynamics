@@ -7,11 +7,20 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.feature.desktop.home.tools.screens.student_status.StudentStatusScreen
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
 import com.feature.desktop.home.tools.screens.take_attendees.dateFormat
+import com.shared.resources.Res
+import com.shared.resources.badge_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
+import com.shared.ui.ScreenAction
 import kotlinx.datetime.format
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -22,6 +31,7 @@ fun AttendanceSheet(
     viewModel: TakeAttendeesViewModel = koinViewModel()
 ) {
     val titleDate = state.selectedDate?.format(dateFormat) ?: "No date selected"
+    var idStudent by remember { mutableStateOf<String?>(null) }
     Text(
         text = "Attendance List - $titleDate", // Título con fecha
         style = MaterialTheme.typography.titleLarge,
@@ -44,7 +54,18 @@ fun AttendanceSheet(
                 // La llamada al ViewModel no necesita cambiar aquí
                 viewModel.updateStudentAttendanceStatus(studentId, newStatus)
             },
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            onClickListener = { id ->  idStudent = id}
         )
+        idStudent?.let {
+            ScreenAction(
+                name = "Student Status",
+                icon = Res.drawable.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+                close = { idStudent = null },
+                content = {
+                    StudentStatusScreen(id = it)
+                }
+            )
+        }
     }
 }

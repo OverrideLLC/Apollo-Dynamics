@@ -4,6 +4,8 @@ import com.feature.desktop.home.HomeViewModel
 import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.feature.desktop.home.tools.ToolViewModel
 import com.feature.desktop.home.tools.screens.add_class.AddClassViewModel
+import com.feature.desktop.home.tools.screens.add_student.AddStudentViewModel
+import com.feature.desktop.home.tools.screens.student_status.StudentStatusViewModel
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
 import com.feature.desktop.start.screen.StartViewModel
 import org.koin.core.module.Module
@@ -18,4 +20,6 @@ val viewModelModule: Module
         viewModelOf(::TakeAttendeesViewModel)
         viewModelOf(::AddClassViewModel)
         viewModelOf(::StartViewModel)
+        viewModelOf(::AddStudentViewModel)
+        viewModelOf(::StudentStatusViewModel)
     }
