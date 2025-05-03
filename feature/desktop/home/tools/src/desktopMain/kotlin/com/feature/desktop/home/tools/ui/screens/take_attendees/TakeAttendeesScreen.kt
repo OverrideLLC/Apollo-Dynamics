@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.tools.ui.components.AttendanceSheet
+import com.feature.desktop.home.tools.ui.components.sheet.AttendanceSheet
 import com.feature.desktop.home.tools.ui.components.SelectedClass
 import com.feature.desktop.home.tools.ui.components.SelectedDateExisting
 import com.feature.desktop.home.tools.ui.components.SelectionDate

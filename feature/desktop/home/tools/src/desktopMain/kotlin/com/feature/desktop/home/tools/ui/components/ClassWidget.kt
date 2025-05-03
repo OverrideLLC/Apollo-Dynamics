@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,50 +27,72 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.override.data.utils.data.ClassData
 
-@OptIn(ExperimentalMaterial3Api::class) // Necesario para Card onClick
+/**
+ * Componente composable que representa un widget de clase.
+ * Muestra la información de una clase en un formato de tarjeta.
+ *
+ * @param classData Datos de la clase que se van a mostrar.
+ * @param isSelected Booleano que indica si la clase está seleccionada.
+ * @param onClick Función lambda que se ejecuta cuando se hace clic en la tarjeta.
+ * @param delete Función lambda que se ejecuta cuando se hace clic en el icono de eliminar.
+ * @param modifier Modificador para personalizar el aspecto del widget.
+ */
 @Composable
 internal fun ClassWidget(
     classData: ClassData,
-    isSelected: Boolean, // Nuevo parámetro para saber si está seleccionada
-    onClick: () -> Unit, // Nuevo parámetro para manejar el click
+    isSelected: Boolean,
+    onClick: () -> Unit,
     delete: () -> Unit,
-    modifier: Modifier = Modifier // Permitir pasar modificadores externos
+    modifier: Modifier = Modifier
 ) {
+    /**
+     * Tarjeta principal que contiene la información de la clase.
+     *
+     * @param onClick Acción que se ejecuta al hacer clic en la tarjeta.
+     * @param modifier Modificador para personalizar el aspecto de la tarjeta.
+     * @param elevation Elevación de la tarjeta en diferentes estados (default, pressed, hovered).
+     * @param shape Forma de la tarjeta.
+     * @param colors Colores de la tarjeta.
+     */
     Card(
         onClick = onClick,
-        modifier = modifier
-            .size(width = 220.dp, height = 180.dp), // Tamaño ligeramente ajustado
+        modifier = modifier.size(width = 220.dp, height = 180.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
             pressedElevation = 8.dp,
             hoveredElevation = 6.dp
         ),
-        shape = MaterialTheme.shapes.medium, // Usar formas de M3
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onBackground // Un color de fondo sutil
-        ),
-        // Añadir un borde si está seleccionada, usando el color de la clase
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = colorScheme.onBackground),
         border = if (isSelected) BorderStroke(3.dp, classData.color) else null
     ) {
+        /**
+         * Columna que organiza los elementos dentro de la tarjeta.
+         *
+         * @param modifier Modificador para personalizar el aspecto de la columna.
+         * @param verticalArrangement Espaciado entre los elementos de la columna.
+         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // Añadir un borde superior sutil con el color de la clase como acento
-                // .border(BorderStroke(4.dp, classData.color), shape = RectangleShape) // Alternativa: borde superior
-                .padding(16.dp), // Padding interno
-            verticalArrangement = Arrangement.spacedBy(8.dp) // Espacio entre elementos
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Nombre de la clase (más prominente)
+            /**
+             * Fila que contiene el nombre de la clase y el botón de eliminar.
+             *
+             * @param modifier Modificador para personalizar el aspecto de la fila.
+             * @param verticalAlignment Alineación vertical de los elementos.
+             * @param horizontalArrangement Espaciado horizontal entre los elementos.
+             */
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Text(
                     text = classData.name,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = classData.color // Usar el color como acento aquí
+                    color = classData.color
                 )
                 IconButton(
                     modifier = Modifier.size(24.dp),
@@ -84,20 +107,22 @@ internal fun ClassWidget(
                     }
                 )
             }
-
-            // Separador sutil
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
-
-            // Otros detalles con tipografía más pequeña y color estándar
-            Text(
+            /**
+             * Divider para separar el nombre de la clase de los detalles.
+             *
+             * @param thickness Grosor de la línea divisoria.
+             * @param color Color de la línea divisoria.
+             */
+            HorizontalDivider(thickness = 1.dp, color = colorScheme.outline.copy(alpha = 0.5f))
+            Text(// Muestra la carrera y el grado de la clase.
                 text = "${classData.career} - ${classData.degree}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface // Color estándar para legibilidad
+                color = colorScheme.onSurface
             )
             Text(
-                text = "Sección: ${classData.section}",
+                text = "Section: ${classData.section}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant // Color ligeramente diferente
+                color = colorScheme.onSurfaceVariant
             )
         }
     }

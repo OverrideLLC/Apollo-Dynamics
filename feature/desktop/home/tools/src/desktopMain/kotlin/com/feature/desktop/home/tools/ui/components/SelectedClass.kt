@@ -34,18 +34,33 @@ import com.shared.ui.ScreenAction
 import org.jetbrains.compose.resources.DrawableResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Composable que muestra la sección para seleccionar una clase.
+ *
+ * Esta función muestra una lista horizontal de clases disponibles,
+ * permite al usuario seleccionar una clase y también añadir nuevas clases.
+ * Además, muestra ventanas modales para visualizar el código QR de asistencia
+ * y para crear una nueva clase.
+ *
+ * @param viewModel El ViewModel que gestiona el estado de la toma de asistencia.
+ * @param state El estado actual del ViewModel.
+ * @param modifier Modificador para personalizar el diseño del composable.
+ */
 @Composable
-fun SelectedClass(
+internal fun SelectedClass(
     viewModel: TakeAttendeesViewModel = koinViewModel(),
     state: TakeAttendeesViewModel.TakeAttendeesState,
     modifier: Modifier
 ) {
+    // Estado para el desplazamiento horizontal de la lista de clases.
     val scrollHorizontalState = rememberLazyListState()
 
-    Text("Select a Class:", style = MaterialTheme.typography.titleMedium)
+    Text("Select a Class:", style = MaterialTheme.typography.titleMedium) // Texto que indica al usuario que seleccione una clase.
+    // Lista horizontal de clases.
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 4.dp),
+        // Se asigna el estado del desplazamiento horizontal.
         state = scrollHorizontalState
     ) {
         item {
@@ -71,6 +86,7 @@ fun SelectedClass(
                 )
             }
         }
+        // Se muestran las clases existentes.
         items(state.allClasses, key = { it.id }) { classData ->
             ClassWidget(
                 classData = classData,
@@ -81,10 +97,12 @@ fun SelectedClass(
         }
     }
 
+    // Barra de desplazamiento horizontal.
     HorizontalScrollbar(
         modifier = modifier.fillMaxWidth(),
         adapter = rememberScrollbarAdapter(scrollHorizontalState)
     )
+    // Muestra la ventana modal con el código QR si está disponible.
     state.qr?.let { qr ->
         ShowWindows(
             name = "Qr Attendance",
@@ -104,7 +122,8 @@ fun SelectedClass(
                 )
             }
         )
-    } ?: run { }
+    }
+    // Muestra la ventana modal para crear una nueva clase si se ha solicitado.
     state.newClass?.let {
         ShowWindows(
             name = "New Class",
@@ -123,9 +142,19 @@ fun SelectedClass(
                 )
             }
         )
-    } ?: run { }
+    }
 }
 
+/**
+ * Composable privado que muestra una ventana modal genérica.
+ *
+ * @param name El nombre de la ventana.
+ * @param icon El icono de la ventana.
+ * @param dpSize El tamaño de la ventana.
+ * @param close La función que se ejecuta al cerrar la ventana.
+ * @param content El contenido que se mostrará en la ventana.
+ *
+ */
 @Composable
 private fun ShowWindows(
     name: String = "",

@@ -33,21 +33,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.feature.desktop.home.tools.ui.components.add_student.AssignClass
+import com.feature.desktop.home.tools.ui.components.add_student.InputsAddStudent
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
 import com.shared.ui.qr
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class) // Necesario para ExposedDropdownMenuBox
 @Composable
 internal fun AddStudentScreen(
-    viewModel: AddStudentViewModel = koinViewModel(), // Inyecta el ViewModel
-    onCompletion: () -> Unit // Callback para cuando se completa la acción
+    viewModel: AddStudentViewModel = koinViewModel(),
+    onCompletion: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     var isClassDropdownExpanded by remember { mutableStateOf(false) }
-
-    // Navegar hacia atrás o cerrar cuando el guardado es exitoso
     LaunchedEffect(state.saveSuccess) {
         if (state.saveSuccess) {
             onCompletion()
@@ -61,91 +60,17 @@ internal fun AddStudentScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Add New Student", style = MaterialTheme.typography.headlineMedium)
-
-        // Campo para el nombre del estudiante
-        OutlinedTextField(
-            value = state.studentName,
-            onValueChange = viewModel::onStudentNameChange,
-            label = { Text("Student Name") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            isError = state.error != null && state.studentName.isBlank()
+        InputsAddStudent(
+            viewModel = viewModel,
+            state = state
         )
-
-        OutlinedTextField(
-            value = state.studentEmail,
-            onValueChange = viewModel::onStudentEmailChange,
-            label = { Text("Student Email (Optional)") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+        AssignClass(
+            state = state,
+            viewModel = viewModel,
+            isClassDropdownExpanded = isClassDropdownExpanded,
+            onClassDropdownExpandedChange = { isClassDropdownExpanded = it }
         )
-
-        OutlinedTextField(
-            value = state.studentNumber,
-            onValueChange = viewModel::onStudentNumberChange,
-            label = { Text("Student Number (Optional)") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = state.studentControlNumber,
-            onValueChange = viewModel::onStudentControlNumberChange,
-            label = { Text("Student Control Number") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
-
-        // Selector de Clase
-        Text("Assign to Class:", style = MaterialTheme.typography.titleMedium)
-
-        if (state.isLoadingClasses) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
-        } else if (state.availableClasses.isNotEmpty()) {
-            // Dropdown para seleccionar la clase
-            ExposedDropdownMenuBox(
-                expanded = isClassDropdownExpanded,
-                onExpandedChange = { isClassDropdownExpanded = !isClassDropdownExpanded }
-            ) {
-                OutlinedTextField(
-                    value = state.selectedClass?.name
-                        ?: "Select a class", // Muestra nombre o placeholder
-                    onValueChange = {}, // No editable directamente
-                    readOnly = true,
-                    label = { Text("Class") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isClassDropdownExpanded) },
-                    modifier = Modifier
-                        .menuAnchor() // Ancla el menú al TextField
-                        .fillMaxWidth(),
-                    isError = state.error != null && state.selectedClass == null
-                )
-
-                // Contenido del menú desplegable
-                ExposedDropdownMenu(
-                    expanded = isClassDropdownExpanded,
-                    containerColor = colorScheme.primary,
-                    onDismissRequest = { isClassDropdownExpanded = false }
-                ) {
-                    state.availableClasses.forEach { classItem ->
-                        DropdownMenuItem(
-                            text = { Text("${classItem.name} (${classItem.degree} ${classItem.section})", color = colorScheme.onTertiary) }, // Muestra detalles de la clase
-                            onClick = {
-                                viewModel.onClassSelected(classItem)
-                                isClassDropdownExpanded = false // Cierra el menú
-                            }
-                        )
-                    }
-                }
-            }
-        } else {
-            Text("No classes available to assign.", style = MaterialTheme.typography.bodyMedium)
-        }
-
-
-        Spacer(Modifier.height(16.dp)) // Espacio antes del botón
-
-        // Botón de Guardar y Mensaje de Error/Carga
+        Spacer(Modifier.height(16.dp))
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 if (state.isLoadingSave) {
@@ -153,13 +78,11 @@ internal fun AddStudentScreen(
                 } else {
                     Button(
                         onClick = viewModel::saveStudent,
-                        enabled = !state.isLoadingSave && state.selectedClass != null // Habilitado si no carga y hay clase seleccionada
+                        enabled = !state.isLoadingSave && state.selectedClass != null
                     ) {
                         Text("Save Student", color = colorScheme.onTertiary)
                     }
                 }
-
-                // Muestra mensaje de error general
                 state.error?.let {
                     Text(
                         text = it,
@@ -187,7 +110,6 @@ internal fun AddStudentScreen(
                         }
                     )
                 }
-                // No mostramos mensaje de éxito aquí porque usamos LaunchedEffect para navegar/cerrar
             }
         }
     }

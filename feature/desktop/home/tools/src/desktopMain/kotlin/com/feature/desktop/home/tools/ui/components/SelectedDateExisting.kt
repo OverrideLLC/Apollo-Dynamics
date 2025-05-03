@@ -16,17 +16,30 @@ import com.override.data.utils.data.ClassData
 import kotlinx.datetime.format
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Componente Composable que muestra las fechas disponibles para tomar asistencia.
+ *
+ * Muestra una lista horizontal de chips de filtro que representan las fechas en las que
+ * se ha tomado asistencia. Permite al usuario seleccionar una fecha específica. Si no hay
+ * fechas disponibles, muestra un mensaje indicando que no hay registros de asistencia.
+ *
+ * @param viewModel El ViewModel [TakeAttendeesViewModel] que gestiona el estado de la asistencia.
+ * @param state El estado [TakeAttendeesViewModel.TakeAttendeesState] actual del ViewModel.
+ * @param selectedClass La clase [ClassData] actualmente seleccionada.
+ */
 @Composable
-fun SelectedDateExisting(
+internal fun SelectedDateExisting(
     viewModel: TakeAttendeesViewModel = koinViewModel(),
     state: TakeAttendeesViewModel.TakeAttendeesState,
     selectedClass: ClassData?
 ) {
+    // Si hay fechas disponibles, muestra la lista de fechas como chips de filtro.
     if (state.availableDates.isNotEmpty()) {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(vertical = 4.dp)
         ) {
+            // Itera sobre las fechas disponibles y crea un chip de filtro para cada una.
             items(state.availableDates, key = { it.toString() }) { date ->
                 FilterChip(
                     selected = date == state.selectedDate,
@@ -40,6 +53,7 @@ fun SelectedDateExisting(
                 )
             }
         }
+    // Si no hay fechas disponibles, muestra un mensaje informativo.
     } else {
         Text(
             "No attendance records yet for ${selectedClass?.name}. Click 'Pass List Today' to start.",
@@ -47,5 +61,4 @@ fun SelectedDateExisting(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
-
 }
