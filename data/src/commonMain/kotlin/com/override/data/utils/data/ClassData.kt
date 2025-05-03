@@ -1,8 +1,9 @@
-package com.feature.desktop.home.utils.data
+package com.override.data.utils.data
 
 import androidx.compose.ui.graphics.Color
-import com.feature.desktop.home.utils.enum.AttendanceStatus
+import com.override.data.utils.enum.AttendanceStatus
 import kotlinx.datetime.LocalDate
+
 
 data class ClassData(
     val id: String,

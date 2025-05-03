@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.HomeViewModel
 import com.feature.desktop.home.task.TasksScreen
 import com.feature.desktop.home.tools.ToolsScreen
+import com.shared.ui.onBackground
 
 @Composable
 internal fun Content(
@@ -91,7 +92,7 @@ internal fun WorkSpace(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = onBackground(),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = { workspace() }
@@ -108,7 +109,7 @@ internal fun Task(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = onBackground(),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {
@@ -129,7 +130,7 @@ internal fun Tools(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = colorScheme.onBackground.copy(alpha = 0.7f),
+                color = onBackground(),
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {

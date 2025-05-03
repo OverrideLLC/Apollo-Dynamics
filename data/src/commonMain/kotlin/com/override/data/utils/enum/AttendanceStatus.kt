@@ -1,4 +1,4 @@
-package com.feature.desktop.home.utils.enum
+package com.override.data.utils.enum
 
 enum class AttendanceStatus(val displayName: String) {
     PRESENT("PRESENT"),

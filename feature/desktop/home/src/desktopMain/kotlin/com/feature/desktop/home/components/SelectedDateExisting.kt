@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.tools.screens.take_attendees.TakeAttendeesViewModel
 import com.feature.desktop.home.tools.screens.take_attendees.dateFormat
-import com.feature.desktop.home.utils.data.ClassData
+import com.override.data.utils.data.ClassData
 import kotlinx.datetime.format
 import org.koin.compose.viewmodel.koinViewModel
 

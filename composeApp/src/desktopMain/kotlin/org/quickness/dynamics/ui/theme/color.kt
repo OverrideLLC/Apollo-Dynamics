@@ -20,7 +20,7 @@ val tertiaryContainer: Color = Color(0xFFd9d9d9) // Tono gris claro para contene
 val onTertiaryContainer: Color = Color(0xFF2a2a2a) // Contraste oscuro para contenedores claros
 
 val background: Color = Color(0xffffffff)
-val onBackground: Color = Color(0xffadce9c)
+val onBackground: Color = Color(0xfff5f6f8)
 
 // --- Recomendaciones para Superficies (Tema Claro) ---
 

@@ -1,6 +1,6 @@
-package com.feature.desktop.home.utils.data
+package com.override.data.utils.data
 
-import com.feature.desktop.home.utils.enum.AttendanceStatus
+import com.override.data.utils.enum.AttendanceStatus
 
 // --- StudentWithStatus.kt (Nuevo - Helper para la UI) ---
 // Combina el estudiante con su estado para una fecha específica (usado en la UI)

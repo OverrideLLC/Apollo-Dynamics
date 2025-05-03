@@ -1,20 +1,27 @@
 package com.feature.desktop.home.tools.screens.take_attendees
 
+
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.feature.desktop.home.utils.data.AttendanceRecord
-import com.feature.desktop.home.utils.data.ClassData
-import com.feature.desktop.home.utils.data.Student
-import com.feature.desktop.home.utils.data.StudentWithStatus
-import com.feature.desktop.home.utils.enum.AttendanceStatus
+import androidx.lifecycle.viewModelScope
+import com.override.data.repository.contract.AttendanceRepository
+import com.override.data.repository.contract.ClassRepository
+import com.override.data.utils.data.ClassData
+import com.override.data.utils.data.StudentWithStatus
+import com.override.data.utils.enum.AttendanceStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.swing.Swing
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import qrgenerator.qrkitpainter.QrKitBallShape
 import qrgenerator.qrkitpainter.QrKitBrush
@@ -25,193 +32,258 @@ import qrgenerator.qrkitpainter.QrKitShapes
 import qrgenerator.qrkitpainter.QrPainter
 import qrgenerator.qrkitpainter.createRoundCorners
 import qrgenerator.qrkitpainter.solidBrush
-import kotlin.random.Random
 
-class TakeAttendeesViewModel : ViewModel() {
+// Quitar imports innecesarios como Random, DateTimeUnit, plus si ya no se usan para sample data
+
+// *** PASO 1: Añadir Repositorios al Constructor ***
+// Idealmente, Koin inyectaría estos.
+class TakeAttendeesViewModel(
+    private val classRepository: ClassRepository,
+    private val attendanceRepository: AttendanceRepository,
+    // private val studentRepository: StudentRepository // Añadir si se necesita directamente
+) : ViewModel() {
+
+    private val customViewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Swing)
+
+    // El State se mantiene igual
     data class TakeAttendeesState(
-        val isLoading: Boolean = false,
-        val allClasses: List<ClassData> = emptyList(), // Todas las clases disponibles
-        val selectedClassId: String? = null, // ID de la clase seleccionada
-        val availableDates: List<LocalDate> = emptyList(), // Fechas con asistencia para la clase seleccionada
-        val selectedDate: LocalDate? = null, // Fecha seleccionada para mostrar/editar
-        // Lista de estudiantes CON su estado para la clase y fecha seleccionadas
+        val isLoading: Boolean = true, // Empezar cargando
+        val allClasses: List<ClassData> = emptyList(),
+        val selectedClassId: String? = null,
+        val availableDates: List<LocalDate> = emptyList(),
+        val selectedDate: LocalDate? = null,
         val studentsForSelectedDate: List<StudentWithStatus> = emptyList(),
         val error: String? = null,
         val qr: QrPainter? = null,
         val tokenAttendees: String? = null,
-        val newClass: ClassData? = null,
+        val newClass: Boolean? = null,
     )
 
     private val _state = MutableStateFlow(TakeAttendeesState())
     val state = _state.asStateFlow()
 
-    // Reloj para obtener la fecha actual (importante para multiplatform)
+    // Reloj y Zona Horaria (se mantienen)
     private val clock: Clock = Clock.System
-
-    // Zona horaria del sistema (puede necesitar ajuste para diferentes plataformas)
     private val zoneId: TimeZone = TimeZone.currentSystemDefault()
 
 
     init {
-        loadInitialData()
+        // *** PASO 2: Cargar Datos desde Repositorios ***
+        loadInitialDataFromDb()
     }
 
-    private fun loadInitialData() {
-        _state.update { it.copy(isLoading = true) }
-        // Simular carga de datos (reemplazar con tu lógica real: Koin, Firebase, etc.)
-        val sampleClasses = generateSampleClassDataWithHistory(5)
-        val initialClass = sampleClasses.firstOrNull()
-        val initialDate = initialClass?.getAttendanceDates()?.firstOrNull() // La fecha más reciente
+    private fun loadInitialDataFromDb() {
+        _state.update { it.copy(isLoading = true, error = null) }
 
-        _state.update {
-            it.copy(
-                isLoading = false,
-                allClasses = sampleClasses,
-                selectedClassId = initialClass?.id,
-                availableDates = initialClass?.getAttendanceDates() ?: emptyList(),
-                selectedDate = initialDate,
-                studentsForSelectedDate = initialClass?.getStudentsWithStatusForDate(
-                    initialDate ?: clock.todayIn(zoneId)
-                ) ?: emptyList()
-            )
-        }
+        // Observar el Flow de clases desde el repositorio
+        classRepository.getAllClasses()
+            .onEach { classes ->
+                // Cuando la lista de clases cambie (desde la BD)...
+                val currentSelectedId = _state.value.selectedClassId
+                val selectedClassStillExists = classes.any { it.id == currentSelectedId }
+                val newSelectedClassId =
+                    if (selectedClassStillExists) currentSelectedId else classes.firstOrNull()?.id
+
+                _state.update { it.copy(allClasses = classes) } // Actualizar la lista de clases
+
+                if (newSelectedClassId != null) {
+                    // Si hay una clase seleccionada (o se seleccionó la primera), cargar sus detalles
+                    selectClassInternal(newSelectedClassId) // Usar función interna para evitar bucles
+                } else {
+                    // No hay clases, limpiar estado relacionado
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            selectedClassId = null,
+                            availableDates = emptyList(),
+                            selectedDate = null,
+                            studentsForSelectedDate = emptyList()
+                        )
+                    }
+                }
+            }
+            .launchIn(customViewModelScope) // Lanzar la colección en el scope del ViewModel
     }
+
+    // --- Acciones del Usuario (Modificadas para usar Repositorios) ---
 
     fun selectClass(classId: String) {
-        val selectedClass = _state.value.allClasses.find { it.id == classId } ?: return
-        val availableDates = selectedClass.getAttendanceDates()
-        val dateToSelect = availableDates.firstOrNull() // Seleccionar la más reciente por defecto
-
-        _state.update {
-            it.copy(
-                selectedClassId = classId,
-                availableDates = availableDates,
-                selectedDate = dateToSelect,
-                studentsForSelectedDate = selectedClass.getStudentsWithStatusForDate(
-                    dateToSelect ?: clock.todayIn(zoneId)
-                ) // Cargar estudiantes para esa fecha
-            )
-        }
-        println("Selected Class: ${selectedClass.name}, Dates: $availableDates, Selected Date: $dateToSelect")
+        selectClassInternal(classId)
     }
 
-    fun selectDate(date: LocalDate) {
-        val selectedClass =
-            _state.value.allClasses.find { it.id == _state.value.selectedClassId } ?: return
-
+    // Función interna para ser llamada desde la carga inicial o la acción del usuario
+    private fun selectClassInternal(classId: String) {
         _state.update {
             it.copy(
-                selectedDate = date,
-                studentsForSelectedDate = selectedClass.getStudentsWithStatusForDate(date)
+                isLoading = true,
+                selectedClassId = classId,
+                error = null
             )
+        } // Marcar carga y seleccionar ID
+
+        viewModelScope.launch(Dispatchers.Swing) {
+            try {
+                // Obtener las fechas disponibles para esta clase desde el repositorio
+                val availableDates = classRepository.getAttendanceDatesForClass(classId)
+                val dateToSelect =
+                    availableDates.firstOrNull() // Seleccionar la más reciente por defecto
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        availableDates = availableDates,
+                        selectedDate = dateToSelect,
+                        studentsForSelectedDate = emptyList()
+                    )
+                }
+
+                // Si se seleccionó una fecha, cargar los estudiantes para esa fecha
+                if (dateToSelect != null) {
+                    selectDate(dateToSelect) // Llama a la función selectDate para cargar estudiantes
+                } else {
+                    // Si no hay fechas, indicar que no hay carga pendiente
+                    _state.update { it.copy(isLoading = false) }
+                }
+
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error loading class dates: ${e.message}"
+                    )
+                }
+            }
         }
-        println("Selected Date: $date")
+    }
+
+
+    fun selectDate(date: LocalDate) {
+        val classId = _state.value.selectedClassId ?: return
+        _state.update {
+            it.copy(
+                isLoading = true,
+                selectedDate = date,
+                error = null
+            )
+        } // Marcar carga y seleccionar fecha
+
+        viewModelScope.launch(Dispatchers.Swing) {
+            try {
+                // Obtener estudiantes con estado para la clase y fecha seleccionadas desde el repositorio
+                val students = attendanceRepository.getAttendanceForClassOnDate(classId, date)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        studentsForSelectedDate = students
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error loading students for date: ${e.message}"
+                    )
+                }
+            }
+        }
     }
 
     fun updateStudentAttendanceStatus(studentId: String, newStatus: AttendanceStatus) {
-        val currentState = _state.value
-        val classId = currentState.selectedClassId ?: return
-        val date = currentState.selectedDate ?: return
+        val classId = _state.value.selectedClassId ?: return
+        val date = _state.value.selectedDate ?: return
+        // No necesitamos actualizar el estado localmente aquí.
+        // El cambio se hará en la BD y el Flow lo reflejará.
 
-        _state.update {
-            // Crear nuevas listas/mapas para asegurar la actualización del estado
-            val updatedClasses = it.allClasses.map { classItem ->
-                if (classItem.id == classId) {
-                    // Encontrar o crear el registro para la fecha
-                    val existingRecordIndex =
-                        classItem.attendanceHistory.indexOfFirst { record -> record.date == date }
-                    val updatedHistory: List<AttendanceRecord>
+        viewModelScope.launch(Dispatchers.Swing) {
+            _state.update { it.copy(isLoading = true) } // Opcional: indicar carga breve
+            try {
+                // Llamar al repositorio para actualizar la BD
+                attendanceRepository.updateStudentAttendanceStatus(
+                    classId,
+                    studentId,
+                    date,
+                    newStatus
+                )
+                // ¡Importante! No actualizamos `studentsForSelectedDate` directamente aquí.
+                // La actualización vendrá automáticamente cuando `getAttendanceForClassOnDate`
+                // sea llamado de nuevo (implícitamente si `selectDate` se llama de nuevo,
+                // o explícitamente si forzamos una recarga).
+                // Para una UI más reactiva, podríamos forzar la recarga de la fecha actual:
+                selectDate(date) // Vuelve a cargar los datos para la fecha actual
+                // _state.update { it.copy(isLoading = false) } // isLoading se maneja en selectDate
 
-                    if (existingRecordIndex != -1) {
-                        // Modificar registro existente
-                        val oldRecord = classItem.attendanceHistory[existingRecordIndex]
-                        val updatedAttendanceMap = oldRecord.attendance.toMutableMap()
-                        updatedAttendanceMap[studentId] = newStatus
-                        val newRecord = oldRecord.copy(attendance = updatedAttendanceMap)
-                        updatedHistory = classItem.attendanceHistory.toMutableList().apply {
-                            set(existingRecordIndex, newRecord)
-                        }
-                    } else {
-                        // Esto no debería pasar si se creó el día primero, pero como fallback:
-                        println("Warning: Updating status for a date with no existing record. Creating one.")
-                        val newAttendanceMap = mapOf(studentId to newStatus)
-                        // Asegurarse que todos los demás estudiantes tengan UNKNOWN
-                        val completeAttendanceMap = classItem.roster.associate { student ->
-                            student.id to (newAttendanceMap[student.id] ?: AttendanceStatus.UNKNOWN)
-                        }
-                        val newRecord =
-                            AttendanceRecord(date = date, attendance = completeAttendanceMap)
-                        updatedHistory = classItem.attendanceHistory + newRecord
-                    }
-                    classItem.copy(attendanceHistory = updatedHistory.sortedByDescending { r -> r.date }) // Mantener ordenado
-                } else {
-                    classItem // Devolver otras clases sin modificar
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error updating status: ${e.message}"
+                    )
                 }
             }
-
-            // Recalcular la lista de estudiantes para la UI con el estado actualizado
-            val updatedSelectedClass = updatedClasses.find { c -> c.id == classId }
-            val updatedStudentsForDate =
-                updatedSelectedClass?.getStudentsWithStatusForDate(date) ?: emptyList()
-
-            it.copy(
-                allClasses = updatedClasses,
-                studentsForSelectedDate = updatedStudentsForDate
-                // availableDates podría necesitar actualizarse si se creó un nuevo registro (ver addNewAttendanceDay)
-            )
         }
-        println("Updated status for $studentId to $newStatus on $date")
     }
 
     fun addNewAttendanceDay(targetDate: LocalDate = clock.todayIn(zoneId)) {
-        val currentState = _state.value
-        val classId = currentState.selectedClassId ?: return
-        val selectedClass = currentState.allClasses.find { it.id == classId } ?: return
+        val classId = _state.value.selectedClassId ?: return
+        val selectedClass = _state.value.allClasses.find { it.id == classId } ?: return
 
-        // Verificar si ya existe un registro para este día
-        if (selectedClass.attendanceHistory.any { it.date == targetDate }) {
+        // Verificar si ya existe localmente (podría chequearse en repo también)
+        if (_state.value.availableDates.contains(targetDate)) {
             println("Attendance record for $targetDate already exists.")
-            // Opcionalmente, seleccionar esa fecha si no es la actual
-            if (currentState.selectedDate != targetDate) {
-                selectDate(targetDate)
+            if (_state.value.selectedDate != targetDate) {
+                selectDate(targetDate) // Selecciona la fecha existente
             }
             return
         }
 
-        _state.update { it.copy(isLoading = true) } // Indicar carga
+        _state.update { it.copy(isLoading = true) }
 
-        // Crear el nuevo registro con todos los estudiantes como UNKNOWN
-        val initialAttendanceMap = selectedClass.roster.associate { student ->
-            student.id to AttendanceStatus.UNKNOWN
-        }
-        val newRecord = AttendanceRecord(date = targetDate, attendance = initialAttendanceMap)
+        viewModelScope.launch(Dispatchers.Swing) {
+            try {
+                // 1. Obtener el roster actual (necesario para inicializar el día)
+                //    Asumiendo que classRepository.getClassById devuelve ClassData con roster
+                val classData = classRepository.getClassById(classId)
+                if (classData == null) {
+                    _state.update { it.copy(isLoading = false, error = "Class not found") }
+                    return@launch
+                }
 
-        // Actualizar la lista de clases
-        _state.update {
-            val updatedClasses = it.allClasses.map { classItem ->
-                if (classItem.id == classId) {
-                    val updatedHistory =
-                        (classItem.attendanceHistory + newRecord).sortedByDescending { r -> r.date }
-                    classItem.copy(attendanceHistory = updatedHistory)
-                } else {
-                    classItem
+                // 2. Crear el mapa inicial (todos UNKNOWN o PRESENT por defecto?)
+                val initialAttendanceMap = classData.roster.associate { student ->
+                    student.id to AttendanceStatus.UNKNOWN // O AttendanceStatus.PRESENT si prefieres
+                }
+
+                // 3. Llamar al repositorio para guardar el nuevo registro de asistencia
+                attendanceRepository.recordAttendance(classId, targetDate, initialAttendanceMap)
+
+                // 4. Refrescar datos para la clase seleccionada para obtener la nueva lista de fechas
+                //    y seleccionar automáticamente el nuevo día.
+                selectClassInternal(classId) // Esto recargará las fechas y seleccionará la más reciente (que será la nueva)
+
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error adding new attendance day: ${e.message}"
+                    )
                 }
             }
-            val newSelectedClass = updatedClasses.find { c -> c.id == classId }!!
-            val newAvailableDates = newSelectedClass.getAttendanceDates()
-
-            it.copy(
-                isLoading = false,
-                allClasses = updatedClasses,
-                availableDates = newAvailableDates,
-                selectedDate = targetDate, // Seleccionar automáticamente el nuevo día
-                studentsForSelectedDate = newSelectedClass.getStudentsWithStatusForDate(targetDate) // Mostrar la lista del nuevo día
-            )
         }
-        println("Added new attendance day: $targetDate for class $classId")
     }
 
+    fun deletedClass(
+        classId: String
+    ) {
+        viewModelScope.launch(Dispatchers.Swing) {
+            classRepository.deleteClass(classId)
+        }
+    }
+
+
+    // --- Funciones de QR y Añadir Clase (requieren lógica adicional) ---
+
     fun generateAttendanceQr() {
+        // La lógica del token y QR se mantiene igual por ahora
         _state.update {
             it.copy(
                 qr = qr(it.tokenAttendees ?: "Non")
@@ -222,6 +294,7 @@ class TakeAttendeesViewModel : ViewModel() {
     private fun qr(
         token: String,
     ): QrPainter {
+        // ... (código del QR sin cambios)
         return QrPainter(
             content = token,
             config = QrKitOptions(
@@ -245,62 +318,15 @@ class TakeAttendeesViewModel : ViewModel() {
         )
     }
 
-    fun closeQr() {
-        _state.update {
-            it.copy(qr = null)
-        }
-    }
-
     fun addNewClass() {
-        /*
-        agregar logica para generar clases.
-         */
+        _state.update { it.copy(newClass = true) }
     }
 
-    private fun generateSampleClassDataWithHistory(count: Int): List<ClassData> {
-        val random = Random(System.currentTimeMillis())
-        val clock: Clock = Clock.System
-        val zoneId: TimeZone = TimeZone.currentSystemDefault()
-        val today = clock.todayIn(zoneId)
+    fun closeQr() {
+        _state.update { it.copy(qr = null) }
+    }
 
-        return List(count) { classIndex ->
-            val roster = List(random.nextInt(15, 25)) { studentIndex ->
-                Student(
-                    id = "student_${classIndex}_$studentIndex",
-                    name = "Student ${('A'..'Z').random()}${('a'..'z').random()}${('a'..'z').random()} ${('A'..'Z').random()}.",
-                    email = "student${classIndex}_${studentIndex}@example.com",
-                    number = "N${random.nextInt(1000, 9999)}",
-                    controlNumber = 1000 + studentIndex
-                )
-            }.sortedBy { it.name }
-
-            // Crear historial de asistencia para los últimos 3 días (ejemplo)
-            val history = (-2..0).map { dayOffset ->
-                val date = today.plus(dayOffset, DateTimeUnit.DAY)
-                val attendanceMap = roster.associate { student ->
-                    // Asignar estado aleatorio (excepto UNKNOWN) para días pasados
-                    val status =
-                        if (dayOffset < 0) AttendanceStatus.entries.filter { it != AttendanceStatus.UNKNOWN }
-                            .random(random) else AttendanceStatus.UNKNOWN
-                    student.id to status
-                }
-                AttendanceRecord(date = date, attendance = attendanceMap)
-            }
-
-            ClassData(
-                id = "class_$classIndex",
-                name = "Class ${classIndex + 1}",
-                degree = "Grade ${random.nextInt(1, 6)}",
-                career = if (classIndex % 2 == 0) "Systems Eng." else "Computer Sci.",
-                section = "Section ${('A'..'C').random()}",
-                roster = roster, // Guardar la lista base de estudiantes
-                color = Color(
-                    red = random.nextFloat() * 0.6f + 0.2f,
-                    green = random.nextFloat() * 0.6f + 0.2f,
-                    blue = random.nextFloat() * 0.6f + 0.2f
-                ),
-                attendanceHistory = history // Asignar el historial generado
-            )
-        }
+    fun closeNewClass() {
+        _state.update { it.copy(newClass = null) }
     }
 }

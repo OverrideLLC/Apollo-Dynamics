@@ -28,11 +28,11 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = Color(0xFF004d51), // Contraste oscuro sobre el contenedor secundario
 
     tertiary = Color.White,
-    onTertiary = Color.Black,
+    onTertiary = Color(0xFF040919),
     tertiaryContainer = Color(0xFFd9d9d9), // Fondo claro para el contenedor terciario
     onTertiaryContainer = Color(0xFF2a2a2a), // Contraste oscuro sobre el contenedor terciario
 
-    background = Color.Black, // Fondo blanco para el modo claro
+    background = Color(0xFF040919), // Fondo blanco para el modo claro
     onBackground = Color.Black, // Texto oscuro sobre fondo claro
 
     surface = Color(0xFFf5f5f5), // Superficie clara
@@ -114,7 +114,7 @@ fun Typography(): Typography {
         titleSmall = TextStyle(fontFamily = ralewayThin),
         bodyLarge = TextStyle(fontFamily = ralewayBold),
         bodyMedium = TextStyle(fontFamily = ralewayMedium),
-        bodySmall = TextStyle(fontFamily = ralewayThin),
+        bodySmall = TextStyle(fontFamily = ralewayMedium),
         labelLarge = TextStyle(fontFamily = ralewayBold),
         labelMedium = TextStyle(fontFamily = ralewayMedium),
         labelSmall = TextStyle(fontFamily = ralewayThin),

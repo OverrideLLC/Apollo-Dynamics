@@ -1,6 +1,4 @@
-package com.feature.desktop.home.utils.data
-
-import com.feature.desktop.home.utils.enum.AttendanceStatus
+package com.override.data.utils.data
 
 data class Student(
     val id: String, // Identificador único del estudiante
