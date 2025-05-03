@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.HomeViewModel
 import com.feature.desktop.home.task.TasksScreen
-import com.feature.desktop.home.tools.ToolsScreen
 import com.shared.ui.onBackground
 
 @Composable
@@ -30,7 +28,8 @@ internal fun Content(
     padding: PaddingValues,
     viewModel: HomeViewModel,
     state: HomeViewModel.HomeState,
-    workspace: @Composable () -> Unit
+    workspace: @Composable () -> Unit,
+    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
     val sizeTask by animateFloatAsState(
         targetValue = if (state.dockToLeft) 0.1f else 0.3f,
@@ -76,7 +75,11 @@ internal fun Content(
                 modifier = Modifier.weight(sizeWorkspace).fillMaxHeight(),
                 workspace = workspace
             )
-            Tools(modifier = Modifier.weight(sizeTools).fillMaxHeight(), viewModel = viewModel)
+            Tools(
+                modifier = Modifier.weight(sizeTools).fillMaxHeight(),
+                viewModel = viewModel,
+                toolsScreen = toolsScreen
+            )
             Spacer(modifier = Modifier.padding(16.dp))
         }
     }
@@ -123,6 +126,7 @@ internal fun Task(
 @Composable
 internal fun Tools(
     modifier: Modifier,
+    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
     viewModel: HomeViewModel
 ) {
     Box(
@@ -134,9 +138,7 @@ internal fun Tools(
                 shape = RoundedCornerShape(10.dp)
             ),
         content = {
-            ToolsScreen(
-                isExpanded = viewModel.state.value.dockToRight,
-            ) {
+            toolsScreen(viewModel.state.value.dockToRight) {
                 viewModel.dockToRight()
             }
         }

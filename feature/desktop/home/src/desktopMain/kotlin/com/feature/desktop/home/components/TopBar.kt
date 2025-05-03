@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.datas.Services
+import com.feature.desktop.home.utils.Services
 import com.shared.resources.Google_Drive_logo
 import com.shared.resources.Res
 import com.shared.resources.google_classroom

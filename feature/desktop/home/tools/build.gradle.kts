@@ -14,7 +14,9 @@ kotlin {
                 //Modules
                 implementation(projects.shared.utils)
                 implementation(projects.shared.ui)
-                implementation(projects.feature.desktop.start)
+                implementation(projects.shared.resources)
+                implementation(projects.network)
+                implementation(projects.data)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)
@@ -32,6 +34,10 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.composeVM)
                 implementation(compose.uiTooling)
+
+                //UTILS
+                implementation(libs.commonmark)
+                implementation(libs.kotlinx.datetime)
             }
         }
 

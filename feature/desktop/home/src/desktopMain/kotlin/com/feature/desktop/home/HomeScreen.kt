@@ -18,14 +18,17 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(
     workspace: @Composable () -> Unit,
+    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) = Screen(
-    workspace = { workspace() }
+    workspace = { workspace() },
+    toolsScreen = toolsScreen
 )
 
 @Composable
 internal fun Screen(
     viewModel: HomeViewModel = koinViewModel(),
-    workspace: @Composable () -> Unit
+    workspace: @Composable () -> Unit,
+    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     Scaffold(
@@ -35,7 +38,8 @@ internal fun Screen(
                 padding = padding,
                 workspace = { workspace() },
                 viewModel = viewModel,
-                state = state
+                state = state,
+                toolsScreen = toolsScreen
             )
         },
         topBar = { TopBar() },
