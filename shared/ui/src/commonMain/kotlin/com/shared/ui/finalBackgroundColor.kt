@@ -7,5 +7,5 @@ import androidx.compose.ui.graphics.lerp
 
 @Composable
 fun onBackground(): Color {
-    return lerp(colorScheme.onBackground, colorScheme.primary, 0.1f)
+    return lerp(colorScheme.onBackground, colorScheme.background, 0.1f)
 }
