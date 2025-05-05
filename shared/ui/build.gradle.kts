@@ -13,7 +13,6 @@ kotlin {
             dependencies {
                 //Modules
                 implementation(projects.shared.utils)
-                implementation(projects.shared.ui)
                 implementation(projects.feature.desktop.start)
 
                 implementation(libs.kotlin.stdlib)

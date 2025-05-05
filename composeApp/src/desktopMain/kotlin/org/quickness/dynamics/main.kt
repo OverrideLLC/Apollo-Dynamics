@@ -17,9 +17,12 @@ import androidx.compose.ui.window.rememberWindowState
 import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.api.navhost.NavigationStart
 import com.network.initGcloudFromPath
-import com.shared.resources.LogoBlancoQuickness
+import com.network.initializeClassroomClient
 import com.shared.resources.Res
 import com.shared.resources.TTNegro
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.swing.Swing
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
@@ -28,6 +31,9 @@ import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
 fun main() = application {
     initKoin()
     initGcloudFromPath("/home/christopher-cop787-gmail-com/Documentos/Credentials/Google Cloud/quickness-backend-gc.json")
+    initializeClassroomClient(
+        coroutineScope = CoroutineScope(Dispatchers.Swing)
+    )
     val viewModel = ApplicationViewModel()
     val state by viewModel.state.collectAsState()
     val windowState = rememberWindowState(

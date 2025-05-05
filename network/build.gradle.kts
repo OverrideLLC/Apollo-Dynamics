@@ -11,6 +11,7 @@ kotlin {
 
         commonMain {
             dependencies {
+                implementation(projects.shared.resources)
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.generativeai)
                 api(libs.generativeai.google.wasm.js)
@@ -31,6 +32,10 @@ kotlin {
             implementation(project.dependencies.platform(libs.google.cloud.bom))
             implementation(libs.google.cloud.firestore)
             implementation(libs.google.cloud.secretmanager)
+
+            implementation("com.google.api-client:google-api-client:2.0.0")
+            implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
+            implementation("com.google.apis:google-api-services-classroom:v1-rev20220323-2.0.0")
         }
     }
 }
