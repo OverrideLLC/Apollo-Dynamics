@@ -51,18 +51,14 @@ class GeminiServiceImpl() : GeminiService {
     }
 
     override suspend fun startChat(): Chat {
-        println("GeminiServiceImpl: Iniciando startChat...") // LOG
         val promptList: List<Content> = listOf(
             content(role = "user") { text(basePromptTemplate) },
             content(role = "model") { text("Ok") },
         )
         try {
-            println("GeminiServiceImpl: Llamando a generativeAi.startChat()...") // LOG
             val chat = generativeAiChat.startChat(history = promptList)
-            println("GeminiServiceImpl: generativeAi.startChat() completado. Chat: $chat") // LOG
             return chat
         } catch(e: Exception) {
-            println("GeminiServiceImpl: ERROR en startChat - ${e.message}") // LOG
             e.printStackTrace()
             throw e
         }
@@ -73,7 +69,6 @@ class GeminiServiceImpl() : GeminiService {
         message: String,
         files: List<File>?
     ): String {
-        println("GeminiServiceImpl: Enviando mensaje con ${files?.size} archivos.")
         return try {
             withContext(Dispatchers.Swing) {
                 val inputContent = content(role = "user") {
@@ -86,26 +81,21 @@ class GeminiServiceImpl() : GeminiService {
                                 else -> println("GeminiServiceImpl: Tipo de archivo no soportado ${file.name} ($mimeType). Omitiendo.")
                             }
                         } catch (e: Exception) {
-                            println("GeminiServiceImpl: Error al procesar el archivo ${file.name} - ${e.message}")
                             e.printStackTrace()
                         }
                     }
                     if (message.isNotBlank()) {
                         text(message)
-                        println("GeminiServiceImpl: Texto añadido: \"$message\"")
                     } else if (files?.isEmpty() != false) {
                         println("GeminiServiceImpl: Mensaje vacío y sin archivos, no se envía.")
                     }
                 }
 
-                println("GeminiServiceImpl: Llamando a chat.sendMessage...")
                 val response = chat.sendMessage(inputContent)
-                println("GeminiServiceImpl: Respuesta recibida.")
 
                 response.text ?: "No se recibió texto en la respuesta."
             }
         } catch (e: Exception) {
-            println("GeminiServiceImpl: ERROR en sendMessage - ${e.message}")
             e.printStackTrace()
             "Error al enviar mensaje: ${e.localizedMessage}"
         }

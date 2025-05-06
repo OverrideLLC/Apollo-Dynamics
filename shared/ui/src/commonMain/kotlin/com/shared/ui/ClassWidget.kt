@@ -1,4 +1,4 @@
-package com.feature.desktop.home.tools.ui.components
+package com.shared.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -12,8 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,9 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.override.data.utils.data.ClassData
 
 /**
  * Componente composable que representa un widget de clase.
@@ -38,9 +36,14 @@ import com.override.data.utils.data.ClassData
  * @param modifier Modificador para personalizar el aspecto del widget.
  */
 @Composable
-internal fun ClassWidget(
-    classData: ClassData,
+fun ClassWidget(
+    name: String,
+    color: Color,
     isSelected: Boolean,
+    career: String,
+    degree: String,
+    section: String,
+    isEnabledDeleted: Boolean = true,
     onClick: () -> Unit,
     delete: () -> Unit,
     modifier: Modifier = Modifier
@@ -64,7 +67,7 @@ internal fun ClassWidget(
         ),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = colorScheme.onBackground),
-        border = if (isSelected) BorderStroke(3.dp, classData.color) else null
+        border = if (isSelected) BorderStroke(3.dp, color) else null
     ) {
         /**
          * Columna que organiza los elementos dentro de la tarjeta.
@@ -86,26 +89,30 @@ internal fun ClassWidget(
              * @param horizontalArrangement Espaciado horizontal entre los elementos.
              */
             Row(
-                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween
-            ){
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
-                    text = classData.name,
+                    text = name,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = classData.color
+                    color = color
                 )
-                IconButton(
-                    modifier = Modifier.size(24.dp),
-                    onClick = { delete() },
-                    content = {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Deleted",
-                            tint = colorScheme.error,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                )
+                if (isEnabledDeleted) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { delete() },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Deleted",
+                                tint = colorScheme.error,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    )
+                }
             }
             /**
              * Divider para separar el nombre de la clase de los detalles.
@@ -115,12 +122,12 @@ internal fun ClassWidget(
              */
             HorizontalDivider(thickness = 1.dp, color = colorScheme.outline.copy(alpha = 0.5f))
             Text(// Muestra la carrera y el grado de la clase.
-                text = "${classData.career} - ${classData.degree}",
+                text = "$career - $degree",
                 style = MaterialTheme.typography.bodyMedium,
                 color = colorScheme.onSurface
             )
             Text(
-                text = "Section: ${classData.section}",
+                text = "Section: ${section}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = colorScheme.onSurfaceVariant
             )

@@ -3,11 +3,23 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xff0d9b03) // Mantenido como está
-val onPrimary: Color = Color(0xFF003f43) // Contraste para Primary, tono oscuro relacionado
-val primaryContainer: Color = Color(0xFF004f53) // Más oscuro que Primary, para fondos contenedores
-val onPrimaryContainer: Color = Color(0xFFb6eff3) // Contraste claro sobre el contenedor primario
-val inversePrimary: Color = Color(0xFFb6eff3) // Similar a onPrimaryContainer, usado en inversiones
+val primary: Color = Color(0xff0d9b03) // #0d9b03
+
+// Color del contenido "sobre" el primario (Texto/Iconos)
+// Busca alto contraste. Suele ser Tono 100 (blanco) o Tono 0 (negro). Para #0d9b03, es blanco.
+val onPrimary: Color = Color(0xffffffff) // #ffffff
+
+// Un contenedor con un tono más claro/suave del primario.
+// Usado para elementos que necesitan menos énfasis que el primario. Suele ser Tono 90.
+val primaryContainer: Color = Color(0xffb9fabb) // #b9fabb  (Valor aproximado generado por M3)
+
+// Color del contenido "sobre" el primaryContainer.
+// Busca alto contraste con primaryContainer. Suele ser Tono 10.
+val onPrimaryContainer: Color = Color(0xff002101) // #002101 (Valor aproximado generado por M3)
+
+// El color primario como aparecería en un contexto inverso (p.ej., en un SnackBar oscuro).
+// Corresponde al rol 'primary' pero del tema opuesto (oscuro en este caso). Suele ser Tono 80.
+val inversePrimary: Color = Color(0xff9edda1) // #9edda1 (Valor aproximado generado por M3)
 
 val secondary: Color = Color(0xff000000) // Un tono relacionado pero más apagado
 val onSecondary: Color = Color(0xFFfefefe) // Mantenido como está

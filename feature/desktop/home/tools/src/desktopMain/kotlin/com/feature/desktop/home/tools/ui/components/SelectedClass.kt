@@ -30,6 +30,7 @@ import com.feature.desktop.home.tools.ui.screens.take_attendees.TakeAttendeesVie
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.ui.ClassWidget
 import com.shared.ui.ScreenAction
 import org.jetbrains.compose.resources.DrawableResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -89,7 +90,11 @@ internal fun SelectedClass(
         // Se muestran las clases existentes.
         items(state.allClasses, key = { it.id }) { classData ->
             ClassWidget(
-                classData = classData,
+                name = classData.name,
+                color = classData.color,
+                career = classData.career,
+                degree = classData.degree,
+                section = classData.section,
                 isSelected = classData.id == state.selectedClassId,
                 onClick = { viewModel.selectClass(classData.id) },
                 delete = { viewModel.deletedClass(classData.id) },

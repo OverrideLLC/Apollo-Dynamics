@@ -13,7 +13,6 @@ data class ClassData(
     val degree: String,
     val career: String,
     val section: String,
-    // Lista de registros de asistencia, uno por cada día que se pasó lista
     val attendanceHistory: List<AttendanceRecord> = emptyList()
 ) {
     // Helper para obtener la lista de estudiantes con su estado para una fecha específica

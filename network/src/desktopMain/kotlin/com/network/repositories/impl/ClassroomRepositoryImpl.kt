@@ -174,7 +174,7 @@ class ClassroomRepositoryImpl(
      */
     override suspend fun postAnnouncement(courseId: String, content: String) {
         try {
-            withContext(Dispatchers.Swing) {
+            withContext(Dispatchers.Default) {
                 classroomServices.addAnnouncement(courseId, content)
             }
         } catch (e: Exception) {

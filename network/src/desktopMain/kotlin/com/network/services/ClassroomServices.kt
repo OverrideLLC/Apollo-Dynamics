@@ -28,7 +28,8 @@ class ClassroomServices(
     private val jsonFactory: GsonFactory,
     private val httpTransport: NetHttpTransport,
 ) {
-    private val applicationName: String = "Apollo"
+    private val applicationName: String = "apollo-dynamics"
+    private val dispatcher = Dispatchers.Default
 
     // Scopes required for Classroom API operations
     private val classroomScopes = listOf(
@@ -38,25 +39,17 @@ class ClassroomServices(
         ClassroomScopes.CLASSROOM_COURSEWORK_ME,    // Manage coursework for the authenticated user
         ClassroomScopes.CLASSROOM_COURSEWORK_STUDENTS, // Manage coursework for students
         ClassroomScopes.CLASSROOM_PROFILE_EMAILS,   // View user profile emails
-        ClassroomScopes.CLASSROOM_PROFILE_PHOTOS    // View user profile photos
+        ClassroomScopes.CLASSROOM_PROFILE_PHOTOS,    // View user profile photos
         // Add other scopes if needed, e.g., for topics, materials, etc.
     )
 
     // Lazily initialized Classroom service client
     private val classroomService: Classroom by lazy {
-        runCatching {
-            // runBlocking is used here because lazy initialization is not a suspend context.
-            // This will block the thread calling it for the first time until credentials are fetched.
-            // Ensure this is handled appropriately (e.g., by calling initializeClient() from a coroutine).
-            val credential = runBlocking(Dispatchers.Swing) { getCredentials(classroomScopes) }
+        runBlocking(dispatcher) { // ¡AÚN NO ES IDEAL, PERO MEJOR QUE SWING SI DEBE SER BLOQUEANTE TEMPORALMENTE!
+            val credential = getCredentials(classroomScopes) // getCredentials ahora usa Dispatchers.Default internamente
             Classroom.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName(applicationName)
                 .build()
-        }.getOrElse {
-            // Log the error or handle it more gracefully
-            println("FATAL: Failed to initialize Classroom service in lazy block: ${it.message}")
-            it.printStackTrace()
-            throw IllegalStateException("Failed to initialize Classroom service", it)
         }
     }
 
@@ -70,7 +63,7 @@ class ClassroomServices(
     @OptIn(ExperimentalResourceApi::class)
     @Throws(IOException::class)
     private suspend fun getCredentials(scopes: Collection<String>): Credential =
-        withContext(Dispatchers.Swing) {
+        withContext(dispatcher) {
             val clientSecretsInputStream = try {
                 // Assuming Res.readBytes provides the content of the client_secret.json file
                 // Ensure Constants.CREDENTIALS_RESOURCE_PATH_CLASSROOM points to your client_secret.json in resources
@@ -101,10 +94,10 @@ class ClassroomServices(
 
             // LocalServerReceiver will start a local server to handle the OAuth redirect
             // Ensure port 8888 (or your chosen port) is available
-            val receiver = LocalServerReceiver.Builder().setPort(Constants.OAUTH_REDIRECT_PORT)
+            val receiver = LocalServerReceiver.Builder()
+                .setPort(Constants.OAUTH_REDIRECT_PORT)
                 .build() // Example: Constants.OAUTH_REDIRECT_PORT = 8888
 
-            println("ClassroomRepositoryImpl: Attempting to authorize user (this may open a browser window)...")
             try {
                 // "user" is a generic ID for the local credential store.
                 AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
@@ -122,12 +115,11 @@ class ClassroomServices(
      * to handle potential initialization errors gracefully.
      */
     suspend fun initializeClient() {
-        withContext(Dispatchers.Swing) {
+        withContext(dispatcher) {
             try {
                 // Accessing classroomService here will trigger its lazy initialization
                 // Perform a lightweight operation to confirm connectivity, e.g., listing courses with pageSize 1
-                classroomService.courses().list().setPageSize(20).execute()
-                println("ClassroomRepositoryImpl: Client initialized successfully.")
+                classroomService.courses().list().setPageSize(1).execute()
             } catch (e: Exception) {
                 println("ClassroomRepositoryImpl: Client initialization failed - ${e.message}")
                 e.printStackTrace()
@@ -140,10 +132,11 @@ class ClassroomServices(
         }
     }
 
-    suspend fun getCourses(): List<Course> = withContext(Dispatchers.Swing) {
+    suspend fun getCourses(): List<Course> = withContext(dispatcher) {
         try {
             val response = classroomService.courses().list()
                 .setPageSize(Constants.API_PAGE_SIZE) // Example: Constants.API_PAGE_SIZE = 20
+                .setTeacherId("me")
                 .execute()
             response.courses ?: emptyList()
         } catch (e: IOException) {
@@ -323,12 +316,13 @@ class ClassroomServices(
         }
 
     suspend fun addAnnouncement(courseId: String, content: String) =
-        withContext(Dispatchers.Swing) {
+        withContext(dispatcher) {
+            println("ClassroomRepositoryImpl: Adding announcement to course $courseId with content: '$content'")
             try {
                 val newAnnouncement = Announcement().apply {
                     text = content
-                    // state = "PUBLISHED" // Announcements are typically published by default.
-                    // assigneeMode = "ALL_STUDENTS" // Default, can be changed if targeting specific students (more complex)
+                    state = "PUBLISHED"
+                    assigneeMode = "ALL_STUDENTS"
                 }
                 val createdAnnouncement =
                     classroomService.courses().announcements().create(courseId, newAnnouncement)

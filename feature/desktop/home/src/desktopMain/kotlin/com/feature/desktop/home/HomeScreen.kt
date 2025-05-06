@@ -72,9 +72,9 @@ internal fun Screen(
         ScreenAction(
             icon = it.icon,
             name = it.nameServices,
-            size = DpSize(1000.dp, 800.dp),
+            size = DpSize(800.dp, 600.dp),
             close = { viewModel.serviceSelected(null) },
             content = { servicesScreen() }
         )
-    }
+    } ?: run {  }
 }
