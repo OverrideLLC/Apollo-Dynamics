@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.feature.desktop.api.navhost.NavigationStart
 import com.network.init.initGcloudFromPath
 import com.shared.resources.Res
 import com.shared.resources.TTNegro
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
@@ -26,7 +28,10 @@ import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
 
 fun main() = application {
     initKoin()
-    initGcloudFromPath("/home/christopher-cop787-gmail-com/Documentos/Credentials/Google Cloud/quickness-backend-gc.json")
+    rememberCoroutineScope().launch {
+        initGcloudFromPath()
+    }
+
     val viewModel = ApplicationViewModel()
     val state by viewModel.state.collectAsState()
     val windowState = rememberWindowState(

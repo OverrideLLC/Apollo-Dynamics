@@ -1,5 +1,8 @@
 package com.network.init
 
+import com.network.utils.constants.Constants
+import com.shared.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -13,27 +16,11 @@ import java.io.IOException
  * @throws IllegalArgumentException Si la ruta es nula o vacía.
  * @throws IllegalStateException Si el archivo no se encuentra, no se puede leer o es inválido.
  */
-fun initGcloudFromPath(credentialsPath: String?) {
-    // 1. Validar que la ruta no sea nula o vacía
-    if (credentialsPath.isNullOrBlank()) {
-        throw java.lang.IllegalArgumentException("La ruta al archivo de credenciales no puede ser nula o estar vacía.")
-    }
-
-    println("Intentando cargar credenciales desde la ruta: $credentialsPath") // Ayuda para depurar
-
+@OptIn(ExperimentalResourceApi::class)
+suspend fun initGcloudFromPath() {
     try {
-        // 2. Crear un FileInputStream para leer el archivo desde la ruta
-        //    Usamos 'use' para asegurar que el stream se cierre automáticamente,
-        //    incluso si ocurren errores.
-        FileInputStream(credentialsPath)
-    } catch (e: FileNotFoundException) {
-        // Error específico si el archivo no existe en esa ruta
-        throw IllegalStateException("Error: Archivo de credenciales no encontrado en la ruta especificada: $credentialsPath", e)
-    } catch (e: IOException) {
-        // Otros errores de lectura o al parsear el JSON
-        throw IllegalStateException("Error al leer o procesar el archivo de credenciales desde la ruta $credentialsPath: ${e.message}", e)
+        Res.readBytes(Constants.CREDENTIALS_RESOURCE_PATH_GOOGLE_CLOUD)
     } catch (e: Exception) {
-        // Captura cualquier otro error inesperado
-        throw IllegalStateException("Error inesperado al cargar credenciales desde la ruta $credentialsPath: ${e.message}", e)
+        throw IOException("Failed to read credentials resource: ${Constants.CREDENTIALS_RESOURCE_PATH_GOOGLE_CLOUD}", e)
     }
 }

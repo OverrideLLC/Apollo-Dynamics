@@ -14,16 +14,6 @@ import com.shared.utils.routes.RoutesStart
 fun NavigationStart(navController: NavHostController) {
     NavHost(navController, startDestination = RoutesStart.Home.route) {
         composable(RoutesStart.Start.route) { StartScreen(navController) }
-        composable(RoutesStart.Home.route) {
-            HomeScreen(
-                workspace = { AiScreen() },
-                toolsScreen = { isRight, onClick ->
-                    ToolsScreen(
-                        isExpanded = isRight,
-                        onDockToRight = onClick
-                    )
-                }
-            )
-        }
+        composable(RoutesStart.Home.route) { NavigationHome() }
     }
 }

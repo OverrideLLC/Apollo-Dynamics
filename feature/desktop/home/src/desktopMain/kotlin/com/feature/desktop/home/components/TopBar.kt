@@ -31,26 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun TopBar(
-    listServices: List<Services> = listOf(
-        Services(
-            name = "ClassRoom",
-            description = "Open ClassRoom",
-            icon = Res.drawable.google_classroom,
-            route = RouteServices.ClassRoom
-        ),
-        Services(
-            name = "Moodle",
-            description = "Open Moodle",
-            icon = Res.drawable.moodle_logo,
-            route = RouteServices.Moodle
-        ),
-        Services(
-            name = "Drive",
-            description = "Open Drive",
-            icon = Res.drawable.Google_Drive_logo,
-            route = RouteServices.Drive
-        ),
-    )
+    onClick: (Services) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -70,9 +51,9 @@ internal fun TopBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                items(listServices) {
+                items(Services.entries) {
                     IconButton(
-                        onClick = { },
+                        onClick = { onClick(it) },
                         modifier = Modifier
                             .size(50.dp)
                             .background(

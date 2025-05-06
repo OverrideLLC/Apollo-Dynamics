@@ -7,20 +7,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
+import com.shared.resources.Res
+import com.shared.resources.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.BackgroundAnimated
+import com.shared.ui.ScreenAction
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     workspace: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
+    servicesScreen: @Composable () -> Unit
 ) = Screen(
     workspace = { workspace() },
+    servicesScreen = servicesScreen,
     toolsScreen = toolsScreen
 )
 
@@ -28,6 +35,7 @@ fun HomeScreen(
 internal fun Screen(
     viewModel: HomeViewModel = koinViewModel(),
     workspace: @Composable () -> Unit,
+    servicesScreen: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
@@ -42,7 +50,13 @@ internal fun Screen(
                 toolsScreen = toolsScreen
             )
         },
-        topBar = { TopBar() },
+        topBar = {
+            TopBar(
+                onClick = {
+                    viewModel.serviceSelected(it)
+                }
+            )
+        },
         containerColor = Color.Transparent,
         modifier = Modifier
             .fillMaxSize()
@@ -53,4 +67,14 @@ internal fun Screen(
                 )
             )
     )
+
+    state.serviceSelected?.let {
+        ScreenAction(
+            icon = it.icon,
+            name = it.nameServices,
+            size = DpSize(1000.dp, 800.dp),
+            close = { viewModel.serviceSelected(null) },
+            content = { servicesScreen() }
+        )
+    }
 }

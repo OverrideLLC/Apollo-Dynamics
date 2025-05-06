@@ -13,11 +13,8 @@ kotlin {
             dependencies {
                 //Modules
                 implementation(projects.shared.utils)
-                implementation(projects.feature.desktop.start)
-                implementation(projects.feature.desktop.home)
-                implementation(projects.feature.desktop.home.ai)
-                implementation(projects.feature.desktop.home.tools)
-                implementation(projects.feature.desktop.home.services)
+                implementation(projects.shared.ui)
+                implementation(projects.shared.resources)
                 implementation(projects.network)
                 implementation(projects.data)
 
@@ -37,6 +34,10 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.composeVM)
                 implementation(compose.uiTooling)
+
+                //UTILS
+                implementation(libs.commonmark)
+                implementation(libs.kotlinx.datetime)
             }
         }
 
