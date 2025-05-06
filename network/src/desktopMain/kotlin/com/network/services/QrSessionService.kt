@@ -4,7 +4,7 @@ import com.google.api.core.ApiFuture
 import com.google.api.core.ApiFutures
 import com.google.cloud.Timestamp
 import com.google.cloud.firestore.Firestore
-import com.network.utils.QrSessionStatus
+import com.network.utils.status.QrSessionStatus
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

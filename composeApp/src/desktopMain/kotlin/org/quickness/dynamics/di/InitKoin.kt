@@ -1,6 +1,7 @@
 package org.quickness.dynamics.di
 
 import com.feature.desktop.api.di.viewModelModule
+import com.network.di.classroomModule
 import com.network.di.firebaseModule
 import com.network.di.repositoryModule
 import com.network.di.serviceModule
@@ -22,6 +23,7 @@ fun initKoin() = startKoin {
         dataModule,
         daoModule,
         repositoryDataModule,
-        firebaseModule
+        firebaseModule,
+        classroomModule
     )
 }

@@ -1,6 +1,6 @@
 package com.network.repositories.contract
 
-import com.network.utils.QrSessionStatus
+import com.network.utils.status.QrSessionStatus
 import kotlinx.coroutines.flow.Flow
 
 /**

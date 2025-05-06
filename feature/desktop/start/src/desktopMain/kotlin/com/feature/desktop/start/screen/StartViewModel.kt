@@ -2,7 +2,7 @@ package com.feature.desktop.start.screen
 
 import androidx.lifecycle.ViewModel
 import com.network.repositories.contract.QrLoginRepository
-import com.network.utils.QrSessionStatus
+import com.network.utils.status.QrSessionStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

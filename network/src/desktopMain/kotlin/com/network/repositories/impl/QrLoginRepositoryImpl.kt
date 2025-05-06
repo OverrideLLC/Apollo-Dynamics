@@ -2,7 +2,7 @@ package com.network.repositories.impl// Asegúrate de importar las clases/interf
 
 import com.network.repositories.contract.QrLoginRepository
 import com.network.services.QrSessionService
-import com.network.utils.QrSessionStatus
+import com.network.utils.status.QrSessionStatus
 import kotlinx.coroutines.flow.Flow
 
 

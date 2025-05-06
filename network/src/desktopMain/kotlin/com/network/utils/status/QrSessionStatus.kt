@@ -1,4 +1,4 @@
-package com.network.utils
+package com.network.utils.status
 
 // Define los posibles estados que el listener puede emitir
 sealed class QrSessionStatus {
