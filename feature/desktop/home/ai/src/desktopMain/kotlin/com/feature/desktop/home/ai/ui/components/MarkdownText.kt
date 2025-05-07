@@ -39,6 +39,7 @@ import org.commonmark.node.Code
 import org.commonmark.node.Emphasis
 import org.commonmark.node.FencedCodeBlock
 import org.commonmark.node.HardLineBreak
+import org.commonmark.node.Heading
 import org.commonmark.node.Link
 import org.commonmark.node.ListItem
 import org.commonmark.node.Node
@@ -135,7 +136,7 @@ internal fun RenderNode(
                 while (listItem != null) {
                     if (listItem is ListItem) { // Asegurarse de que es un ListItem
                         RenderListItem(
-                            itemNode = listItem,
+                            itemNode = listItem as ListItem,
                             marker = "$itemNumber.",
                             textColor = textColor,
                             indentLevel = indentLevel + 1
@@ -157,7 +158,7 @@ internal fun RenderNode(
         }
 
         // Puedes añadir más casos para otros tipos de nodos de bloque:
-        // is Heading -> { /* Renderizar encabezado */ }
+        // is Heading
         // is BlockQuote -> { /* Renderizar cita */ }
         is FencedCodeBlock -> {
             // Renderizar bloque de código cercado

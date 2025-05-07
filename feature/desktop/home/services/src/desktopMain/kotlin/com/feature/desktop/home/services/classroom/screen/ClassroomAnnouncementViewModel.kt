@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
 
-class ClassroomViewModel(
+class ClassroomAnnouncementViewModel(
     private val classroomRepository: ClassroomRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow(ClassroomState())
+    private val _state = MutableStateFlow(ClassroomAnnouncementState())
     val state = _state.asStateFlow()
 
     init {
         getCourses()
     }
 
-    fun update(update: ClassroomState.() -> ClassroomState) {
+    fun update(update: ClassroomAnnouncementState.() -> ClassroomAnnouncementState) {
         _state.value = update(_state.value)
     }
 

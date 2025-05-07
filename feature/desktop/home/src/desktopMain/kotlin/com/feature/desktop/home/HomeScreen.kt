@@ -24,10 +24,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     workspace: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
-    servicesScreen: @Composable () -> Unit
 ) = Screen(
     workspace = { workspace() },
-    servicesScreen = servicesScreen,
     toolsScreen = toolsScreen
 )
 
@@ -35,7 +33,6 @@ fun HomeScreen(
 internal fun Screen(
     viewModel: HomeViewModel = koinViewModel(),
     workspace: @Composable () -> Unit,
-    servicesScreen: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
@@ -51,11 +48,7 @@ internal fun Screen(
             )
         },
         topBar = {
-            TopBar(
-                onClick = {
-                    viewModel.serviceSelected(it)
-                }
-            )
+            TopBar()
         },
         containerColor = Color.Transparent,
         modifier = Modifier
@@ -67,14 +60,4 @@ internal fun Screen(
                 )
             )
     )
-
-    state.serviceSelected?.let {
-        ScreenAction(
-            icon = it.icon,
-            name = it.nameServices,
-            size = DpSize(800.dp, 600.dp),
-            close = { viewModel.serviceSelected(null) },
-            content = { servicesScreen() }
-        )
-    } ?: run {  }
 }

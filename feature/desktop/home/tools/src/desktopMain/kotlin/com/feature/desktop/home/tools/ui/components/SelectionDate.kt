@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
@@ -19,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.tools.ui.screens.take_attendees.TakeAttendeesViewModel
 import com.override.data.utils.data.ClassData
 import com.shared.resources.Res
+import com.shared.resources.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -72,7 +71,10 @@ internal fun SelectionDate(
             /**
              * Muestra un icono de añadir.
              */
-            Icon(Icons.Default.Add, contentDescription = "Add Today's Attendance")
+            Icon(
+                painter = painterResource(Res.drawable.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
+                contentDescription = "Add Today's Attendance"
+            )
             /**
              * Espacio entre el icono y el texto.
              */

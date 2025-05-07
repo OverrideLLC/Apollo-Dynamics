@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,8 +18,10 @@ import com.override.data.utils.enum.AttendanceStatus
 import com.shared.resources.Res
 import com.shared.resources.badge_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.call_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.contact_mail_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.engineering_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.format_color_fill_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.format_list_numbered_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.person_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
@@ -237,11 +237,11 @@ private fun AttendanceStatusChip(status: AttendanceStatus) {
         AttendanceStatus.PRESENT -> Triple(
             "Present",
             Color(0xFF4CAF50),
-            Icons.Default.CheckCircle
+            Res.drawable.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
         ) // Verde
-        AttendanceStatus.ABSENT -> Triple("Absent", Color(0xFFF44336), Icons.Default.Close) // Rojo
-        AttendanceStatus.TARDY -> Triple("Late", Color(0xFFFF9800), Icons.Default.Check) // Naranja
-        AttendanceStatus.UNKNOWN -> Triple("Excused", Color(0xFF2196F3), Icons.Default.Info) // Azul
+        AttendanceStatus.ABSENT -> Triple("Absent", Color(0xFFF44336), Res.drawable.call_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24) // Rojo
+        AttendanceStatus.TARDY -> Triple("Late", Color(0xFFFF9800), Res.drawable.widgets_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24) // Naranja
+        AttendanceStatus.UNKNOWN -> Triple("Excused", Color(0xFF2196F3), Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24) // Azul
     }
 
     SuggestionChip(
@@ -249,7 +249,7 @@ private fun AttendanceStatusChip(status: AttendanceStatus) {
         label = { Text(text) },
         icon = {
             Icon(
-                icon,
+                painter = painterResource(icon),
                 contentDescription = text,
                 modifier = Modifier.size(SuggestionChipDefaults.IconSize)
             )

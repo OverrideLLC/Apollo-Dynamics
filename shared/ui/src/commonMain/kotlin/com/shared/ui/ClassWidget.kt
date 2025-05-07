@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -24,6 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
+import quicknessdynamics.shared.ui.generated.resources.Res
 
 /**
  * Componente composable que representa un widget de clase.
@@ -44,6 +46,7 @@ fun ClassWidget(
     degree: String,
     section: String,
     isEnabledDeleted: Boolean = true,
+    iconDeleted: DrawableResource,
     onClick: () -> Unit,
     delete: () -> Unit,
     modifier: Modifier = Modifier
@@ -105,7 +108,7 @@ fun ClassWidget(
                         onClick = { delete() },
                         content = {
                             Icon(
-                                imageVector = Icons.Default.Close,
+                                painter = painterResource(iconDeleted),
                                 contentDescription = "Deleted",
                                 tint = colorScheme.error,
                                 modifier = Modifier.fillMaxSize()

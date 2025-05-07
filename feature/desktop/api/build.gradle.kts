@@ -17,7 +17,6 @@ kotlin {
                 implementation(projects.feature.desktop.home)
                 implementation(projects.feature.desktop.home.ai)
                 implementation(projects.feature.desktop.home.tools)
-                implementation(projects.feature.desktop.home.services)
                 implementation(projects.network)
                 implementation(projects.data)
 

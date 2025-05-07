@@ -4,9 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.feature.desktop.home.HomeScreen
-import com.feature.desktop.home.ai.ui.screen.AiScreen
-import com.feature.desktop.home.tools.ui.ToolsScreen
 import com.feature.desktop.start.screen.StartScreen
 import com.shared.utils.routes.RoutesStart
 

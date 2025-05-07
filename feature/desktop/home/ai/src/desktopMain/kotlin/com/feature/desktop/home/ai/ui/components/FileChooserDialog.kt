@@ -18,8 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -28,6 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shared.resources.Res
+import com.shared.resources.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import org.jetbrains.compose.resources.painterResource
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -112,7 +113,7 @@ internal fun SelectedFilesPreview(
                             modifier = Modifier.size(18.dp) // Icono pequeño
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Close,
+                                painter = painterResource(Res.drawable.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                                 contentDescription = "Eliminar archivo ${file.name}",
                                 tint = colorScheme.tertiary
                             )

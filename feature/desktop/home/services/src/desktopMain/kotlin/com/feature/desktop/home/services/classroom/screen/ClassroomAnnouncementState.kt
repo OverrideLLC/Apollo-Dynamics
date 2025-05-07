@@ -6,7 +6,7 @@ import com.google.api.services.classroom.model.Course
 import com.google.api.services.classroom.model.Student
 import kotlin.enums.EnumEntries
 
-data class ClassroomState(
+data class ClassroomAnnouncementState(
     val courses: List<Course>? = null,
     val students: List<Student>? = null,
     val announcements: List<Announcement>? = null,

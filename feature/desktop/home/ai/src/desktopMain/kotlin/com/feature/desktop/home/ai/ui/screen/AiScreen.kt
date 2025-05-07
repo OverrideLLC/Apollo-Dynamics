@@ -15,12 +15,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.AwtWindow
 import com.feature.desktop.home.ai.ui.components.Chat
 import com.feature.desktop.home.ai.ui.components.SelectedFilesPreview
 import com.feature.desktop.home.ai.ui.components.TextFieldAi
 import com.feature.desktop.home.ai.ui.components.fileChooserDialog
+import com.feature.desktop.home.services.classroom.screen.ClassroomAnnouncementScreen
+import com.shared.resources.Res
+import com.shared.resources.chat_bubble_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.ui.ScreenAction
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import java.awt.Frame
@@ -29,15 +35,14 @@ import java.awt.Frame
 fun AiScreen() = Screen()
 
 @Composable
-internal fun Screen(
-    viewModel: AiViewModel = koinViewModel()
-) {
+internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
     LaunchedEffect(Unit) { viewModel.loadData() }
     val state by viewModel.state.collectAsState()
     val messages = state.messages
     val newMessage = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     var showFileChooser by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf(TextFieldValue(newMessage.value)) }
 
     if (showFileChooser) {
         AwtWindow(
@@ -59,6 +64,22 @@ internal fun Screen(
         }
     }
 
+    state.announcement?.let {
+        if (!state.isLoading) {
+            ScreenAction(
+                size = DpSize(900.dp, 600.dp),
+                content = {
+                    ClassroomAnnouncementScreen(
+                        announcement = it
+                    )
+                },
+                close = { viewModel.update { copy(announcement = null) } },
+                icon = Res.drawable.chat_bubble_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+                name = "Announce",
+            )
+        }
+    } ?: run { }
+
     Column(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,8 +98,8 @@ internal fun Screen(
                 // El modifier se configura dentro del composable para padding, etc.
             )
             TextFieldAi(
-                value = newMessage.value,
-                onValueChange = { newMessage.value = it },
+                value = value,
+                onValueChange = { value = it },
                 state = state,
                 modifier = Modifier.padding(
                     bottom = 8.dp,
@@ -86,11 +107,28 @@ internal fun Screen(
                     end = 16.dp
                 ),
                 onAttachFile = { showFileChooser = true },
-                onSend = {
-                    if (newMessage.value.isNotBlank() && !state.isLoading) {
-                        scope.launch {
-                            viewModel.sendMessage(newMessage.value)
+                onSend = { detectedService, message ->
+                    when (detectedService) {
+                        "run" -> {
+                            viewModel.runCode(message)
+                            value = TextFieldValue("")
                             newMessage.value = ""
+                        }
+
+                        "announce" -> {
+                            viewModel.announce(message)
+                            value = TextFieldValue("")
+                            newMessage.value = ""
+                        }
+
+                        else -> {
+                            if (value.text.isNotBlank() && !state.isLoading) {
+                                scope.launch {
+                                    viewModel.sendMessage(value.text)
+                                    value = TextFieldValue("")
+                                    newMessage.value = ""
+                                }
+                            }
                         }
                     }
                 }

@@ -34,11 +34,17 @@ class AiViewModel(
         val messages: List<Message> = emptyList(),
         val errorMessage: String? = null,
         val chat: Chat? = null,
-        val selectedFiles: List<File> = emptyList()
+        val selectedService: String? = null,
+        val selectedFiles: List<File> = emptyList(),
+        val announcement: String? = null
     )
 
     private val _state = MutableStateFlow(AiState())
     val state = _state.asStateFlow()
+
+    fun update(update: AiState.() -> AiState) {
+        _state.value = _state.value.update()
+    }
 
     fun loadData() {
         println("AiViewModel: Cargando datos...")
@@ -78,31 +84,26 @@ class AiViewModel(
     }
 
     fun sendMessage(messageText: String) {
-        // Solo proceder si hay texto o archivos, y no está cargando
-        if ((messageText.isBlank() && state.value.selectedFiles.isEmpty()) || state.value.isLoading || state.value.chat == null) {
-            return
-        }
+        if ((messageText.isBlank() && state.value.selectedFiles.isEmpty()) || state.value.isLoading || state.value.chat == null) return
 
-        val filesToSend = state.value.selectedFiles // Copia la lista actual de archivos
+        val filesToSend = state.value.selectedFiles
 
-        // Añadir mensaje del usuario a la UI inmediatamente
         _state.update { currentState ->
             currentState.copy(
-                messages = currentState.messages + Message(text = messageText, isUser = true), // Podrías añadir los 'filesToSend' aquí si Message los soporta
+                messages = currentState.messages + Message(text = messageText, isUser = true),
                 errorMessage = null,
-                selectedFiles = emptyList() // Limpiar archivos seleccionados de la UI después de enviarlos
+                selectedFiles = emptyList()
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) { // Usar IO para la llamada de red y posible lectura de archivos
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                _state.update { it.copy(isLoading = true) } // Indicar carga
+                _state.update { it.copy(isLoading = true) }
 
-                // Llamar al repositorio con el texto y los archivos
                 val response = repository.sendMessage(
-                    chat = state.value.chat!!, // Sabemos que no es nulo por la comprobación inicial
+                    chat = state.value.chat!!,
                     message = messageText,
-                    files = filesToSend // Pasar la lista de archivos
+                    files = filesToSend
                 )
 
                 // Añadir respuesta del modelo a la UI
@@ -126,7 +127,10 @@ class AiViewModel(
                 // Opcionalmente, añadir un mensaje de error a la lista de mensajes
                 _state.update { currentState ->
                     currentState.copy(
-                        messages = currentState.messages + Message(text = "Error: ${e.localizedMessage}", isUser = false)
+                        messages = currentState.messages + Message(
+                            text = "Error: ${e.localizedMessage}",
+                            isUser = false
+                        )
                     )
                 }
             }
@@ -137,7 +141,7 @@ class AiViewModel(
         text: String
     ) {
         _state.update { it.copy(isRunCode = true) }
-        viewModelScope.launch(Dispatchers.Swing) {
+        viewModelScope.launch(Dispatchers.Default) {
             try {
                 val response = repository.generate(
                     prompt = """
@@ -158,7 +162,10 @@ class AiViewModel(
                 _state.update { it.copy(isRunCode = false) }
                 _state.update { currentState ->
                     currentState.copy(
-                        messages = currentState.messages + Message(text = "Error: ${e.localizedMessage}", isUser = false)
+                        messages = currentState.messages + Message(
+                            text = "Error: ${e.localizedMessage}",
+                            isUser = false
+                        )
                     )
                 }
             }
@@ -178,5 +185,36 @@ class AiViewModel(
             )
         }
         loadData()
+    }
+
+    fun classroom(message: String) {
+    }
+
+    fun announce(message: String) {
+        _state.update { currentState ->
+            currentState.copy(
+                announcement = message,
+                isLoading = true
+            )
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val text = repository.generate(
+                    """
+                        Redacta:
+                        [${_state.value.announcement}]".
+                        Instrucciones:
+                        •"Mejora la redacción sin modificar el sentido del texto."
+                        •"Asegúrate que sea un anuncio para estudiantes." 
+                        *"El texto resultante debe ser adecuado para publicarse en Google Classroom"
+                        No agregues ni elimines información. El mensaje debe ser el mismo, solo debe de estar escrito correctamente.
+                        Solo entrega el texto modificado, no ponga ninguna cosa extra, ningun mensaje tuyo, es el mensaje final.
+                    """.trimIndent()
+                )
+                _state.update { it.copy(announcement = text, isLoading = false) }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

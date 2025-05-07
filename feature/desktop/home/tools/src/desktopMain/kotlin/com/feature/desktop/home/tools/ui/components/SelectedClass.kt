@@ -7,17 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +25,7 @@ import com.feature.desktop.home.tools.ui.screens.add_class.AddClassScreen
 import com.feature.desktop.home.tools.ui.screens.take_attendees.TakeAttendeesViewModel
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
+import com.shared.resources.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.ClassWidget
 import com.shared.ui.ScreenAction
@@ -56,7 +53,10 @@ internal fun SelectedClass(
     // Estado para el desplazamiento horizontal de la lista de clases.
     val scrollHorizontalState = rememberLazyListState()
 
-    Text("Select a Class:", style = MaterialTheme.typography.titleMedium) // Texto que indica al usuario que seleccione una clase.
+    Text(
+        "Select a Class:",
+        style = MaterialTheme.typography.titleMedium
+    ) // Texto que indica al usuario que seleccione una clase.
     // Lista horizontal de clases.
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -80,11 +80,11 @@ internal fun SelectedClass(
                 ),
                 border = BorderStroke(3.dp, Color.Black),
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Class",
-                    modifier = Modifier.padding(16.dp).size(30.dp)
-                )
+//                Icon(
+//                    imageVector = Icons.Default.Add,
+//                    contentDescription = "Add Class",
+//                    modifier = Modifier.padding(16.dp).size(30.dp)
+//                )
             }
         }
         // Se muestran las clases existentes.
@@ -98,6 +98,7 @@ internal fun SelectedClass(
                 isSelected = classData.id == state.selectedClassId,
                 onClick = { viewModel.selectClass(classData.id) },
                 delete = { viewModel.deletedClass(classData.id) },
+                iconDeleted = Res.drawable.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
             )
         }
     }

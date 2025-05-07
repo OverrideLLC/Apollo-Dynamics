@@ -37,17 +37,17 @@ class GeminiServiceImpl() : GeminiService {
 
     override val generativeAiChat: GenerativeModel
         get() = GenerativeModel(
-            modelName = "gemini-2.0-flash-thinking-exp-01-21", //EN UN FUTURO SE TIENE QUE CAMBIAR A EL MODELO FLASH
+            modelName = "gemini-2.0-flash-001",
             apiKey = "AIzaSyBkbkmLgBhJ9nwoPOJIUf5GUmQ3igzcnlU"
         )
     override val generativeAiQuestions: GenerativeModel
         get() = GenerativeModel(
-            modelName = "gemini-2.0-flash-thinking-exp-01-21", //EN UN FUTURO SE TIENE QUE CAMBIAR A EL MODELO FLASH LITE
+            modelName = "gemini-2.0-flash-lite-001",
             apiKey = "AIzaSyBkbkmLgBhJ9nwoPOJIUf5GUmQ3igzcnlU"
         )
 
     override suspend fun generate(prompt: String): String {
-        return generativeAiChat.generateContent(prompt).text ?: "No response"
+        return generativeAiQuestions.generateContent(prompt).text ?: "No response"
     }
 
     override suspend fun startChat(): Chat {
