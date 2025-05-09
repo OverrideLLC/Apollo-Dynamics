@@ -25,7 +25,9 @@ import com.feature.desktop.home.ai.ui.components.TextFieldAi
 import com.feature.desktop.home.ai.ui.components.fileChooserDialog
 import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementScreen
 import com.feature.desktop.home.services.classroom.services.announcements.ClassroomAnnouncements
+import com.feature.desktop.home.services.classroom.services.report.ReportScreen
 import com.shared.resources.Res
+import com.shared.resources.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.ScreenAction
 import org.koin.compose.viewmodel.koinViewModel
@@ -86,6 +88,17 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
         )
     }
 
+    if (state.showReport) {
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = { ReportScreen() },
+            close = { viewModel.update { copy(showReport = false) } },
+            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+            name = "Report",
+        )
+    }
+
+
     Column(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -129,6 +142,14 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
 
                         "announcements" -> {
                             viewModel.getAnnouncements()
+                            value = TextFieldValue("")
+                            newMessage.value = ""
+                        }
+
+                        "report" -> {
+                            viewModel.showReport()
+                            value = TextFieldValue("")
+                            newMessage.value = ""
                         }
 
                         else -> {

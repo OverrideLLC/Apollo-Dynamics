@@ -12,7 +12,9 @@ import com.google.api.services.classroom.Classroom
 import com.google.api.services.classroom.ClassroomScopes
 import com.google.api.services.classroom.model.Announcement
 import com.google.api.services.classroom.model.Course
+import com.google.api.services.classroom.model.CourseWork
 import com.google.api.services.classroom.model.Student
+import com.google.api.services.classroom.model.StudentSubmission
 import com.network.utils.constants.Constants
 import com.shared.resources.Res
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +48,8 @@ class ClassroomServices(
     // Lazily initialized Classroom service client
     private val classroomService: Classroom by lazy {
         runBlocking(dispatcher) { // ¡AÚN NO ES IDEAL, PERO MEJOR QUE SWING SI DEBE SER BLOQUEANTE TEMPORALMENTE!
-            val credential = getCredentials(classroomScopes) // getCredentials ahora usa Dispatchers.Default internamente
+            val credential =
+                getCredentials(classroomScopes) // getCredentials ahora usa Dispatchers.Default internamente
             Classroom.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName(applicationName)
                 .build()
@@ -334,4 +337,39 @@ class ClassroomServices(
                 e.printStackTrace()
             }
         }
+
+    suspend fun getCourseWork(courseId: String): List<CourseWork> =
+        withContext(dispatcher) {
+            try {
+                val response = classroomService
+                    .courses()
+                    .courseWork()
+                    .list(courseId)
+                    .execute()
+                response.courseWork ?: emptyList()
+            } catch (e: IOException) {
+                println("ClassroomRepositoryImpl: Error getting course work for course $courseId - ${e.message}")
+                e.printStackTrace()
+                emptyList()
+            }
+        }
+
+    suspend fun getStudentSubmissions(
+        courseId: String,
+        courseworkId: String
+    ): List<StudentSubmission> = withContext(dispatcher) {
+        try {
+            val response = classroomService
+                .courses()
+                .courseWork()
+                .StudentSubmissions()
+                .list(courseId, courseworkId)
+                .execute()
+            response.studentSubmissions ?: emptyList()
+        } catch (e: IOException) {
+            println("ClassroomRepositoryImpl: Error getting student submissions - ${e.message}")
+            e.printStackTrace()
+            emptyList()
+        }
+    }
 }

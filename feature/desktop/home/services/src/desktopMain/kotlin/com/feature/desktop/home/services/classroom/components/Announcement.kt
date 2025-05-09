@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.services.classroom.ClassroomAnnouncementState
 import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
-import com.feature.desktop.home.services.classroom.utils.enums.ClassroomServices
+import com.feature.desktop.home.services.classroom.utils.ClassroomServices
 
 @Composable
 internal fun Announcement(

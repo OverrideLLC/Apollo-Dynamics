@@ -1,6 +1,6 @@
 package com.feature.desktop.home.services.classroom
 
-import com.feature.desktop.home.services.classroom.utils.enums.ClassroomServices
+import com.feature.desktop.home.services.classroom.utils.ClassroomServices
 import com.google.api.services.classroom.model.Announcement
 import com.google.api.services.classroom.model.Course
 import com.google.api.services.classroom.model.Student

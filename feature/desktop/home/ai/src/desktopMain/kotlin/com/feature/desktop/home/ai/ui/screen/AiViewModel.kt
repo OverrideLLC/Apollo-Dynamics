@@ -38,6 +38,7 @@ class AiViewModel(
         val selectedFiles: List<File> = emptyList(),
         val announcement: String? = null,
         val announcements: Boolean = false,
+        val showReport: Boolean = false
     )
 
     private val _state = MutableStateFlow(AiState())
@@ -220,11 +221,11 @@ class AiViewModel(
         }
     }
 
-    fun clearAnnouncement() {
-
-    }
-
     fun getAnnouncements() {
         _state.update { it.copy(announcements = true) }
+    }
+
+    fun showReport() {
+        _state.update { it.copy(showReport = true) }
     }
 }

@@ -60,7 +60,8 @@ import org.jetbrains.compose.resources.painterResource
 val knownServices = listOf(
     "run",
     "announce",
-    "announcements"
+    "announcements",
+    "report"
 )
 
 class ServiceTagVisualTransformation(
