@@ -207,14 +207,14 @@ class ClassroomServices(
         }
     }
 
-    suspend fun getStudents(courseId: String): List<String> =
+    suspend fun getStudents(courseId: String): List<Student> =
         withContext(Dispatchers.Swing) {
             try {
                 val response = classroomService.courses().students().list(courseId)
                     .setPageSize(Constants.API_STUDENT_PAGE_SIZE) // Example: Constants.API_STUDENT_PAGE_SIZE = 100
                     .execute()
                 // Extracts email addresses if available, otherwise falls back to userId.
-                response.students?.mapNotNull { it.profile?.emailAddress ?: it.userId }
+                response.students?.mapNotNull { it }
                     ?: emptyList()
             } catch (e: IOException) {
                 println("ClassroomRepositoryImpl: Error getting students for course $courseId - ${e.message}")

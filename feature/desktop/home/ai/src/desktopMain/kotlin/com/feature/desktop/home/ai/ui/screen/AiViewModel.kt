@@ -36,7 +36,8 @@ class AiViewModel(
         val chat: Chat? = null,
         val selectedService: String? = null,
         val selectedFiles: List<File> = emptyList(),
-        val announcement: String? = null
+        val announcement: String? = null,
+        val announcements: Boolean = false,
     )
 
     private val _state = MutableStateFlow(AiState())
@@ -145,6 +146,7 @@ class AiViewModel(
             try {
                 val response = repository.generate(
                     prompt = """
+                        ==============EN LA RESPUESTA SOLO QUIERO EL RESULTADO DE EL CODIGO QUE EJECUTASTE==========
                         Ejecuta este codigo:
                         ```python
                         $text
@@ -216,5 +218,13 @@ class AiViewModel(
                 e.printStackTrace()
             }
         }
+    }
+
+    fun clearAnnouncement() {
+
+    }
+
+    fun getAnnouncements() {
+        _state.update { it.copy(announcements = true) }
     }
 }

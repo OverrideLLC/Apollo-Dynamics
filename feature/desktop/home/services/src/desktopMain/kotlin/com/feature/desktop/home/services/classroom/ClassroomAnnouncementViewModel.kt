@@ -1,8 +1,9 @@
-package com.feature.desktop.home.services.classroom.screen
+package com.feature.desktop.home.services.classroom
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.api.services.classroom.model.Course // Required import
+import com.google.api.services.classroom.model.Announcement
+import com.google.api.services.classroom.model.Course
 import com.network.repositories.contract.ClassroomRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,19 +25,10 @@ class ClassroomAnnouncementViewModel(
         _state.value = update(_state.value)
     }
 
-    // Called when a course is selected from the UI
     fun onCourseSelected(course: Course) {
         update {
-            // If the same course is clicked again, it remains selected.
-            // To toggle selection (deselect if same course clicked), you could add:
-            // if (selectedCourseId == course.id) {
-            //     copy(selectedCourseId = null, servicesVisible = false)
-            // } else {
-            //     copy(selectedCourseId = course.id, servicesVisible = true)
-            // }
             copy(selectedCourseId = course.id, servicesVisible = true)
         }
-        // Here you could also trigger loading data specific to the selected course if needed
     }
 
     fun addAnnouncement(content: String, courseId: String) {
@@ -55,9 +47,39 @@ class ClassroomAnnouncementViewModel(
         }
     }
 
-    fun initialize() {
+    fun removeAllAnnouncements(courseId: String) {
         viewModelScope.launch(Dispatchers.Swing) {
-            classroomRepository.initialize()
+            val courseId = state.value.selectedCourseId ?: return@launch
+            classroomRepository.getCourseAnnouncements(courseId).forEach {
+                classroomRepository.removeAnnouncement(courseId, it.id)
+            }
         }
+    }
+
+    fun removeAnnouncement(courseId: String, announcementId: String) {
+        viewModelScope.launch(Dispatchers.Swing) {
+            classroomRepository.removeAnnouncement(courseId, announcementId)
+        }
+    }
+
+    fun updateAnnouncement(courseId: String, announcementId: String, content: String) {
+        viewModelScope.launch(Dispatchers.Swing) {
+            classroomRepository.editAnnouncement(
+                courseId = courseId,
+                announcementId = announcementId,
+                newContent = content,
+            )
+        }
+    }
+
+    fun getCourseAnnouncements(courseId: String) {
+        viewModelScope.launch(Dispatchers.Swing) {
+            val announcements = classroomRepository.getCourseAnnouncements(courseId)
+            update { copy(announcements = announcements) }
+        }
+    }
+
+    fun onAnnouncementSelected(announcement: Announcement) {
+        update { copy(selectedAnnouncement = announcement) }
     }
 }

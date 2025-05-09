@@ -23,11 +23,11 @@ import com.feature.desktop.home.ai.ui.components.Chat
 import com.feature.desktop.home.ai.ui.components.SelectedFilesPreview
 import com.feature.desktop.home.ai.ui.components.TextFieldAi
 import com.feature.desktop.home.ai.ui.components.fileChooserDialog
-import com.feature.desktop.home.services.classroom.screen.ClassroomAnnouncementScreen
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementScreen
+import com.feature.desktop.home.services.classroom.services.announcements.ClassroomAnnouncements
 import com.shared.resources.Res
-import com.shared.resources.chat_bubble_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
+import com.shared.resources.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.ScreenAction
-import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import java.awt.Frame
 
@@ -68,17 +68,23 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
         if (!state.isLoading) {
             ScreenAction(
                 size = DpSize(900.dp, 600.dp),
-                content = {
-                    ClassroomAnnouncementScreen(
-                        announcement = it
-                    )
-                },
+                content = { ClassroomAnnouncementScreen(announcement = it) },
                 close = { viewModel.update { copy(announcement = null) } },
-                icon = Res.drawable.chat_bubble_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+                icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
                 name = "Announce",
             )
         }
     } ?: run { }
+
+    if (state.announcements) {
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = { ClassroomAnnouncements() },
+            close = { viewModel.update { copy(announcements = false) } },
+            icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+            name = "Announcements",
+        )
+    }
 
     Column(
         verticalArrangement = Arrangement.Bottom,
@@ -121,13 +127,15 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
                             newMessage.value = ""
                         }
 
+                        "announcements" -> {
+                            viewModel.getAnnouncements()
+                        }
+
                         else -> {
                             if (value.text.isNotBlank() && !state.isLoading) {
-                                scope.launch {
-                                    viewModel.sendMessage(value.text)
-                                    value = TextFieldValue("")
-                                    newMessage.value = ""
-                                }
+                                viewModel.sendMessage(value.text)
+                                value = TextFieldValue("")
+                                newMessage.value = ""
                             }
                         }
                     }

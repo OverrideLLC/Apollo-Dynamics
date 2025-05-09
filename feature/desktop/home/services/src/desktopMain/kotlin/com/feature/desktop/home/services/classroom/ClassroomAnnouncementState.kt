@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom.screen
+package com.feature.desktop.home.services.classroom
 
 import com.feature.desktop.home.services.classroom.utils.enums.ClassroomServices
 import com.google.api.services.classroom.model.Announcement
@@ -12,5 +12,6 @@ data class ClassroomAnnouncementState(
     val announcements: List<Announcement>? = null,
     val classroomServices: EnumEntries<ClassroomServices> = ClassroomServices.entries,
     val selectedCourseId: String? = null, // To track the selected course
-    val servicesVisible: Boolean = false   // To control visibility of services section
+    val servicesVisible: Boolean = false,   // To control visibility of services section
+    val selectedAnnouncement: Announcement? = null,
 )

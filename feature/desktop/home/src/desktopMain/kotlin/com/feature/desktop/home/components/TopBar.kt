@@ -53,7 +53,7 @@ internal fun TopBar(
                             painter = painterResource(Res.drawable.TTNegro),
                             contentDescription = null,
                             modifier = Modifier.size(50.dp),
-                            tint = colorScheme.onSurface
+                            tint = colorScheme.primary
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(

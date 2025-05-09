@@ -1,7 +1,10 @@
 package com.network.repositories.impl
 
+import com.google.api.services.classroom.Classroom
+import com.google.api.services.classroom.Classroom.Courses.Students
 import com.google.api.services.classroom.model.Announcement
 import com.google.api.services.classroom.model.Course
+import com.google.api.services.classroom.model.Student
 import com.network.repositories.contract.ClassroomRepository
 import com.network.services.ClassroomServices
 import kotlinx.coroutines.CoroutineScope
@@ -106,7 +109,7 @@ class ClassroomRepositoryImpl(
      * @param courseId The ID of the course.
      * @return A list of student identifiers (emails or IDs), or an empty list on error.
      */
-    override suspend fun getCourseStudents(courseId: String): List<String> {
+    override suspend fun getCourseStudents(courseId: String): List<Student> {
         return try {
             withContext(Dispatchers.Swing) {
                 classroomServices.getStudents(courseId)
@@ -219,9 +222,4 @@ class ClassroomRepositoryImpl(
             e.printStackTrace()
         }
     }
-
-    // Note: updateStudent is not included here as a primary service method because
-    // the underlying repository method indicates direct student profile updates (like name)
-    // are not supported by the Classroom API. If there were other course-specific student
-    // properties to manage, a corresponding service method could be added.
 }

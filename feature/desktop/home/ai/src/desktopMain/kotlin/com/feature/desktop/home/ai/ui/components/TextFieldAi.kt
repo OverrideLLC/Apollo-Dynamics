@@ -58,14 +58,9 @@ import org.jetbrains.compose.resources.painterResource
 
 // Lista de servicios conocidos (puedes obtenerla de tu ViewModel o una constante)
 val knownServices = listOf(
-    "classroom",
-    "drive",
-    "calendar",
-    "meet",
-    "docs",
-    "sheets",
     "run",
-    "announce"
+    "announce",
+    "announcements"
 )
 
 class ServiceTagVisualTransformation(
@@ -160,17 +155,10 @@ internal fun TextFieldAi(
                 expanded = attachMenuExpanded,
                 onDismissRequest = { attachMenuExpanded = false }
             ) {
-                DropdownMenuItem( // Usando androidx.compose.material3.DropdownMenuItem
+                DropdownMenuItem(
                     text = { Text("Attach File") },
                     onClick = {
                         onAttachFile()
-                        attachMenuExpanded = false
-                    }
-                )
-                DropdownMenuItem( // Usando androidx.compose.material3.DropdownMenuItem
-                    text = { Text("Another Action") },
-                    onClick = {
-                        onAnotherAction()
                         attachMenuExpanded = false
                     }
                 )
@@ -212,7 +200,7 @@ internal fun TextFieldAi(
                 modifier = Modifier.fillMaxWidth(), // El focusRequester puede ser añadido si se necesita
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = shapes.medium,
-                maxLines = 5,
+                maxLines = 10,
                 placeholder = { Text(text = "Type a message or @service...") },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = colorScheme.surface,

@@ -2,10 +2,7 @@ package com.network.repositories.contract
 
 import com.google.api.services.classroom.model.Announcement
 import com.google.api.services.classroom.model.Course
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.swing.Swing
-import kotlinx.coroutines.withContext
+import com.google.api.services.classroom.model.Student
 
 /**
  * Interface defining the contract for Classroom operations.
@@ -52,7 +49,7 @@ interface ClassroomRepository {
      * @param courseId The ID of the course.
      * @return A list of student identifiers (emails or IDs), or an empty list on error.
      */
-    suspend fun getCourseStudents(courseId: String): List<String>
+    suspend fun getCourseStudents(courseId: String): List<Student>
 
     /**
      * Adds a student to a course.
