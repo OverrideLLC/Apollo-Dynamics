@@ -17,7 +17,7 @@ data class UploadAssignmentUiState(
     val isLoading: Boolean = false,
     val uploadSuccess: Boolean = false,
     val error: String? = null,
-    val selectedCourse: String? = null,
+    val selectedCourse: Course? = null,
     val courses: List<Course>? = null
 )
 
@@ -27,6 +27,10 @@ class UploadAssignmentViewModel(
 
     private val _uiState = MutableStateFlow(UploadAssignmentUiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        getCourses()
+    }
 
     /**
      * Sube una nueva tarea a un curso.
@@ -96,5 +100,9 @@ class UploadAssignmentViewModel(
                 }
             }
         }
+    }
+
+    fun selectCourse(course: Course) {
+        _uiState.update { it.copy(selectedCourse = course) }
     }
 }

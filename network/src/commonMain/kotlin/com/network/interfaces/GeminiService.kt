@@ -10,4 +10,5 @@ interface GeminiService {
     suspend fun generate(prompt: String): String
     suspend fun startChat(): Chat
     suspend fun sendMessage(chat: Chat, message: String, files: List<File>?): String
+    suspend fun generateAdvancedPrompt(prompt: String): String
 }

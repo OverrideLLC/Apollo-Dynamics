@@ -101,6 +101,10 @@ class GeminiServiceImpl() : GeminiService {
         }
     }
 
+    override suspend fun generateAdvancedPrompt(prompt: String): String {
+        return generativeAiChat.generateContent(prompt).text ?: "No response"
+    }
+
     private fun getMimeType(file: File): String {
         return try {
             Files.probeContentType(file.toPath()) ?: when (file.extension.lowercase()) {

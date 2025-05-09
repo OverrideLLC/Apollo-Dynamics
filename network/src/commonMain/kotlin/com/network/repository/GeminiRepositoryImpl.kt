@@ -50,4 +50,8 @@ class GeminiRepositoryImpl(
             files = files
         )
     }
+
+    override suspend fun generateAdvancedPrompt(prompt: String): String {
+        return service.generateAdvancedPrompt(prompt = prompt)
+    }
 }

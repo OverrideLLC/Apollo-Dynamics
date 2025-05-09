@@ -178,10 +178,6 @@ class AiViewModel(
         }
     }
 
-    fun clearErrorMessage() {
-        _state.update { it.copy(errorMessage = null) }
-    }
-
     fun clearChat() {
         _state.update {
             it.copy(
@@ -191,9 +187,6 @@ class AiViewModel(
             )
         }
         loadData()
-    }
-
-    fun classroom(message: String) {
     }
 
     fun announce(message: String) {
@@ -236,29 +229,36 @@ class AiViewModel(
         _state.update { it.copy(workText = message, isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val description = repository.generate(
+                val description = repository.generateAdvancedPrompt(
                     """
-                        Readacta:
+                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA==========
                         [${_state.value.workText}]".
                         nstrucciones:
                         1.Contexto: Describe brevemente el tema o unidad en la que se enmarca la tarea
                         2.Objetivo: Define qué se espera que los alumnos aprendan o logren al completar la tarea.
                         3.Actividad: Explica con claridad qué deben hacer los alumnos paso a paso. Incluye detalles específicos sobre los recursos, herramientas o materiales que necesitan.
                         4.Formato de entrega: Especifica el formato en el que se debe de entregar la asignación.
-                        5.Agrega enlaces a recurso: Agrega por lo menos 4 videos de youtube para que los alumnos tengan recursos de el tema.
+                        5.Agrega enlaces a recurso: 
+                            Agrega por lo menos 4 videos de youtube para que los alumnos tengan recursos de el tema.
+                            Solo da los links y nombres de los videos, pero no lo agregues en formato markdown, asi no ()[] x, asi si https://example.com.
                         Consideraciones:
+                            •No lo pongas en formato markdown, porque se va a subir a classroom y ahi no existe le formato markdrown, damelo en un formato limpio.
                             •Usa un lenguaje motivador y positivo.
                             •Sé preciso y evita la ambigüedad.
                             •Incluye instrucciones claras y numeradas si es necesario.
                             •Adapta el tono y el lenguaje al nivel educativo (por ejemplo, primaria, secundaria, universidad).
                             •Ofrece ejemplos o aclaraciones si es pertinente.
                             •Menciona cualquier información de apoyo que el estudiante pueda utilizar.
+                            
+                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA RECUERDA QUE ESTO LO VA A VER EL USUARIO FINAL==========
                     """.trimIndent()
                 )
 
                 val title = repository.generate(
                     """
+                        =============EN LA RESPUESTA SOLO QUIERO EL TITULO DE LA TAREA==========
                         Genera un titulo para la tarea: ${_state.value.workText}
+                        =============EN LA RESPUESTA SOLO QUIERO EL TITULO DE LA TAREA RECUERDA QUE ESTO LO VA A VER EL USUARIO FINAL==========
                     """.trimIndent()
                 )
 

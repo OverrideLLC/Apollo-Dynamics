@@ -63,7 +63,8 @@ internal fun Content(
             )
 
             ListCourses(
-                state = state,
+                courses = state.courses,
+                selectedCourseId = state.selectedCourseId,
                 onCourseClick = { course -> viewModel.onCourseSelected(course) }
             )
 

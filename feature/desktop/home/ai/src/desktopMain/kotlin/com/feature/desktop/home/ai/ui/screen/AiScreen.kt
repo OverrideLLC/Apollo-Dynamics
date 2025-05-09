@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import com.feature.desktop.home.ai.ui.components.Chat
 import com.feature.desktop.home.ai.ui.components.SelectedFilesPreview
 import com.feature.desktop.home.ai.ui.components.TextFieldAi
 import com.feature.desktop.home.ai.ui.components.fileChooserDialog
+import com.feature.desktop.home.ai.ui.screen.AiViewModel.AiState
 import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementScreen
 import com.feature.desktop.home.services.classroom.services.announcements.ClassroomAnnouncements
 import com.feature.desktop.home.services.classroom.services.report.ReportScreen
@@ -43,74 +43,15 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val messages = state.messages
     val newMessage = remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
     var showFileChooser by remember { mutableStateOf(false) }
     var value by remember { mutableStateOf(TextFieldValue(newMessage.value)) }
 
-    if (showFileChooser) {
-        AwtWindow(
-            create = {
-                object : Frame() {
-                    init {
-                        isVisible = false
-                    }
-                }
-            },
-            dispose = { frame -> frame.dispose() }
-        ) { frame ->
-            fileChooserDialog(parent = frame) { selectedFiles ->
-                showFileChooser = false
-                if (selectedFiles.isNotEmpty()) {
-                    viewModel.addFiles(selectedFiles)
-                }
-            }
-        }
-    }
-
-    state.announcement?.let {
-        if (!state.isLoading) {
-            ScreenAction(
-                size = DpSize(900.dp, 600.dp),
-                content = { ClassroomAnnouncementScreen(announcement = it) },
-                close = { viewModel.update { copy(announcement = null) } },
-                icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
-                name = "Announce",
-            )
-        }
-    } ?: run { }
-
-    if (state.announcements) {
-        ScreenAction(
-            size = DpSize(900.dp, 600.dp),
-            content = { ClassroomAnnouncements() },
-            close = { viewModel.update { copy(announcements = false) } },
-            icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
-            name = "Announcements",
-        )
-    }
-
-    if (state.showReport) {
-        ScreenAction(
-            size = DpSize(900.dp, 600.dp),
-            content = { ReportScreen() },
-            close = { viewModel.update { copy(showReport = false) } },
-            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
-            name = "Report",
-        )
-    }
-
-    state.workText?.let {
-        ScreenAction(
-            size = DpSize(900.dp, 600.dp),
-            content = {
-                UploadAssignmentScreen(
-                )
-            },
-            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
-            name = "Work",
-            close = { viewModel.update { copy(workText = null) } },
-        )
-    }
+    Screens(
+        viewModel = viewModel,
+        state = state,
+        showFileChooserState = showFileChooser,
+        showFileChooser = { showFileChooser = it }
+    )
 
     Column(
         verticalArrangement = Arrangement.Bottom,
@@ -184,5 +125,83 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
         } else {
             CircularProgressIndicator()
         }
+    }
+}
+
+
+@Composable
+private fun Screens(
+    viewModel: AiViewModel = koinViewModel(),
+    state: AiState,
+    showFileChooserState: Boolean,
+    showFileChooser: (Boolean) -> Unit,
+) {
+    if (showFileChooserState) {
+        AwtWindow(
+            create = {
+                object : Frame() {
+                    init {
+                        isVisible = false
+                    }
+                }
+            },
+            dispose = { frame -> frame.dispose() }
+        ) { frame ->
+            fileChooserDialog(parent = frame) { selectedFiles ->
+                showFileChooser(false)
+                if (selectedFiles.isNotEmpty()) {
+                    viewModel.addFiles(selectedFiles)
+                }
+            }
+        }
+    }
+
+    state.announcement?.let {
+        if (!state.isLoading) {
+            ScreenAction(
+                size = DpSize(900.dp, 600.dp),
+                content = { ClassroomAnnouncementScreen(announcement = it) },
+                close = { viewModel.update { copy(announcement = null) } },
+                icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+                name = "Announce",
+            )
+        }
+    } ?: run { }
+
+    if (state.announcements) {
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = { ClassroomAnnouncements() },
+            close = { viewModel.update { copy(announcements = false) } },
+            icon = Res.drawable.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+            name = "Announcements",
+        )
+    }
+
+    if (state.showReport) {
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = { ReportScreen() },
+            close = { viewModel.update { copy(showReport = false) } },
+            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+            name = "Report",
+        )
+    }
+
+    state.work?.let { work ->
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = {
+                UploadAssignmentScreen(
+                    initialAssignmentTitle = work.title,
+                    initialAssignmentDescription = work.description,
+                    onUploadSuccess = {},
+                    onError = {}
+                )
+            },
+            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+            name = "Work",
+            close = { viewModel.update { copy(work = null) } },
+        )
     }
 }
