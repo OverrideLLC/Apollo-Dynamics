@@ -46,7 +46,8 @@ fun ClassroomAnnouncements() {
             )
 
             ListCourses(
-                state = state,
+                selectedCourseId = state.selectedCourseId,
+                courses = state.courses,
                 onCourseClick = { course ->
                     viewModel.onCourseSelected(course)
                     viewModel.getCourseAnnouncements(course.id)

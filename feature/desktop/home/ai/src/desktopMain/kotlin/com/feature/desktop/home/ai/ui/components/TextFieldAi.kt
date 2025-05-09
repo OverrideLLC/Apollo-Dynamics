@@ -59,9 +59,10 @@ import org.jetbrains.compose.resources.painterResource
 // Lista de servicios conocidos (puedes obtenerla de tu ViewModel o una constante)
 val knownServices = listOf(
     "run",
-    "announce",
-    "announcements",
-    "report"
+    "classroom announce",
+    "classroom announcements",
+    "classroom report",
+    "classroom update assignment"
 )
 
 class ServiceTagVisualTransformation(

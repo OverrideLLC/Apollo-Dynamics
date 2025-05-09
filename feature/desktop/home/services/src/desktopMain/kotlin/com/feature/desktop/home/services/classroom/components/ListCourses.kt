@@ -30,7 +30,8 @@ import com.shared.ui.ClassWidget
 
 @Composable
 fun ListCourses(
-    state: ClassroomAnnouncementState,
+    courses: List<Course>?,
+    selectedCourseId: String?,
     onCourseClick: (Course) -> Unit
 ) {
     val scrollStateCourses = rememberLazyListState()
@@ -57,7 +58,7 @@ fun ListCourses(
                 ),
                 state = scrollStateCourses
             ) {
-                state.courses?.let { courses ->
+                courses?.let { courses ->
                     items(items = courses) { course ->
                         ClassWidget(
                             name = course.name ?: "No name",
@@ -67,7 +68,7 @@ fun ListCourses(
                             section = course.section ?: "General",
                             onClick = { onCourseClick(course) },
                             delete = {},
-                            isSelected = course.id == state.selectedCourseId,
+                            isSelected = course.id == selectedCourseId,
                             isEnabledDeleted = false,
                             iconDeleted = Res.drawable.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
                         )

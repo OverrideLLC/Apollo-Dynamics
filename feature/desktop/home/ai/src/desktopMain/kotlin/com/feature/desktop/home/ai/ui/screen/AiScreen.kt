@@ -26,6 +26,7 @@ import com.feature.desktop.home.ai.ui.components.fileChooserDialog
 import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementScreen
 import com.feature.desktop.home.services.classroom.services.announcements.ClassroomAnnouncements
 import com.feature.desktop.home.services.classroom.services.report.ReportScreen
+import com.feature.desktop.home.services.classroom.uploadassignment.UploadAssignmentScreen
 import com.shared.resources.Res
 import com.shared.resources.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
@@ -98,6 +99,18 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
         )
     }
 
+    state.workText?.let {
+        ScreenAction(
+            size = DpSize(900.dp, 600.dp),
+            content = {
+                UploadAssignmentScreen(
+                )
+            },
+            icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
+            name = "Work",
+            close = { viewModel.update { copy(workText = null) } },
+        )
+    }
 
     Column(
         verticalArrangement = Arrangement.Bottom,
@@ -134,20 +147,26 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
                             newMessage.value = ""
                         }
 
-                        "announce" -> {
+                        "classroom announce" -> {
                             viewModel.announce(message)
                             value = TextFieldValue("")
                             newMessage.value = ""
                         }
 
-                        "announcements" -> {
+                        "classroom announcements" -> {
                             viewModel.getAnnouncements()
                             value = TextFieldValue("")
                             newMessage.value = ""
                         }
 
-                        "report" -> {
+                        "classroom report" -> {
                             viewModel.showReport()
+                            value = TextFieldValue("")
+                            newMessage.value = ""
+                        }
+
+                        "classroom update assignment" -> {
+                            viewModel.updateAssignment(message)
                             value = TextFieldValue("")
                             newMessage.value = ""
                         }

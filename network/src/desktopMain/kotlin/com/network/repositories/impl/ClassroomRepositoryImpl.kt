@@ -266,7 +266,6 @@ class ClassroomRepositoryImpl(
      * @param courseId The ID of the course.
      * El ID del curso.
      * @param announcementId The ID of the announcement to delete.
-     * El ID del anuncio a eliminar.
      */
     override suspend fun removeAnnouncement(courseId: String, announcementId: String) {
         try {
@@ -323,6 +322,29 @@ class ClassroomRepositoryImpl(
             println("ClassroomServices: Error fetching submissions for coursework $courseworkId in course $courseId - ${e.message}")
             e.printStackTrace()
             emptyList()
+        }
+    }
+
+    /**
+     * Creates a new coursework item in a course.
+     * Crea un nuevo elemento de trabajo de clase en un curso.
+     *
+     * @param courseId The ID of the course.
+     * El ID del curso.
+     * @param coursework The [CourseWork] object containing the details of the assignment.
+     * El objeto [CourseWork] que contiene los detalles de la tarea.
+     * @return The created [CourseWork] object, or null if an error occurs.
+     * El objeto [CourseWork] creado, o null if an error occurs.
+     */
+    override suspend fun createCourseWork(courseId: String, coursework: CourseWork): CourseWork? {
+        return try {
+            withContext(Dispatchers.IO) {
+                classroomServices.createCourseWork(courseId, coursework)
+            }
+        } catch (e: Exception) {
+            println("ClassroomServices: Error creating coursework in course $courseId - ${e.message}")
+            e.printStackTrace()
+            null
         }
     }
 }

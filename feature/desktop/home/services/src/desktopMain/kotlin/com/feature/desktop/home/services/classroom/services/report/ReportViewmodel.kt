@@ -21,7 +21,7 @@ data class ReportUiState(
     val pdfGenerated: Boolean = false, // Indica si el PDF se generó exitosamente
     val pdfFilePath: String? = null,
     val courses: List<Course>? = null,
-    val selectedCourseId: String? = null
+    val selectedCourse: Course? = null
 )
 
 // Data class to represent a student's submission for a specific coursework
@@ -59,10 +59,6 @@ class ReportViewmodel(
     private val _uiState = MutableStateFlow(ReportUiState())
     val uiState = _uiState.asStateFlow()
 
-    // Variable para almacenar temporalmente el ID de la clase mientras se selecciona el archivo
-    // Variable to temporarily store the class ID while the file is being selected
-    private var currentClassId: String? = null
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
@@ -89,18 +85,20 @@ class ReportViewmodel(
      * @param filePath La ruta del archivo seleccionada (usar cuando `showFilePicker` es false).
      */
     fun startReportGeneration(
-        classId: String,
+        course: Course,
         showFilePicker: Boolean = false,
         filePath: String? = null
     ) {
-        currentClassId = classId // Guarda el ID de la clase
+        _uiState.update {
+            it.copy(selectedCourse = course)
+        }
 
         if (showFilePicker) {
             _uiState.update { it.copy(isFilePickerVisible = true) }
-        } else if (filePath != null && currentClassId != null) {
+        } else if (filePath != null && uiState.value.selectedCourse != null) {
             // Si ya tenemos la ruta y el ID de la clase, procedemos a generar el reporte y PDF
             // If we already have the file path and class ID, proceed to generate the report and PDF
-            generateReportAndPdf(currentClassId!!, filePath)
+            generateReportAndPdf(uiState.value.selectedCourse!!, filePath)
         }
     }
 
@@ -109,8 +107,7 @@ class ReportViewmodel(
      * Hides the file picker.
      */
     fun hideFilePicker() {
-        _uiState.update { it.copy(isFilePickerVisible = false) }
-        currentClassId = null // Limpia el ID de la clase
+        _uiState.update { it.copy(isFilePickerVisible = false, selectedCourse = null) }
     }
 
     /**
@@ -124,7 +121,7 @@ class ReportViewmodel(
      * @param filePath La ruta donde se guardará el archivo PDF.
      */
     private fun generateReportAndPdf(
-        classId: String,
+        course: Course,
         filePath: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -140,11 +137,11 @@ class ReportViewmodel(
             runCatching {
                 // 1. Fetch students for the course
                 // 1. Obtener estudiantes para el curso
-                val students = repositoryClassroom.getCourseStudents(classId)
+                val students = repositoryClassroom.getCourseStudents(course.id)
 
                 // 2. Fetch coursework for the course
                 // 2. Obtener trabajos de clase para el curso
-                val courseworkList = repositoryClassroom.getCourseWork(classId)
+                val courseworkList = repositoryClassroom.getCourseWork(course.id)
 
                 // 3. Create a map to store student reports
                 // 3. Crear un mapa para almacenar los reportes de los estudiantes
@@ -163,7 +160,7 @@ class ReportViewmodel(
                 for (coursework in courseworkList) {
                     coursework.id?.let { courseworkId ->
                         val submissions =
-                            repositoryClassroom.getStudentSubmissions(classId, courseworkId)
+                            repositoryClassroom.getStudentSubmissions(course.id, courseworkId)
                         for (submission in submissions) {
                             submission.userId?.let { studentId ->
                                 val submissionDetail = StudentSubmissionDetail(
@@ -193,13 +190,9 @@ class ReportViewmodel(
                     }
                 }
 
-                // Note: To get the course name, you might need to fetch the course details separately
-                // Nota: Para obtener el nombre del curso, es posible que necesites obtener los detalles del curso por separado
-                val courseName = "Course Name Placeholder" // Replace with actual fetch if needed
-
                 CourseReport(
-                    courseId = classId,
-                    courseName = courseName,
+                    courseId = course.id,
+                    courseName = course.name,
                     studentReports = studentReports
                 )
 
@@ -231,9 +224,9 @@ class ReportViewmodel(
         }
     }
 
-    fun selectCourse(courseId: String) {
+    fun selectCourse(course: Course) {
         _uiState.update {
-            it.copy(selectedCourseId = courseId)
+            it.copy(selectedCourse = course)
         }
     }
 }

@@ -40,34 +40,25 @@ import java.awt.FileDialog
 import java.awt.Frame
 import java.util.Locale
 
-// Implementación actual para mostrar un selector de archivos para guardar en Desktop
-// Actual implementation to show a file save picker on Desktop
 fun showFileSavePicker(title: String, allowedExtensions: List<String>): String? {
     val dialog = FileDialog(null as Frame?, title, FileDialog.SAVE)
 
-    // Configurar filtro de archivos si hay extensiones permitidas
-    // Set file filter if there are allowed extensions
     if (allowedExtensions.isNotEmpty()) {
         dialog.setFilenameFilter { _, name ->
             allowedExtensions.any { name.endsWith(".$it", ignoreCase = true) }
         }
     }
 
-    dialog.isVisible = true // Muestra el diálogo de forma modal
+    dialog.isVisible = true
 
-    // Obtener el directorio y el nombre del archivo seleccionados
-    // Get the selected directory and file name
     val directory = dialog.directory
     val file = dialog.file
 
-    // Construir la ruta completa del archivo
-    // Construct the full file path
     return if (directory != null && file != null) {
-        // Asegurarse de que la extensión .pdf esté presente si se seleccionó
-        // Ensure the .pdf extension is present if selected
         val fileNameWithExtension =
-            if (allowedExtensions.contains("pdf") && file.lowercase(Locale.getDefault())
-                    .endsWith(".pdf")
+            if (allowedExtensions.contains("pdf") && file
+                .lowercase(Locale.getDefault())
+                .endsWith(".pdf")
             ) {
                 "$file.pdf"
             } else {
@@ -75,7 +66,7 @@ fun showFileSavePicker(title: String, allowedExtensions: List<String>): String? 
             }
         "$directory$fileNameWithExtension"
     } else {
-        null // El usuario canceló el diálogo
+        null
     }
 }
 
@@ -85,26 +76,19 @@ fun ReportScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // Efecto lateral para mostrar el selector de archivos cuando sea necesario
-    // Side effect to show the file picker when needed
     LaunchedEffect(uiState.isFilePickerVisible) {
         if (uiState.isFilePickerVisible) {
             val filePath = showFileSavePicker(
                 title = "Guardar Reporte PDF",
                 allowedExtensions = listOf("pdf")
             )
-            // Llama al ViewModel con la ruta seleccionada o null si se canceló
-            // Call the ViewModel with the selected path or null if canceled
-            viewModel.hideFilePicker() // Oculta el selector independientemente del resultado
+            viewModel.hideFilePicker()
             if (filePath != null) {
                 viewModel.startReportGeneration(
-                    uiState.selectedCourseId ?: "",
+                    uiState.selectedCourse!!,
                     showFilePicker = false,
                     filePath = filePath
                 )
-            } else {
-                // Manejar la cancelación del selector de archivos si es necesario
-                // Handle file picker cancellation if needed
             }
         }
     }
@@ -119,11 +103,11 @@ fun ReportScreen(
         ListCourses(
             state = uiState,
             onCourseClick = {
-                viewModel.selectCourse(it.id)
+                viewModel.selectCourse(it)
             }
         )
         HorizontalDivider()
-        Text("Reporte de Alumnos", style = MaterialTheme.typography.h5)
+        Text("Student Report", style = MaterialTheme.typography.h5)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -132,13 +116,13 @@ fun ReportScreen(
                 // Inicia el proceso de generación del reporte mostrando el selector de archivos
                 // Start the report generation process by showing the file picker
                 viewModel.startReportGeneration(
-                    uiState.selectedCourseId ?: "",
+                    uiState.selectedCourse!!,
                     showFilePicker = true
                 )
             },
             enabled = !uiState.isLoading // Deshabilita el botón mientras carga
         ) {
-            Text("Generar Reporte PDF")
+            Text("Generate PDF Report")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -147,7 +131,7 @@ fun ReportScreen(
         // Show loading indicator
         if (uiState.isLoading) {
             CircularProgressIndicator()
-            Text("Generando reporte...")
+            Text("Generating report...")
         }
 
         // Mostrar mensaje de éxito o error
@@ -157,7 +141,7 @@ fun ReportScreen(
         }
 
         if (uiState.pdfGenerated) {
-            Text("Reporte PDF generado con éxito en: ${uiState.pdfFilePath}")
+            Text("PDF report successfully generated in: ${uiState.pdfFilePath}")
         }
 
         // Opcional: Mostrar un resumen del reporte en la pantalla (si uiState.report no es null)
@@ -210,7 +194,7 @@ private fun ListCourses(
                             section = course.section ?: "General",
                             onClick = { onCourseClick(course) },
                             delete = {},
-                            isSelected = course.id == state.selectedCourseId,
+                            isSelected = course.id == state.selectedCourse?.id,
                             isEnabledDeleted = false,
                             iconDeleted = Res.drawable.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
                         )

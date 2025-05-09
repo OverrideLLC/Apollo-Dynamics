@@ -372,4 +372,15 @@ class ClassroomServices(
             emptyList()
         }
     }
+
+    suspend fun createCourseWork(courseId: String, coursework: CourseWork): CourseWork? =
+        withContext(dispatcher) {
+            try {
+                classroomService.courses().courseWork().create(courseId, coursework).execute()
+            } catch (e: IOException) {
+                println("ClassroomRepositoryImpl: Error creating course work - ${e.message}")
+                e.printStackTrace()
+                null
+            }
+        }
 }

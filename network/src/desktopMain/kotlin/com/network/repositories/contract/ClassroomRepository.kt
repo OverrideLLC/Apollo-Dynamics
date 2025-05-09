@@ -141,7 +141,6 @@ interface ClassroomRepository {
      * @param courseId The ID of the course.
      * El ID del curso.
      * @param announcementId The ID of the announcement to delete.
-     * El ID del anuncio a eliminar.
      */
     suspend fun removeAnnouncement(courseId: String, announcementId: String)
 
@@ -171,4 +170,17 @@ interface ClassroomRepository {
         courseId: String,
         courseworkId: String
     ): List<StudentSubmission>
+
+    /**
+     * Creates a new coursework item in a course.
+     * Crea un nuevo elemento de trabajo de clase en un curso.
+     *
+     * @param courseId The ID of the course.
+     * El ID del curso.
+     * @param coursework The [CourseWork] object containing the details of the assignment.
+     * El objeto [CourseWork] que contiene los detalles de la tarea.
+     * @return The created [CourseWork] object, or null if an error occurs.
+     * El objeto [CourseWork] creado, o null si ocurre un error.
+     */
+    suspend fun createCourseWork(courseId: String, coursework: CourseWork): CourseWork?
 }

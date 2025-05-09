@@ -3,6 +3,7 @@ package com.feature.desktop.home.ai.ui.screen
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.feature.desktop.home.ai.utils.WorkData
 import com.network.interfaces.GeminiRepository
 import dev.shreyaspatil.ai.client.generativeai.Chat
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,9 @@ class AiViewModel(
         val selectedFiles: List<File> = emptyList(),
         val announcement: String? = null,
         val announcements: Boolean = false,
-        val showReport: Boolean = false
+        val showReport: Boolean = false,
+        val work: WorkData? = null,
+        val workText: String? = null
     )
 
     private val _state = MutableStateFlow(AiState())
@@ -227,5 +230,50 @@ class AiViewModel(
 
     fun showReport() {
         _state.update { it.copy(showReport = true) }
+    }
+
+    fun updateAssignment(message: String) {
+        _state.update { it.copy(workText = message, isLoading = true) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val description = repository.generate(
+                    """
+                        Readacta:
+                        [${_state.value.workText}]".
+                        nstrucciones:
+                        1.Contexto: Describe brevemente el tema o unidad en la que se enmarca la tarea
+                        2.Objetivo: Define qué se espera que los alumnos aprendan o logren al completar la tarea.
+                        3.Actividad: Explica con claridad qué deben hacer los alumnos paso a paso. Incluye detalles específicos sobre los recursos, herramientas o materiales que necesitan.
+                        4.Formato de entrega: Especifica el formato en el que se debe de entregar la asignación.
+                        5.Agrega enlaces a recurso: Agrega por lo menos 4 videos de youtube para que los alumnos tengan recursos de el tema.
+                        Consideraciones:
+                            •Usa un lenguaje motivador y positivo.
+                            •Sé preciso y evita la ambigüedad.
+                            •Incluye instrucciones claras y numeradas si es necesario.
+                            •Adapta el tono y el lenguaje al nivel educativo (por ejemplo, primaria, secundaria, universidad).
+                            •Ofrece ejemplos o aclaraciones si es pertinente.
+                            •Menciona cualquier información de apoyo que el estudiante pueda utilizar.
+                    """.trimIndent()
+                )
+
+                val title = repository.generate(
+                    """
+                        Genera un titulo para la tarea: ${_state.value.workText}
+                    """.trimIndent()
+                )
+
+                val work = WorkData(
+                    description = description,
+                    title = title
+                )
+                _state.update {
+                    it.copy(workText = null, work = work)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
     }
 }
