@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
-
 kotlin {
     jvm("desktop")
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.singleWindowApplication
 import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.api.navhost.NavigationStart
 import com.network.init.initGcloudFromPath

@@ -25,12 +25,13 @@ fun ScreenAction(
     undecorated: Boolean = false,
     transparent: Boolean = false,
     size: DpSize = DpSize(width = 400.dp, height = 600.dp),
+    placement: WindowPlacement = WindowPlacement.Floating,
     close: () -> Unit,
     content: @Composable () -> Unit
 ) {
     val icon = painterResource(icon)
     val windowState = WindowState(
-        placement = WindowPlacement.Floating,
+        placement = placement,
         position = WindowPosition(Alignment.Center),
         size = size,
     )

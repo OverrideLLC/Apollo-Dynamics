@@ -37,7 +37,7 @@ fun ListCourses(
     val scrollStateCourses = rememberLazyListState()
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            "Available Courses",
+            "Select Course",
             style = typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
             color = colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 12.dp, start = 8.dp)

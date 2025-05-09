@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.AwtWindow
+import androidx.compose.ui.window.WindowPlacement
 import com.feature.desktop.home.ai.ui.components.Chat
 import com.feature.desktop.home.ai.ui.components.SelectedFilesPreview
 import com.feature.desktop.home.ai.ui.components.TextFieldAi
@@ -195,7 +196,7 @@ private fun Screens(
                 UploadAssignmentScreen(
                     initialAssignmentTitle = work.title,
                     initialAssignmentDescription = work.description,
-                    onUploadSuccess = {},
+                    onUploadSuccess = { viewModel.update { copy(work = null) } },
                     onError = {}
                 )
             },
