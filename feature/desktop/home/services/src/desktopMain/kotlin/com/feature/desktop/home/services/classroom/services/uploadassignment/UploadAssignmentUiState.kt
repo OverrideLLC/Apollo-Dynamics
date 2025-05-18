@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom.uploadassignment
+package com.feature.desktop.home.services.classroom.services.uploadassignment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

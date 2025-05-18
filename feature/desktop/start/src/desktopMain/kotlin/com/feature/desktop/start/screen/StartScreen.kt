@@ -26,6 +26,7 @@ import com.feature.desktop.start.components.Content
 import com.shared.resources.Res
 import com.shared.resources.TTNegro
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun StartScreen(navController: NavController) = Screen(navController = navController)

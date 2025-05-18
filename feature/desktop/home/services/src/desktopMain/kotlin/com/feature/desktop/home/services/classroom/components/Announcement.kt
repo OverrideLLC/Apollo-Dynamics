@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementState
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementState
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementViewModel
 import com.feature.desktop.home.services.classroom.utils.ClassroomServices
 
 @Composable

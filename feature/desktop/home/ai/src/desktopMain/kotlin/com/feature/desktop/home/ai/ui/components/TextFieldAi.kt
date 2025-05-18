@@ -1,5 +1,8 @@
 package com.feature.desktop.home.ai.ui.components
 
+// import androidx.compose.foundation.layout.wrapContentWidth // No es necesario explícitamente aquí
+// import androidx.compose.ui.text.PlatformTextStyle // No estaba siendo usado
+// import com.shared.resources.menu_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24 // No estaba siendo usado
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -12,16 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-// import androidx.compose.foundation.layout.wrapContentWidth // No es necesario explícitamente aquí
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.DropdownMenu // Usando Material 2 DropdownMenu como en tu código original
-import androidx.compose.material.Icon // Usando Material 2 Icon para el botón de adjuntar
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.Icon
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem // Usando Material 3 DropdownMenuItem como en tu código original
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
@@ -37,9 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
-// import androidx.compose.ui.text.PlatformTextStyle // No estaba siendo usado
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,7 +53,6 @@ import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.shared.resources.Res
 import com.shared.resources.arrow_upward_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
-// import com.shared.resources.menu_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24 // No estaba siendo usado
 import org.jetbrains.compose.resources.painterResource
 
 // Lista de servicios conocidos (puedes obtenerla de tu ViewModel o una constante)
@@ -85,7 +84,7 @@ class ServiceTagVisualTransformation(
                 addStyle(
                     style = serviceStyle,
                     start = matchResult.range.first,
-                    end = matchResult.range.last + 1
+                    end = matchResult.range.last + 1,
                 )
             }
         }
@@ -104,7 +103,8 @@ internal fun TextFieldAi(
     onAnotherAction: () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val sendEnabled = (value.text.isNotBlank() || state.selectedFiles.isNotEmpty()) && !state.isLoading
+    val sendEnabled =
+        (value.text.isNotBlank() || state.selectedFiles.isNotEmpty()) && !state.isLoading
     var attachMenuExpanded by remember { mutableStateOf(false) } // Renombrado para claridad
 
     // --- Estados para el DropdownMenu de autocompletado de servicios ---
@@ -122,7 +122,7 @@ internal fun TextFieldAi(
     )
 
     val serviceVisualTransformation = remember(knownServices, serviceTagStyle) {
-        ServiceTagVisualTransformation(knownServices, serviceTagStyle)
+        ServiceTagVisualTransformation(knownServices, serviceTagStyle.copy(fontSize = 20.sp))
     }
 
     var currentDetectedService by remember { mutableStateOf<String?>(null) }
@@ -144,13 +144,14 @@ internal fun TextFieldAi(
             IconButton(
                 onClick = { attachMenuExpanded = true },
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(55.dp)
                     .background(colorScheme.onSurface, shapes.medium)
             ) {
-                Icon( // Usando androidx.compose.material.Icon
+                Icon(
+                    // Usando androidx.compose.material.Icon
                     painter = painterResource(Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
                     contentDescription = "Abrir menú de adjuntos",
-                    tint = colorScheme.surface
+                    tint = colorScheme.surface,
                 )
             }
             DropdownMenu( // Usando androidx.compose.material.DropdownMenu
@@ -158,7 +159,7 @@ internal fun TextFieldAi(
                 onDismissRequest = { attachMenuExpanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Attach File") },
+                    text = { Text("Attach File", fontSize = 20.sp) },
                     onClick = {
                         onAttachFile()
                         attachMenuExpanded = false
@@ -171,6 +172,9 @@ internal fun TextFieldAi(
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
                 value = value,
+                textStyle = TextStyle(
+                    fontSize = 20.sp
+                ),
                 onValueChange = { newValue ->
                     onValueChange(newValue) // Propagar el cambio
 
@@ -203,7 +207,7 @@ internal fun TextFieldAi(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = shapes.medium,
                 maxLines = 10,
-                placeholder = { Text(text = "Type a message or @service...") },
+                placeholder = { Text(text = "Type a message or @service...", fontSize = 20.sp) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = colorScheme.surface,
                     unfocusedContainerColor = colorScheme.surface,
@@ -220,14 +224,17 @@ internal fun TextFieldAi(
                     Box(modifier = Modifier.padding(end = 8.dp)) {
                         IconButton(
                             onClick = {
-                                val messageText = value.text.replace(Regex("@(${knownServices.joinToString("|")})\\b"), "").trim()
+                                val messageText = value.text.replace(
+                                    Regex("@(${knownServices.joinToString("|")})\\b"),
+                                    ""
+                                ).trim()
                                 onSend(currentDetectedService, messageText)
                                 // Considerar limpiar el campo aquí si es el comportamiento deseado
                                 // onValueChange(TextFieldValue(""))
                             },
                             enabled = sendEnabled,
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(30.dp)
                                 .background(
                                     color = if (sendEnabled) colorScheme.primaryContainer else colorScheme.surface,
                                     shape = RoundedCornerShape(16.dp)
@@ -269,8 +276,10 @@ internal fun TextFieldAi(
             ) {
                 filteredServices.forEach { service ->
                     DropdownMenuItem( // androidx.compose.material3.DropdownMenuItem
-                        text = { Text("@$service") },
-                        modifier = Modifier,
+                        text = {
+                            Text("@$service", fontSize = 20.sp)
+                        },
+                        modifier = Modifier.width(400.dp),
                         onClick = {
                             val currentText = value.text
                             // val selectionStart = value.selection.start // No se usa directamente aquí
@@ -280,7 +289,8 @@ internal fun TextFieldAi(
                             // Si había texto después de la query de mención, se necesita una lógica más compleja para conservarlo.
                             // Esta implementación simple reemplaza desde el @.
 
-                            val newText = "$textBeforeMention@$service " // Añade un espacio después del servicio
+                            val newText =
+                                "$textBeforeMention@$service " // Añade un espacio después del servicio
                             val newCursorPosition = textBeforeMention.length + "@$service ".length
 
                             onValueChange(

@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementState
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementState
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementViewModel
 
 @Composable
 internal fun AnnouncementCreator(

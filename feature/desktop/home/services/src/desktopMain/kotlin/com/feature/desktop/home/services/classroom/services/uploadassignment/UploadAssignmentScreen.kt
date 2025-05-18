@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom.uploadassignment
+package com.feature.desktop.home.services.classroom.services.uploadassignment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.feature.desktop.home.services.classroom.components.ListCourses
 import com.google.api.services.classroom.model.Course
 import com.google.api.services.classroom.model.CourseWork
@@ -70,7 +72,7 @@ fun UploadAssignmentScreen(
 }
 
 @Composable
-fun Content(
+private fun Content(
     initialAssignmentTitle: String,
     initialAssignmentDescription: String,
     maxPoints: Double?,
@@ -110,6 +112,9 @@ fun Content(
                 item {
                     OutlinedTextField(
                         value = assignmentTitle,
+                        textStyle = TextStyle(
+                            fontSize = 20.sp
+                        ),
                         onValueChange = { assignmentTitle = it },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = colorScheme.primary,
@@ -124,6 +129,9 @@ fun Content(
                 item {
                     OutlinedTextField(
                         value = assignmentDescription,
+                        textStyle = TextStyle(
+                            fontSize = 20.sp
+                        ),
                         onValueChange = { assignmentDescription = it },
                         label = { Text("Assignment Description") },
                         colors = OutlinedTextFieldDefaults.colors(

@@ -13,8 +13,8 @@ import org.jetbrains.compose.resources.DrawableResource
 
 class HomeViewModel : ViewModel() {
     data class HomeState(
-        val dockToLeft: Boolean = false,
-        val dockToRight: Boolean = false,
+        val dockToLeft: Boolean = true,
+        val dockToRight: Boolean = true,
         val serviceSelected: Services? = null,
     )
 

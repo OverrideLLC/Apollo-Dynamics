@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom
+package com.feature.desktop.home.services.classroom.services.announcement
 
 import com.feature.desktop.home.services.classroom.utils.ClassroomServices
 import com.google.api.services.classroom.model.Announcement

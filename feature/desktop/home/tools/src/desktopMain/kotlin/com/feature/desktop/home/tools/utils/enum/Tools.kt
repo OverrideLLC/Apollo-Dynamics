@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.tools.utils.routes.ToolRoute
 import com.shared.resources.Res
+import com.shared.resources._103405_book_run_sans_icon
 import com.shared.resources.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.person_add_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
@@ -33,5 +34,11 @@ enum class Tools(
         nameString = "Add Student",
         size = DpSize(width = 600.dp, height = 850.dp)
 
+    ),
+    ASSISTED_GRADING(
+        icon = Res.drawable._103405_book_run_sans_icon,
+        route = ToolRoute.Ratings.route,
+        nameString = "Assisted Grading",
+        size = DpSize(width = 1200.dp, height = 720.dp)
     )
 }

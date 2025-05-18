@@ -2,9 +2,7 @@ package com.feature.desktop.home.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,15 +11,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.HomeViewModel
-import com.feature.desktop.home.task.TasksScreen
-import com.shared.ui.onBackground
+import com.feature.desktop.home.task.TaskRoot
+import com.shared.ui.AcrylicCard
 
 @Composable
 internal fun Content(
@@ -90,15 +87,12 @@ internal fun WorkSpace(
     workspace: @Composable () -> Unit,
     modifier: Modifier
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                color = onBackground(),
-                shape = RoundedCornerShape(10.dp)
-            ),
-        content = { workspace() }
+    AcrylicCard(
+        modifier = modifier.fillMaxSize(),
+        alpha = .8f,
+        content = {
+            workspace()
+        }
     )
 }
 
@@ -107,18 +101,14 @@ internal fun Task(
     modifier: Modifier,
     viewModel: HomeViewModel
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                color = onBackground(),
-                shape = RoundedCornerShape(10.dp)
-            ),
+    AcrylicCard(
+        modifier = modifier.fillMaxSize(),
+        alpha = .8f,
         content = {
-            TasksScreen {
-                viewModel.dockToLeft()
-            }
+            TaskRoot(
+                onDockToLeft = { viewModel.dockToLeft() },
+                isExpanded = viewModel.state.value.dockToLeft
+            )
         }
     )
 }
@@ -129,14 +119,9 @@ internal fun Tools(
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
     viewModel: HomeViewModel
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                color = onBackground(),
-                shape = RoundedCornerShape(10.dp)
-            ),
+    AcrylicCard(
+        modifier = modifier.fillMaxSize(),
+        alpha = .8f,
         content = {
             toolsScreen(viewModel.state.value.dockToRight) {
                 viewModel.dockToRight()

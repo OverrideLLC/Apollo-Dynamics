@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom
+package com.feature.desktop.home.services.classroom.services.announcement
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -19,8 +19,6 @@ import kotlinx.coroutines.withContext
 class ClassroomRepositoryImpl(
     private val classroomServices: ClassroomServices,
 ) : ClassroomRepository {
-    // Using Dispatchers.IO for network operations
-    // Usando Dispatchers.IO para operaciones de red
     private val serviceScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
 
 

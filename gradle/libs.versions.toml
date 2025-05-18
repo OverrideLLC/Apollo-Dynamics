@@ -1,8 +1,5 @@
 [versions]
-agp = "8.9.1"
-android-compileSdk = "35"
-android-minSdk = "26"
-android-targetSdk = "35"
+agp = "8.10.0"
 androidx-lifecycle = "2.8.4"
 commonmark = "0.24.0"
 compose-multiplatform = "1.8.0"

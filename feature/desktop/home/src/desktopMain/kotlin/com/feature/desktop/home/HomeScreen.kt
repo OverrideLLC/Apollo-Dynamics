@@ -16,6 +16,7 @@ import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
 import com.shared.resources.Res
 import com.shared.resources.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
+import com.shared.ui.AcrylicCard
 import com.shared.ui.BackgroundAnimated
 import com.shared.ui.ScreenAction
 import org.koin.compose.viewmodel.koinViewModel
@@ -54,10 +55,7 @@ internal fun Screen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = BackgroundAnimated(
-                    colorBackground = colorScheme.background,
-                    colorAnimated = colorScheme.onBackground
-                )
+                colorScheme.background
             )
     )
 }

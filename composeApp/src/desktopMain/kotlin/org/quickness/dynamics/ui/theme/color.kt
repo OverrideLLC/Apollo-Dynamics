@@ -3,7 +3,7 @@ package org.quickness.dynamics.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Paleta de colores completa para MaterialTheme en el tema oscuro
-val primary: Color = Color(0xff0d9b03) // #0d9b03
+val primary: Color = Color(0xff000000) // #0d9b03
 
 // Color del contenido "sobre" el primario (Texto/Iconos)
 // Busca alto contraste. Suele ser Tono 100 (blanco) o Tono 0 (negro). Para #0d9b03, es blanco.
@@ -38,7 +38,7 @@ val onBackground: Color = Color(0xfff5f6f8)
 
 // Surface: Ligeramente distinto del fondo, con un toque de verde muy sutil.
 // Ideal para Cards, Menus, Sheets.
-val surface: Color = Color(0xFFF6FBF4) // Blanco con un tinte verde muy, muy claro
+val surface: Color = Color(0xFFeaeaf3) // Blanco con un tinte verde muy, muy claro
 
 // OnSurface: Texto/iconos sobre 'surface'. Necesita alto contraste.
 // Un gris oscuro casi negro, derivado de tonos verdes.

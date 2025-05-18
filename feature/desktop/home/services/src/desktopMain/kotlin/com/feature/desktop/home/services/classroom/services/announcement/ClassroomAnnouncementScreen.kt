@@ -17,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementState
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
 import com.feature.desktop.home.services.classroom.components.ListCourses
 import com.feature.desktop.home.services.classroom.components.AnnouncementCreator
 import org.koin.compose.viewmodel.koinViewModel

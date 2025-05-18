@@ -2,9 +2,10 @@ package com.feature.desktop.api.di
 
 import com.feature.desktop.home.HomeViewModel
 import com.feature.desktop.home.ai.ui.screen.AiViewModel
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementViewModel
 import com.feature.desktop.home.services.classroom.services.report.ReportViewmodel
-import com.feature.desktop.home.services.classroom.uploadassignment.UploadAssignmentViewModel
+import com.feature.desktop.home.services.classroom.services.uploadassignment.UploadAssignmentViewModel
+import com.feature.desktop.home.task.TaskViewModel
 import com.feature.desktop.home.tools.ui.ToolViewModel
 import com.feature.desktop.home.tools.ui.screens.add_class.AddClassViewModel
 import com.feature.desktop.home.tools.ui.screens.add_student.AddStudentViewModel
@@ -28,4 +29,5 @@ val viewModelModule: Module
         viewModelOf(::ClassroomAnnouncementViewModel)
         viewModelOf(::ReportViewmodel)
         viewModelOf(::UploadAssignmentViewModel)
+        viewModelOf(::TaskViewModel)
     }

@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom.services.announcements
+package com.feature.desktop.home.services.classroom.services.announcement
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
 import com.feature.desktop.home.services.classroom.components.AnnouncementAll
 import com.feature.desktop.home.services.classroom.components.ListCourses
 import org.koin.compose.viewmodel.koinViewModel

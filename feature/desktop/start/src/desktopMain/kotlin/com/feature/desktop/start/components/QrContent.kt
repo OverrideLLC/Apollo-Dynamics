@@ -57,7 +57,7 @@ internal fun QrDisplay(qrData: String) { // Cambiado el nombre y parámetro
             modifier = Modifier
                 .size(300.dp) // Puedes ajustar el tamaño si es necesario
                 .background(
-                    color = Color.Black,
+                    color = Color.White,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(10.dp)
@@ -89,21 +89,15 @@ internal fun qr(
             colors = QrKitColors(
                 lightBrush = QrKitBrush.solidBrush(color = Color.Transparent),
                 ballBrush = QrKitBrush.solidBrush(
-                    color = Color(0xffffffff)
+                    color = Color(0xff000000)
                 ),
                 frameBrush = QrKitBrush.solidBrush(
-                    color = Color(0xffffffff)
+                    color = Color(0xff000000)
                 ),
                 darkBrush = QrKitBrush.solidBrush(
-                    color = Color(0xffffffff)
+                    color = Color(0xff000000)
                 )
             ),
-            logo = QrKitLogo(
-                painter = painterResource(Res.drawable.LogoBlancoQuickness),
-                size = 0.4f,
-                padding = QrKitLogoPadding.Exact(0.1f),
-                shape = QrKitLogoKitShape.createCircle()
-            )
         ),
     )
 }

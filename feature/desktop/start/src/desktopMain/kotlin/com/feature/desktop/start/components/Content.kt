@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,7 +69,8 @@ internal fun Content(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxSize(0.5f)
+            .fillMaxWidth(.5f)
+            .height(400.dp)
             .background(
                 color = colorScheme.onBackground.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(20.dp)

@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.feature.desktop.home.tools.ui.navigation.NavigationTools
 import com.feature.desktop.home.tools.utils.enum.Tools
 import com.shared.resources.Res
@@ -73,9 +74,7 @@ internal fun Screen(
                         )
                     },
                     modifier = Modifier
-                        .align(
-                            if (!isExpanded) Alignment.End else Alignment.CenterHorizontally
-                        )
+                        .align(Alignment.End)
                         .padding(10.dp)
                         .background(
                             color = colorScheme.onTertiary,
@@ -146,13 +145,14 @@ fun ItemTool(
                         painter = painterResource(tool.icon),
                         contentDescription = tool.name,
                         tint = colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                     Text(
                         text = tool.nameString,
                         color = colorScheme.primary,
                         modifier = Modifier.padding(start = 8.dp),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 20.sp
                     )
                 }
             }
@@ -172,7 +172,7 @@ fun ItemTool(
                     painter = painterResource(tool.icon),
                     contentDescription = tool.name,
                     tint = colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             }
         )

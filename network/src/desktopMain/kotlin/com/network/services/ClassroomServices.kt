@@ -309,7 +309,10 @@ class ClassroomServices(
     suspend fun deleteAnnouncement(courseId: String, announcementId: String) =
         withContext(Dispatchers.Swing) {
             try {
-                classroomService.courses().announcements().delete(courseId, announcementId)
+                classroomService
+                    .courses()
+                    .announcements()
+                    .delete(courseId, announcementId)
                     .execute()
                 println("ClassroomRepositoryImpl: Announcement $announcementId in course $courseId deleted successfully.")
             } catch (e: IOException) {

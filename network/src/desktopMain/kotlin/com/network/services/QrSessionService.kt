@@ -60,7 +60,7 @@ class QrSessionService(
 
             if (snapshot != null && snapshot.exists()) {
                 val status = snapshot.getString("status")
-                val desktopToken = snapshot.getString("jwt") // Tu campo de token
+                val desktopToken = snapshot.getString("uid") // Tu campo de token
 
                 println("Service Listener: Recibido status=$status, hasToken=${desktopToken != null}") // Debug
 

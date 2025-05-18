@@ -1,6 +1,5 @@
 package com.feature.desktop.home.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -86,7 +85,7 @@ internal fun TopBar(
                                 shape = CircleShape
                             ),
                             content = {
-                                Image(
+                                Icon(
                                     painter = painterResource(iconProfile),
                                     modifier = Modifier.fillMaxSize(),
                                     contentDescription = null,

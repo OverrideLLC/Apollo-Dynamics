@@ -197,8 +197,6 @@ class ReportViewmodel(
                 )
 
             }.onSuccess { courseReport ->
-                // Generar PDF después de obtener y procesar los datos del reporte
-                // Generate PDF after fetching and processing report data
                 val pdfSuccess = PdfGenerator().generateReportPdf(courseReport, filePath)
                 _uiState.update {
                     it.copy(

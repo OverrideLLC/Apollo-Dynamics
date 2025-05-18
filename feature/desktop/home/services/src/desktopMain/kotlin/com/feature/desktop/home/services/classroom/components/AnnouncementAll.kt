@@ -32,8 +32,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementState
-import com.feature.desktop.home.services.classroom.ClassroomAnnouncementViewModel
+import androidx.compose.ui.unit.sp
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementState
+import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementViewModel
 import com.google.api.services.classroom.model.Announcement
 import com.shared.resources.Res
 import com.shared.resources.delete_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
@@ -49,7 +50,7 @@ internal fun AnnouncementAll(
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             "Available Courses",
-            style = typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+            style = typography.titleLarge.copy(fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
             color = colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 12.dp, start = 8.dp)
         )
@@ -70,18 +71,18 @@ internal fun AnnouncementAll(
                 state = scrollStateCourses
             ) {
                 state.announcements?.let { announcements ->
-                    items(items = announcements) { announcements ->
+                    items(items = announcements) { announcement ->
                         AnnouncementWidget(
-                            announcement = announcements,
+                            announcement = announcement,
                             size = 200.dp,
                             onCLickDeleted = {
                                 viewModel.removeAnnouncement(
-                                    announcementId = announcements.id,
+                                    announcementId = announcement.id,
                                     courseId = state.selectedCourseId ?: ""
                                 )
                             },
                             onClick = {
-                                onAnnouncementClick(announcements)
+                                onAnnouncementClick(announcement)
                             }
                         )
                     }
