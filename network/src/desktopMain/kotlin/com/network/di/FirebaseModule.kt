@@ -13,12 +13,12 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val firebaseModule: Module = module {
+    single<FirebaseApp> {
+        initFirebase() ?: throw IllegalStateException("Firebase no inicializado")
+    }
     factoryOf(::QrLoginRepositoryImpl).bind(QrLoginRepository::class)
     factoryOf(::QrSessionService)
     single<Firestore> {
         FirestoreClient.getFirestore(get<FirebaseApp>())
-    }
-    single<FirebaseApp> {
-        initFirebase() ?: throw IllegalStateException("Firebase no inicializado")
     }
 }
