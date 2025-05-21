@@ -73,13 +73,13 @@ internal fun SelectionDate(
              */
             Icon(
                 painter = painterResource(Res.drawable.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
-                contentDescription = "Add Today's Attendance"
+                contentDescription = "Añadir asistencia de hoy"
             )
             /**
              * Espacio entre el icono y el texto.
              */
             Spacer(Modifier.width(8.dp))
-            Text("Pass List Today")
+            Text("Pasar lista hoy")
         }
         Button(
             onClick = { viewModel.generateAttendanceQr() },
@@ -107,13 +107,13 @@ internal fun SelectionDate(
              */
             Icon(
                 painter = painterResource(Res.drawable.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
-                contentDescription = "Qr Attendance"
+                contentDescription = "Asistencia con QR"
             )
             /**
              * Espacio entre el icono y el texto.
              */
             Spacer(Modifier.width(8.dp))
-            Text("Qr Attendance")
+            Text("Asistencia con QR")
         }
     }
 }

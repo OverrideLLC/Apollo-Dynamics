@@ -1,4 +1,4 @@
-package com.feature.desktop.home.services.classroom.services.uploadassignment
+package com.feature.desktop.home.services.classroom.services.upload_assignment
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

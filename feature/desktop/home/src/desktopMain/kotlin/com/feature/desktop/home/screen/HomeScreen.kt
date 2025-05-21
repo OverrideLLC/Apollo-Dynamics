@@ -1,4 +1,4 @@
-package com.feature.desktop.home
+package com.feature.desktop.home.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,54 +8,51 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import com.feature.desktop.home.components.Content
 import com.feature.desktop.home.components.TopBar
-import com.shared.resources.Res
-import com.shared.resources.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
-import com.shared.ui.AcrylicCard
-import com.shared.ui.BackgroundAnimated
-import com.shared.ui.ScreenAction
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen(
-    workspace: @Composable () -> Unit,
-    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
-) = Screen(
-    workspace = { workspace() },
-    toolsScreen = toolsScreen
-)
-
-@Composable
-internal fun Screen(
+fun HomeRoot(
     viewModel: HomeViewModel = koinViewModel(),
     workspace: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
+
+    HomeScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        workspace = workspace,
+        toolsScreen = toolsScreen,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+internal fun HomeScreen(
+    state: HomeState,
+    viewModel: HomeViewModel,
+    workspace: @Composable () -> Unit,
+    toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
+    onAction: (HomeAction) -> Unit,
+) {
     Scaffold(
         floatingActionButton = { },
+        topBar = { TopBar() },
         content = { padding ->
             Content(
                 padding = padding,
-                workspace = { workspace() },
+                workspace = workspace,
                 viewModel = viewModel,
                 state = state,
                 toolsScreen = toolsScreen
             )
         },
-        topBar = {
-            TopBar()
-        },
         containerColor = Color.Transparent,
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                colorScheme.background
-            )
+            .background(colorScheme.background)
     )
 }

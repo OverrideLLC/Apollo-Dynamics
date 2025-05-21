@@ -100,7 +100,7 @@ internal fun AddClassScreen(
         OutlinedTextField(
             value = state.career,
             onValueChange = viewModel::onCareerChange,
-            label = { Text("Career / Subject") },
+            label = { Text("Carrera / Materia") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             isError = state.error != null && state.career.isBlank()

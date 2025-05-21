@@ -2,9 +2,10 @@ package com.feature.desktop.home.tools.ui.screens.add_class
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import com.network.interfaces.FirebaseGitliveRepository
 import com.override.data.repository.contract.ClassRepository
 import com.override.data.utils.data.ClassData
-import com.override.data.utils.data.Student
+import com.shared.utils.data.firebase.Course
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,7 +24,8 @@ import java.util.UUID
  * @param classRepository Repositorio de clase utilizado para interactuar con la capa de datos.
  */
 class AddClassViewModel(
-    private val classRepository: ClassRepository
+    private val classRepository: ClassRepository,
+    private val firebaseGitliveRepository: FirebaseGitliveRepository
 ) : ViewModel(), Closeable {
 
     /**
@@ -31,10 +33,12 @@ class AddClassViewModel(
      * dentro de este ViewModel. Está vinculado a [Dispatchers.Swing] para actualizar la UI en el hilo principal de Swing.
      */
     private val customViewModelScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Swing)
+
     /**
      * [_state] es un [MutableStateFlow] que almacena el estado actual de la pantalla de agregar clase.
      */
     private val _state = MutableStateFlow(AddClassState())
+
     /**
      * [state] es un [StateFlow] expuesto al exterior que permite observar el estado de la pantalla de agregar clase.
      */
@@ -46,12 +50,14 @@ class AddClassViewModel(
     fun onClassNameChange(newName: String) {
         _state.update { it.copy(className = newName, error = null, saveSuccess = false) }
     }
+
     /**
      * [onDegreeChange] actualiza el grado de la clase en el estado.
      */
     fun onDegreeChange(newDegree: String) {
         _state.update { it.copy(degree = newDegree, error = null, saveSuccess = false) }
     }
+
     /**
      * [onCareerChange] actualiza la carrera de la clase en el estado.
      */
@@ -62,6 +68,7 @@ class AddClassViewModel(
     fun onSectionChange(newSection: String) {
         _state.update { it.copy(section = newSection, error = null, saveSuccess = false) }
     }
+
     /**
      * [onColorSelected] actualiza el color seleccionado de la clase en el estado.
      */
@@ -75,7 +82,7 @@ class AddClassViewModel(
      * Luego crea un objeto [ClassData] y llama a [ClassRepository.addOrUpdateClass] para guardar la clase.
      */
     fun saveClass() {
-          val currentState = _state.value
+        val currentState = _state.value
         if (currentState.className.isBlank() || currentState.career.isBlank() || currentState.degree.isBlank() || currentState.section.isBlank()) {
             _state.update { it.copy(error = "Please fill in all fields.") }
             return
@@ -84,7 +91,7 @@ class AddClassViewModel(
         _state.update { it.copy(isLoading = true, error = null, saveSuccess = false) }
 
         customViewModelScope.launch {
-              try {
+            try {
                 val newClass = ClassData(
                     id = UUID.randomUUID().toString(),
                     name = currentState.className.trim(),
@@ -94,6 +101,15 @@ class AddClassViewModel(
                     career = currentState.career.trim(),
                     section = currentState.section.trim(),
                     attendanceHistory = emptyList()
+                )
+                firebaseGitliveRepository.addCourse(
+                    newCourse = Course(
+                        id = newClass.id,
+                        name = newClass.name,
+                        degree = newClass.degree,
+                        section = newClass.section,
+                        career = newClass.career,
+                    )
                 )
 
                 classRepository.addOrUpdateClass(newClass)
@@ -129,6 +145,6 @@ class AddClassViewModel(
      */
     override fun onCleared() {
         super.onCleared()
-         close()
+        close()
     }
 }

@@ -20,12 +20,12 @@ internal fun InputsAddStudent(
     viewModel: AddStudentViewModel,
     state: AddStudentState
 ) {
-    Text("Add New Student", style = MaterialTheme.typography.headlineMedium) // Titulo del formulario
+    Text("Agregar Nuevo Estudiante", style = MaterialTheme.typography.headlineMedium) // Titulo del formulario
     // Campo de texto para el nombre del estudiante
     OutlinedTextField(
         value = state.studentName,
         onValueChange = viewModel::onStudentNameChange,
-        label = { Text("Student Name") }, // Etiqueta del campo
+        label = { Text("Nombre del Estudiante") }, // Etiqueta del campo
         modifier = Modifier.fillMaxWidth(), // Ocupa todo el ancho disponible
         singleLine = true, // Solo permite una linea de texto
         isError = state.error != null && state.studentName.isBlank() // Muestra un error si el campo esta vacio y hay un error
@@ -42,7 +42,7 @@ internal fun InputsAddStudent(
     OutlinedTextField(
         value = state.studentEmail,
         onValueChange = viewModel::onStudentEmailChange,
-        label = { Text("Student Email (Optional)") },
+        label = { Text("Correo Electrónico del Estudiante (Opcional)") },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true
     )
@@ -58,7 +58,7 @@ internal fun InputsAddStudent(
     OutlinedTextField(
         value = state.studentNumber,
         onValueChange = viewModel::onStudentNumberChange,
-        label = { Text("Student Number (Optional)") },
+        label = { Text("Número del Estudiante (Opcional)") },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true
     )
@@ -74,7 +74,7 @@ internal fun InputsAddStudent(
     OutlinedTextField(
         value = state.studentControlNumber,
         onValueChange = viewModel::onStudentControlNumberChange,
-        label = { Text("Student Control Number") },
+        label = { Text("Número de Control del Estudiante") },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true
     )

@@ -56,7 +56,7 @@ internal fun SelectedDateExisting(
     // Si no hay fechas disponibles, muestra un mensaje informativo.
     } else {
         Text(
-            "No attendance records yet for ${selectedClass?.name}. Click 'Pass List Today' to start.",
+            "Aún no hay registros de asistencia para ${selectedClass?.name}. Haz clic en 'Pasar lista hoy' para comenzar.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

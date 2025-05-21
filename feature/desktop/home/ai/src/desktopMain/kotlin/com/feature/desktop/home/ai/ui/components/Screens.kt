@@ -8,8 +8,8 @@ import com.feature.desktop.home.ai.ui.screen.AiViewModel
 import com.feature.desktop.home.ai.ui.screen.AiViewModel.AiState
 import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncementScreen
 import com.feature.desktop.home.services.classroom.services.announcement.ClassroomAnnouncements
-import com.feature.desktop.home.services.classroom.services.report.ReportScreen
-import com.feature.desktop.home.services.classroom.services.uploadassignment.UploadAssignmentScreen
+import com.feature.desktop.home.services.classroom.services.report.ClassroomReportScreen
+import com.feature.desktop.home.services.classroom.services.upload_assignment.UploadAssignmentScreen
 import com.shared.resources.Res
 import com.shared.resources.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.campaign_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
@@ -69,7 +69,7 @@ internal fun Screens(
     if (state.showReport) {
         ScreenAction(
             size = DpSize(900.dp, 600.dp),
-            content = { ReportScreen() },
+            content = { ClassroomReportScreen() },
             close = { viewModel.update { copy(showReport = false) } },
             icon = Res.drawable.attach_file_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
             name = "Report",
@@ -78,7 +78,7 @@ internal fun Screens(
 
     state.work?.let { work ->
         ScreenAction(
-            size = DpSize(900.dp, 600.dp),
+            size = DpSize(900.dp, 900.dp),
             content = {
                 UploadAssignmentScreen(
                     initialAssignmentTitle = work.title,

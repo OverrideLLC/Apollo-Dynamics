@@ -16,8 +16,7 @@ interface ClassDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertClass(classEntity: ClassEntity)
 
-    // Para insertar la relación entre clase y estudiante
-    @Insert(onConflict = OnConflictStrategy.IGNORE) // Ignorar si la relación ya existe
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertClassStudentCrossRef(crossRef: ClassStudentCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -30,8 +29,7 @@ interface ClassDao {
     @Query("SELECT * FROM classes ORDER BY name ASC")
     suspend fun getAllClasses(): List<ClassEntity>
 
-    // --- Obtener Clase CON sus Estudiantes ---
-    @Transaction // Asegura que la operación se realice atómicamente
+    @Transaction
     @Query("SELECT * FROM classes WHERE class_id = :id")
     suspend fun getClassWithStudents(id: String): ClassWithStudents?
 
@@ -39,15 +37,13 @@ interface ClassDao {
     @Query("SELECT * FROM classes ORDER BY name ASC")
     suspend fun getAllClassesWithStudents(): List<ClassWithStudents>
 
-    // Opcional: Flujo para observar clases con estudiantes
     @Transaction
     @Query("SELECT * FROM classes ORDER BY name ASC")
     fun getAllClassesWithStudentsFlow(): Flow<List<ClassWithStudents>>
 
     @Query("DELETE FROM classes WHERE class_id = :id")
-    suspend fun deleteClassById(id: String) // Borrará ClassStudentCrossRef por CASCADE
+    suspend fun deleteClassById(id: String)
 
-    // Podrías necesitar un método para borrar una relación específica si un alumno deja una clase
     @Query("DELETE FROM class_student_cross_ref WHERE class_id = :classId AND student_id = :studentId")
     suspend fun deleteStudentFromClass(classId: String, studentId: String)
 }

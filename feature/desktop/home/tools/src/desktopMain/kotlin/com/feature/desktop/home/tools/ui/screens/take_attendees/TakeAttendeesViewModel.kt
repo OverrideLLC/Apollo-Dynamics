@@ -4,6 +4,7 @@ package com.feature.desktop.home.tools.ui.screens.take_attendees
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.network.interfaces.FirebaseGitliveRepository
 import com.override.data.repository.contract.AttendanceRepository
 import com.override.data.repository.contract.ClassRepository
 import com.override.data.utils.data.ClassData
@@ -40,7 +41,7 @@ import qrgenerator.qrkitpainter.solidBrush
 class TakeAttendeesViewModel(
     private val classRepository: ClassRepository,
     private val attendanceRepository: AttendanceRepository,
-    // private val studentRepository: StudentRepository // Añadir si se necesita directamente
+    private val firebaseGitliveRepository: FirebaseGitliveRepository
 ) : ViewModel() {
 
     private val customViewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Swing)
@@ -204,11 +205,6 @@ class TakeAttendeesViewModel(
                     date,
                     newStatus
                 )
-                // ¡Importante! No actualizamos `studentsForSelectedDate` directamente aquí.
-                // La actualización vendrá automáticamente cuando `getAttendanceForClassOnDate`
-                // sea llamado de nuevo (implícitamente si `selectDate` se llama de nuevo,
-                // o explícitamente si forzamos una recarga).
-                // Para una UI más reactiva, podríamos forzar la recarga de la fecha actual:
                 selectDate(date) // Vuelve a cargar los datos para la fecha actual
                 // _state.update { it.copy(isLoading = false) } // isLoading se maneja en selectDate
 
@@ -286,7 +282,7 @@ class TakeAttendeesViewModel(
         // La lógica del token y QR se mantiene igual por ahora
         _state.update {
             it.copy(
-                qr = qr(it.tokenAttendees ?: "Non")
+                qr = qr(it.selectedClassId ?: "NON")
             )
         }
     }

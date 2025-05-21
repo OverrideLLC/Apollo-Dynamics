@@ -71,8 +71,8 @@ fun showFileSavePicker(title: String, allowedExtensions: List<String>): String? 
 }
 
 @Composable
-fun ReportScreen(
-    viewModel: ReportViewmodel = koinViewModel(),
+fun ClassroomReportScreen(
+    viewModel: ClassroomReportViewmodel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

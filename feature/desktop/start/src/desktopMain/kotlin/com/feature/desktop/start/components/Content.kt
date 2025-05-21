@@ -39,29 +39,17 @@ import com.shared.utils.routes.RoutesStart
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
-// Asume que tienes un factory o Koin/Hilt configurado para instanciar StartViewModel
-// Si no, necesitarás pasar el ViewModel como parámetro desde StartScreen
 @Composable
 internal fun Content(
     navController: NavController,
-    // Puedes inyectar el ViewModel así si usas androidx.lifecycle.viewmodel.compose
-    // o pasarlo como parámetro si lo creas en StartScreen
     viewModel: StartViewModel = koinViewModel()
 ) {
-    // Observa el estado del ViewModel
     val uiState by viewModel.uiState.collectAsState()
-
-    // Llama a startQrLoginProcess solo una vez cuando el estado es IDLE
-    // o si hubo un error previo y se quiere reintentar (manejo de reintento no implementado aquí)
     LaunchedEffect(uiState.loginState) {
         if (uiState.loginState == QrLoginState.IDLE) {
             viewModel.startQrLoginProcess()
         }
-        // Navega cuando el estado sea SUCCESS
         if (uiState.loginState == QrLoginState.SUCCESS) {
-            // Aquí podrías querer obtener el token con viewModel.getSessionToken()
-            // y pasarlo a la siguiente pantalla si es necesario.
-            println("Navegando a Home...") // Log para depuración
             navController.navigate(RoutesStart.Home.route)
         }
     }
@@ -95,29 +83,23 @@ internal fun Content(
 @Composable
 private fun qr(modifier: Modifier, uiState: QrUiState, viewModel: StartViewModel = koinViewModel()) {
     Box(
-        modifier = modifier.fillMaxHeight(), // Ocupa espacio disponible
+        modifier = modifier.fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        // Muestra contenido diferente según el estado del login QR
         when (uiState.loginState) {
             QrLoginState.IDLE, QrLoginState.GENERATING -> {
-                // Muestra un indicador de carga mientras se genera
                 CircularProgressIndicator(color = colorScheme.primary)
             }
 
             QrLoginState.DISPLAYING -> {
-                // Muestra el QR si el contenido está listo
                 if (uiState.qrContent != null) {
-                    // Llama al composable renombrado que solo muestra el QR
                     QrDisplay(qrData = uiState.qrContent!!)
                 } else {
-                    // Estado inconsistente, muestra error o reintenta
                     Text("Generando código QR...", color = colorScheme.onSurface)
                 }
             }
 
             QrLoginState.ERROR -> {
-                // Muestra mensaje de error y un botón para reintentar
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = uiState.errorMessage ?: "Error desconocido",
@@ -142,7 +124,6 @@ private fun qr(modifier: Modifier, uiState: QrUiState, viewModel: StartViewModel
             }
 
             QrLoginState.SUCCESS -> {
-                // Muestra un mensaje de éxito brevemente antes de navegar (la navegación se maneja en LaunchedEffect)
                 Text("¡Inicio de sesión exitoso!", color = colorScheme.primary)
             }
         }

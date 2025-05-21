@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.feature.desktop.home.HomeScreen
 import com.feature.desktop.home.ai.ui.screen.AiScreen
+import com.feature.desktop.home.screen.HomeRoot
 import com.feature.desktop.home.tools.ui.ToolsScreen
 import com.shared.utils.routes.RoutesHome
 
@@ -17,7 +17,7 @@ fun NavigationHome() {
         startDestination = RoutesHome.Dashboard.route,
     ) {
         composable(RoutesHome.Dashboard.route) {
-            HomeScreen(
+            HomeRoot(
                 toolsScreen = { isExpanded, onDockToRight ->
                     ToolsScreen(
                         isExpanded = isExpanded,

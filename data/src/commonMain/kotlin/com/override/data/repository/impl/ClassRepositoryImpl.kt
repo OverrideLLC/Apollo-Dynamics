@@ -1,5 +1,6 @@
 package com.override.data.repository.impl
 
+import com.override.data.dao.AnnouncementDao
 import com.override.data.dao.AttendanceDao
 import com.override.data.dao.ClassDao
 import com.override.data.utils.data.ClassWithStudents
@@ -10,6 +11,7 @@ import com.override.data.repository.contract.ClassRepository
 import com.override.data.utils.data.AttendanceRecord
 import com.override.data.utils.data.ClassData
 import com.override.data.utils.data.Student
+import com.override.data.utils.data.toAnnouncementData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +21,8 @@ import kotlinx.datetime.LocalDate
 
 class ClassRepositoryImpl(
     private val classDao: ClassDao,
-    private val attendanceDao: AttendanceDao
+    private val attendanceDao: AttendanceDao,
+    private val announcementDao: AnnouncementDao
 ) : ClassRepository {
 
     override fun getAllClasses(): Flow<List<ClassData>> {
@@ -38,9 +41,33 @@ class ClassRepositoryImpl(
     }
 
     override suspend fun getClassById(id: String): ClassData? {
+        // Es MUY RECOMENDABLE usar Dispatchers.IO para operaciones de base de datos
+        // Dispatchers.Swing es para la interfaz de usuario en Swing y puede bloquearla.
         return withContext(Dispatchers.Swing) {
-            val classWithStudents = classDao.getClassWithStudents(id)
-            classWithStudents?.let { mapToClassData(it) } // Usa el helper
+            // 1. Obtener la clase con sus estudiantes
+            val classWithStudents = classDao.getClassWithStudents(id) //
+
+            // 2. Obtener los anuncios para esa clase
+            // Asumo que tienes una función en AnnouncementDao como la que creamos antes:
+            // @Query("SELECT * FROM announcements WHERE ann_class_id = :classId ORDER BY ann_date DESC")
+            // suspend fun getAnnouncementsForClass(classId: String): List<AnnouncementEntity>
+            val announcementEntities = announcementDao.getAnnouncementsForClass(id)
+            val announcementsData = announcementEntities.map { it.toAnnouncementData() }
+
+            // 3. Mapear a ClassData
+            //    classWithStudents?.let { cws -> mapToClassData(cws, announcementsData) }
+            //    O si tu mapToClassData no puede tomar anuncios directamente,
+            //    hazlo a través de ClassEntity.toClassData
+
+            classWithStudents?.let { cws ->
+                // cws.classEntity es tu ClassEntity
+                // cws.students es tu List<StudentEntity>
+                cws.classEntity.toClassData(
+                    students = cws.students,
+                    announcements = announcementsData
+                    // Aquí también podrías cargar y pasar el historial de asistencia si fuera necesario
+                )
+            }
         }
     }
 

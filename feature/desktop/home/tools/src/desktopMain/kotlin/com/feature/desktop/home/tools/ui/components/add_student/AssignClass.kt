@@ -36,7 +36,7 @@ internal fun AssignClass(
     onClassDropdownExpandedChange: (Boolean) -> Unit
 ) {
     // Título para indicar la sección de asignación de clase.
-    Text("Assign to Class:", style = MaterialTheme.typography.titleMedium)
+    Text("Asignar a Clase:", style = MaterialTheme.typography.titleMedium)
 
     // Muestra un indicador de carga mientras se cargan las clases.
     if (state.isLoadingClasses) {
@@ -51,11 +51,11 @@ internal fun AssignClass(
             // Campo de texto que muestra la clase seleccionada o un mensaje de selección.
             OutlinedTextField(
                 value = state.selectedClass?.name
-                    ?: "Select a class",
+                    ?: "Seleccionar una clase",
                 // El campo no es editable directamente.
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Class") }, // Etiqueta del campo de texto.
+                label = { Text("Clase") }, // Etiqueta del campo de texto.
                 // Icono desplegable al final del campo de texto.
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isClassDropdownExpanded) },
                 modifier = Modifier
@@ -92,6 +92,6 @@ internal fun AssignClass(
             }
         }
     } else { // Si no hay clases disponibles, muestra un mensaje.
-        Text("No classes available to assign.", style = MaterialTheme.typography.bodyMedium)
+        Text("No hay clases disponibles para asignar.", style = MaterialTheme.typography.bodyMedium)
     }
 }

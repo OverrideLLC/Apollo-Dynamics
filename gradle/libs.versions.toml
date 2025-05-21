@@ -20,6 +20,8 @@ generativeai = "0.9.0"
 generativeaiGoogleWasmJs = "0.9.0-1.0.1-wasm"
 ksp = "2.2.0-Beta2-2.0.1"
 google-cloud-bom = "26.45.0"
+firebase-gitlive-sdk = "1.13.0"
+google-services = "4.4.2"
 
 [libraries]
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
@@ -44,7 +46,7 @@ androidx-room-compailer = { group = "androidx.room", name = "room-compiler", ver
 google-cloud-bom = { module = "com.google.cloud:libraries-bom", version.ref = "google-cloud-bom" }
 google-cloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager" }
 google-cloud-firestore = { module = "com.google.cloud:google-cloud-firestore" }
-
+firebase-gitlive-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebase-gitlive-sdk" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
@@ -53,3 +55,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidxRoom = { id = "androidx.room", version.ref = "androidx-room" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }

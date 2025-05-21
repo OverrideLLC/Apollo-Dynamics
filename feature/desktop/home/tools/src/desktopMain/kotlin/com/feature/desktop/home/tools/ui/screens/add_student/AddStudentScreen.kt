@@ -13,14 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +75,7 @@ internal fun AddStudentScreen(
                         onClick = viewModel::saveStudent,
                         enabled = !state.isLoadingSave && state.selectedClass != null
                     ) {
-                        Text("Save Student", color = colorScheme.onTertiary)
+                        Text("Guardar Alumno", color = colorScheme.onTertiary)
                     }
                 }
                 state.error?.let {
@@ -103,7 +98,10 @@ internal fun AddStudentScreen(
                         contentAlignment = Alignment.Center,
                         content = {
                             Image(
-                                painter = qr(token = classItem.id, icon = Res.drawable.LogoBlancoQuickness),
+                                painter = qr(
+                                    token = classItem.id,
+                                    icon = Res.drawable.LogoBlancoQuickness
+                                ),
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxSize(.9f)
                             )

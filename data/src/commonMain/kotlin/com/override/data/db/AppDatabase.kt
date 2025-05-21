@@ -4,9 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.override.data.dao.AnnouncementDao
 import com.override.data.dao.AttendanceDao
 import com.override.data.dao.ClassDao
 import com.override.data.dao.StudentDao
+import com.override.data.entity.AnnouncementEntity
 import com.override.data.entity.AttendanceEntity
 import com.override.data.entity.ClassEntity
 import com.override.data.entity.ClassStudentCrossRef
@@ -19,10 +21,11 @@ import kotlinx.coroutines.swing.Swing
         StudentEntity::class,
         ClassEntity::class,
         AttendanceEntity::class,
-        ClassStudentCrossRef::class // No olvides la tabla de unión
+        ClassStudentCrossRef::class,
+        AnnouncementEntity::class
     ],
-    version = 1, // Incrementa si cambias el esquema más adelante
-    exportSchema = false // Mantenlo en false por ahora para simplicidad
+    version = 2, // Incrementa si cambias el esquema más adelante
+    exportSchema = true // Mantenlo en false por ahora para simplicidad
 )
 @TypeConverters(Converters::class) // Registra tus conversores aquí
 abstract class AppDatabase : RoomDatabase() {
@@ -31,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun studentDao(): StudentDao
     abstract fun classDao(): ClassDao
     abstract fun attendanceDao(): AttendanceDao
+    abstract fun announcementDao(): AnnouncementDao
 }
 
 fun getDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {

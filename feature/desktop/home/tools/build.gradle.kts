@@ -34,6 +34,7 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.composeVM)
                 implementation(compose.uiTooling)
+                implementation(libs.firebase.gitlive.firestore)
 
                 //UTILS
                 implementation(libs.commonmark)

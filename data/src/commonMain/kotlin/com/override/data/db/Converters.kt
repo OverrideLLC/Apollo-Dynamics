@@ -3,7 +3,12 @@ package com.override.data.db
 import androidx.compose.ui.graphics.Color
 import androidx.room.TypeConverter
 import com.override.data.utils.enum.AttendanceStatus
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 class Converters {
 
@@ -25,6 +30,22 @@ class Converters {
     }
 
     @TypeConverter
+    fun fromEpochMillis(value: Long?): LocalDateTime? {
+        return value?.let {
+            try {
+                Instant.fromEpochMilliseconds(it).toLocalDateTime(TimeZone.currentSystemDefault())
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    @TypeConverter
+    fun localDateTimeToEpochMillis(dateTime: LocalDateTime?): Long? {
+        return dateTime?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds()
+    }
+
+    @TypeConverter
     fun colorToArgb(color: Color?): Int? {
         // Convertimos el Color de Compose a su representación Int ARGB
         // Nota: androidx.compose.ui.graphics.Color ya tiene métodos para esto,
@@ -37,7 +58,7 @@ class Converters {
         // o podrías necesitar `color?.toArgb()` si está disponible y es adecuado.
         // Aquí usamos una conversión común:
         return color?.let {
-             // Convertir Color (Float 0..1) a Int (0..255) para cada canal ARGB
+            // Convertir Color (Float 0..1) a Int (0..255) para cada canal ARGB
             val red = (it.red * 255).toInt()
             val green = (it.green * 255).toInt()
             val blue = (it.blue * 255).toInt()
@@ -51,7 +72,10 @@ class Converters {
     @TypeConverter
     fun fromStatusName(value: String?): AttendanceStatus? {
         // Usamos `entries.find` para seguridad, en lugar de `valueOf` que lanza excepción
-        return value?.let { AttendanceStatus.entries.find { status -> status.name == it } ?: AttendanceStatus.UNKNOWN }
+        return value?.let {
+            AttendanceStatus.entries.find { status -> status.name == it }
+                ?: AttendanceStatus.UNKNOWN
+        }
     }
 
     @TypeConverter

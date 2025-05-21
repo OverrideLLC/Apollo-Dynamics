@@ -1,6 +1,7 @@
 package com.override.data.di
 
 import androidx.room.Database
+import com.override.data.dao.AnnouncementDao
 import com.override.data.dao.AttendanceDao
 import com.override.data.dao.ClassDao
 import com.override.data.dao.StudentDao
@@ -32,4 +33,5 @@ val daoModule: Module = module {
     factory<ClassDao> { get<AppDatabase>().classDao() }
     factory<AttendanceDao> { get<AppDatabase>().attendanceDao() }
     factory<StudentDao> { get<AppDatabase>().studentDao() }
+    factory<AnnouncementDao> { get<AppDatabase>().announcementDao() }
 }

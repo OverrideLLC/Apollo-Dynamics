@@ -63,7 +63,7 @@ private fun Screen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "Select a class to manage attendance.",
+                    "Selecciona una clase para gestionar la asistencia.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

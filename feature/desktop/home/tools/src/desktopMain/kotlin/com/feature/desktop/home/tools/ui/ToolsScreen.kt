@@ -87,7 +87,7 @@ internal fun Screen(
                         .fillMaxSize()
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = if (!isExpanded) Arrangement.Top else Arrangement.Center,
+                    verticalArrangement = Arrangement.Top ,
                     content = {
                         items(state.tools) { tool ->
                             ItemTool(

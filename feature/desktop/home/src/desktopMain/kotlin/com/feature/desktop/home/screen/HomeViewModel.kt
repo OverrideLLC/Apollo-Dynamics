@@ -1,25 +1,25 @@
-package com.feature.desktop.home
+package com.feature.desktop.home.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.feature.desktop.home.utils.Services
-import com.shared.resources.Res
-import com.shared.resources.*
-import com.shared.utils.routes.RouteServices
-import com.shared.utils.routes.RoutesHome
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import org.jetbrains.compose.resources.DrawableResource
 
 class HomeViewModel : ViewModel() {
-    data class HomeState(
-        val dockToLeft: Boolean = true,
-        val dockToRight: Boolean = true,
-        val serviceSelected: Services? = null,
-    )
 
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
+
+    fun onAction(action: HomeAction) {
+        when (action) {
+            else -> TODO("Handle actions")
+        }
+    }
 
     fun serviceSelected(service: Services?) {
         _state.update {
@@ -44,4 +44,5 @@ class HomeViewModel : ViewModel() {
             )
         }
     }
+
 }

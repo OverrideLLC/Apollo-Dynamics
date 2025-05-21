@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +27,13 @@ import com.feature.desktop.home.tools.ui.screens.add_class.AddClassScreen
 import com.feature.desktop.home.tools.ui.screens.take_attendees.TakeAttendeesViewModel
 import com.shared.resources.LogoBlancoQuickness
 import com.shared.resources.Res
+import com.shared.resources.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.resources.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24
 import com.shared.ui.ClassWidget
 import com.shared.ui.ScreenAction
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -54,10 +58,8 @@ internal fun SelectedClass(
     val scrollHorizontalState = rememberLazyListState()
 
     Text(
-        "Select a Class:",
-        style = MaterialTheme.typography.titleMedium
-    ) // Texto que indica al usuario que seleccione una clase.
-    // Lista horizontal de clases.
+        "Selecciona una Clase:",
+    )
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 4.dp),
@@ -67,8 +69,7 @@ internal fun SelectedClass(
         item {
             Card(
                 onClick = { viewModel.addNewClass() },
-                modifier = Modifier
-                    .size(width = 220.dp, height = 180.dp),
+                modifier = Modifier.size(width = 220.dp, height = 180.dp),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 4.dp,
                     pressedElevation = 8.dp,
@@ -76,15 +77,16 @@ internal fun SelectedClass(
                 ),
                 shape = MaterialTheme.shapes.medium,
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    contentColor = MaterialTheme.colorScheme.surface
                 ),
                 border = BorderStroke(3.dp, Color.Black),
             ) {
-//                Icon(
-//                    imageVector = Icons.Default.Add,
-//                    contentDescription = "Add Class",
-//                    modifier = Modifier.padding(16.dp).size(30.dp)
-//                )
+                Icon(
+                    painter = painterResource(Res.drawable.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24),
+                    contentDescription = "Add Class",
+                    modifier = Modifier.padding(16.dp).size(30.dp)
+                )
             }
         }
         // Se muestran las clases existentes.
@@ -111,7 +113,7 @@ internal fun SelectedClass(
     // Muestra la ventana modal con el código QR si está disponible.
     state.qr?.let { qr ->
         ShowWindows(
-            name = "Qr Attendance",
+            name = "Asistencia por QR",
             icon = Res.drawable.qr_code_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
             dpSize = DpSize(
                 width = 500.dp,
@@ -123,7 +125,7 @@ internal fun SelectedClass(
             content = {
                 Image(
                     painter = qr,
-                    contentDescription = "Qr Attendance",
+                    contentDescription = "Asistencia por QR",
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -132,7 +134,7 @@ internal fun SelectedClass(
     // Muestra la ventana modal para crear una nueva clase si se ha solicitado.
     state.newClass?.let {
         ShowWindows(
-            name = "New Class",
+            name = "Nueva Clase",
             dpSize = DpSize(
                 width = 1200.dp,
                 height = 720.dp,
@@ -154,7 +156,7 @@ internal fun SelectedClass(
 /**
  * Composable privado que muestra una ventana modal genérica.
  *
- * @param name El nombre de la ventana.
+ * @param nombre El nombre de la ventana.
  * @param icon El icono de la ventana.
  * @param dpSize El tamaño de la ventana.
  * @param close La función que se ejecuta al cerrar la ventana.

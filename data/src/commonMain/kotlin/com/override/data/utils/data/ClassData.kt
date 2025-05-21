@@ -9,6 +9,7 @@ data class ClassData(
     val id: String,
     val name: String,
     val roster: List<Student>, // La lista de estudiantes inscritos (roster)
+    val announcements: List<AnnouncementData> = emptyList(),
     val color: Color,
     val degree: String,
     val career: String,

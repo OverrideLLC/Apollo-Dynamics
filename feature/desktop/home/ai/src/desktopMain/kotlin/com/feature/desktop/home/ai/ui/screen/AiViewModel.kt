@@ -4,20 +4,24 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.feature.desktop.home.ai.utils.WorkData
+import com.google.api.services.classroom.model.Student // Necesario para el nombre del estudiante
 import com.network.interfaces.GeminiRepository
+import com.network.repositories.contract.ClassroomRepository
 import dev.shreyaspatil.ai.client.generativeai.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.swing.Swing
+import kotlinx.coroutines.swing.Swing // Asegúrate que es el dispatcher correcto para tu UI
 import java.io.File
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import com.google.api.services.classroom.model.UserProfile // Para obtener el nombre del estudiante
 
 class AiViewModel(
-    private val repository: GeminiRepository
+    private val repository: GeminiRepository,
+    private val classroomRepository: ClassroomRepository
 ) : ViewModel() {
 
     @Immutable
@@ -189,7 +193,7 @@ class AiViewModel(
         loadData()
     }
 
-    fun announce(message: String) {
+    fun announceClassroom(message: String) {
         _state.update { currentState ->
             currentState.copy(
                 announcement = message,
@@ -217,21 +221,21 @@ class AiViewModel(
         }
     }
 
-    fun getAnnouncements() {
+    fun getAnnouncementsClassroom() {
         _state.update { it.copy(announcements = true) }
     }
 
-    fun showReport() {
+    fun showReportClassroom() {
         _state.update { it.copy(showReport = true) }
     }
 
-    fun updateAssignment(message: String) {
+    fun updateAssignmentClassroom(message: String) {
         _state.update { it.copy(workText = message, isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val description = repository.generateAdvancedPrompt(
                     """
-                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA==========
+                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA NO AGREGUES NINGUNA INSTRUCCION NI EXPLICACION==========
                         [${_state.value.workText}]".
                         nstrucciones:
                         1.Contexto: Describe brevemente el tema o unidad en la que se enmarca la tarea
@@ -248,9 +252,8 @@ class AiViewModel(
                             •Incluye instrucciones claras y numeradas si es necesario.
                             •Adapta el tono y el lenguaje al nivel educativo (por ejemplo, primaria, secundaria, universidad).
                             •Ofrece ejemplos o aclaraciones si es pertinente.
-                            •Menciona cualquier información de apoyo que el estudiante pueda utilizar.
-                            
-                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA RECUERDA QUE ESTO LO VA A VER EL USUARIO FINAL==========
+                            •Menciona cualquier información de apoyo que el estudiante pueda utilizar.                            
+                        =============EN LA RESPUESTA SOLO QUIERO LA DESCRIPCION DE LA TAREA NO AGREGUES NINGUNA INSTRUCCION NI EXPLICACION==========
                     """.trimIndent()
                 )
 
@@ -276,4 +279,154 @@ class AiViewModel(
             }
         }
     }
+
+    fun workerRanking() {
+        _state.update { it.copy(isLoading = true, errorMessage = null) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val courses = classroomRepository.getAllCourses()
+                if (courses.isEmpty()) {
+                    _state.update { it.copy(isLoading = false) }
+                    return@launch
+                }
+
+                var reviewsCount = 0
+                val allStudentProfiles = mutableMapOf<String, UserProfile?>()
+
+                for (course in courses) {
+                    _state.update { it.copy() }
+
+                    // Obtener todos los perfiles de estudiantes del curso una vez para optimizar
+                    // classroomRepository.getCourseStudents(course.id) devuelve List<Student>,
+                    // Student tiene userId y profile (UserProfile).
+                    // Necesitamos una forma de obtener UserProfile por userId de forma eficiente.
+                    // Por ahora, asumiremos que StudentSubmission podría tenerlo o lo obtendremos por separado si es necesario.
+                    // Esta parte puede necesitar ajuste según cómo tu `ClassroomRepository` pueda obtener UserProfile.
+                    // Para simplificar, intentaremos obtenerlo de la sumisión, o usaremos el ID.
+
+                    // Obtener perfiles de estudiantes para el curso actual
+                    val studentsInCourse = classroomRepository.getCourseStudents(course.id)
+                    studentsInCourse.forEach { student ->
+                        if (student.userId != null && student.profile != null) {
+                            allStudentProfiles[student.userId] = student.profile
+                        }
+                    }
+
+
+                    val courseWorks = classroomRepository.getCourseWork(course.id)
+                    if (courseWorks.isEmpty()) {
+                        _state.update { currentState ->
+                            currentState.copy(
+                                messages = currentState.messages + Message(text = "Curso: ${course.name} - No hay tareas para revisar.", isUser = false)
+                            )
+                        }
+                        continue
+                    }
+
+                    for (courseWork in courseWorks) {
+                        _state.update { it.copy() }
+                        val submissions = classroomRepository.getStudentSubmissions(course.id, courseWork.id)
+
+                        if (submissions.isEmpty()) {
+                            _state.update { currentState ->
+                                currentState.copy(
+                                    messages = currentState.messages + Message(text = "Tarea: ${courseWork.title} (Curso: ${course.name}) - No hay entregas.", isUser = false)
+                                )
+                            }
+                            continue
+                        }
+
+                        for (submission in submissions) {
+                            // Intentar obtener el nombre del estudiante
+                            // StudentSubmission tiene userId. Necesitamos obtener el UserProfile.
+                            // La API de Classroom podría no devolver UserProfile directamente en StudentSubmission en todos los casos.
+                            // Si `submission.profile` no existe o es nulo, usamos el `userId`.
+                            // Una mejor aproximación sería tener un método en ClassroomRepository para obtener UserProfile por ID.
+                            val studentProfile = allStudentProfiles[submission.userId]
+                            val studentName = studentProfile?.name?.fullName ?: submission.userId ?: "Alumno Desconocido"
+
+                            // Contenido del trabajo: Usamos alternateLink como placeholder.
+                            // En un caso real, necesitarías descargar y procesar el contenido de este enlace.
+                            val workContentProxy = submission.alternateLink ?: "No hay enlace al trabajo."
+                            // También se podría usar submission.assignmentSubmission.attachments si se quiere procesar archivos.
+                            // Por ahora, nos enfocamos en el enlace como un resumen o descripción.
+
+                            val prompt = """
+                                Por favor, evalúa el siguiente trabajo de un alumno.
+                                Alumno: $studentName
+                                Tarea: ${courseWork.title}
+                                Enlace/Contenido del trabajo (o descripción): $workContentProxy
+
+                                Proporciona:
+                                1. Una descripción muy breve de tu evaluación (máximo 2 frases).
+                                2. Una calificación numérica del 1 al 100.
+                                3. Indica si el trabajo es: Excelente, Bueno, Regular, Necesita Mejorar.
+
+                                Formato de respuesta esperado (solo esto, sin texto adicional):
+                                Evaluación: [Tu descripción aquí]
+                                Calificación: [Número entre 1 y 100]
+                                Desempeño: [Excelente/Bueno/Regular/Necesita Mejorar]
+                            """.trimIndent()
+
+                            try {
+                                _state.update { it.copy() }
+                                val aiResponse = repository.generate(prompt)
+
+                                // Parsear la respuesta de la IA (esto es una simplificación)
+                                val evalRegex = Regex("Evaluación: (.*?)\nCalificación: (.*?)\nDesempeño: (.*)", RegexOption.DOT_MATCHES_ALL)
+                                val matchResult = evalRegex.find(aiResponse)
+
+                                val reviewMessage: String
+                                if (matchResult != null) {
+                                    val (description, grade, performance) = matchResult.destructured
+                                    reviewMessage = """
+                                        Revisión para: $studentName
+                                        Tarea: ${courseWork.title} (Curso: ${course.name})
+                                        Descripción IA: $description
+                                        Calificación IA: $grade
+                                        Desempeño IA: $performance
+                                    """.trimIndent()
+                                } else {
+                                    reviewMessage = "Respuesta de IA para $studentName (Tarea: ${courseWork.title}):\n$aiResponse\n(No se pudo parsear en el formato esperado)"
+                                }
+
+                                _state.update { currentState ->
+                                    currentState.copy(
+                                        messages = currentState.messages + Message(text = reviewMessage, isUser = false)
+                                    )
+                                }
+                                reviewsCount++
+                            } catch (e: Exception) {
+                                val errorMessage = "Error evaluando trabajo de $studentName para '${courseWork.title}': ${e.message}"
+                                println(errorMessage)
+                                _state.update { currentState ->
+                                    currentState.copy(
+                                        messages = currentState.messages + Message(text = errorMessage, isUser = false),
+                                        errorMessage = (currentState.errorMessage ?: "") + "\n" + errorMessage
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                _state.update { it.copy(isLoading = false) }
+
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Error en workerRanking: ${e.localizedMessage ?: "Error desconocido"}"
+                    )
+                }
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    fun announceLocal(string: String) {}
+    fun getAnnouncements() {}
+    fun showReport() {}
+    fun updateAssignment(string: String) {}
 }

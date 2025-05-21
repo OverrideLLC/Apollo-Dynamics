@@ -41,13 +41,13 @@ internal fun AttendanceSheet(
     modifier: Modifier = Modifier,
     viewModel: TakeAttendeesViewModel = koinViewModel()
 ) {
-    // Formatea la fecha seleccionada para mostrarla en el título o muestra "No date selected" si no hay fecha seleccionada.
-    val titleDate = state.selectedDate?.format(dateFormat) ?: "No date selected"
+    // Formatea la fecha seleccionada para mostrarla en el título o muestra "Sin fecha seleccionada" si no hay fecha seleccionada.
+    val titleDate = state.selectedDate?.format(dateFormat) ?: "Sin fecha seleccionada"
     // Estado para almacenar el ID del estudiante seleccionado, que se usa para mostrar la pantalla de detalle del estudiante.
     var idStudent by remember { mutableStateOf<String?>(null) }
     // Título principal de la hoja de asistencia con la fecha seleccionada.
     Text(
-        text = "Attendance List - $titleDate", // Título con fecha
+        text = "Lista de asistencia - $titleDate", // Título con fecha
         style = MaterialTheme.typography.titleLarge,
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(bottom = 8.dp)
@@ -78,7 +78,7 @@ internal fun AttendanceSheet(
             ScreenAction(
                 // Título de la pantalla de detalle.
                 // Icono para cerrar la pantalla de detalle.
-                name = "Student Status",
+                name = "Estado del estudiante",
                 icon = Res.drawable.school_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
                 close = { idStudent = null },
                 content = {

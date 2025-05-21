@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.override.data.utils.data.AnnouncementData
 import com.override.data.utils.data.ClassData
 
 @Entity(tableName = "classes")
@@ -12,7 +13,6 @@ data class ClassEntity(
     @PrimaryKey
     @ColumnInfo(name = "class_id")
     val id: String,
-
     val name: String,
     val color: Color, // Necesita TypeConverter
     val degree: String,
@@ -45,7 +45,8 @@ data class ClassEntity(
     // Función para convertir de vuelta (parcialmente, las listas se cargan por DAO)
     fun toClassData(
         students: List<StudentEntity> = emptyList(),
-        attendance: List<AttendanceEntity> = emptyList()
+        attendance: List<AttendanceEntity> = emptyList(),
+        announcements: List<AnnouncementData> = emptyList()
     ): ClassData {
         // La conversión de attendance es más compleja, requiere agrupar por fecha
         // Esto es solo un ejemplo básico
@@ -56,7 +57,8 @@ data class ClassEntity(
             degree = this.degree,
             career = this.career,
             section = this.section,
-            roster = students.map { it.toStudent() }
+            roster = students.map { it.toStudent() },
+            announcements = announcements
             // attendanceHistory requeriría procesamiento adicional
         )
     }

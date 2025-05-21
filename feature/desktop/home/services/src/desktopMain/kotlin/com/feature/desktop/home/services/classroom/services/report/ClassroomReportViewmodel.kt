@@ -52,7 +52,7 @@ data class CourseReport(
     val studentReports: List<StudentReport>
 )
 
-class ReportViewmodel(
+class ClassroomReportViewmodel(
     private val repositoryClassroom: ClassroomRepository
 ) : ViewModel() {
 

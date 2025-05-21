@@ -19,26 +19,20 @@ enum class Tools(
     TAKE_ATTENDEES(
         icon = Res.drawable.fact_check_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
         route = ToolRoute.TakeAttendees.route,
-        nameString = "Take Attendees",
-        size = DpSize(width = 1200.dp, height = 720.dp)
+        nameString = "Tomar Asistencia", // Traducido de "Take Attendees"
+        size = DpSize(width = 1200.dp, height = 900.dp)
     ),
     ADD_CLASS(
         icon = Res.drawable.add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24,
         route = ToolRoute.AddClass.route,
-        nameString = "Add Class",
+        nameString = "Agregar Clase", // Traducido de "Add Class"
         size = DpSize(width = 1200.dp, height = 720.dp)
     ),
     ADD_STUDENT(
         icon = Res.drawable.person_add_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
         route = ToolRoute.AddStudent.route,
-        nameString = "Add Student",
+        nameString = "Agregar Estudiante", // Traducido de "Add Student"
         size = DpSize(width = 600.dp, height = 850.dp)
 
     ),
-    ASSISTED_GRADING(
-        icon = Res.drawable._103405_book_run_sans_icon,
-        route = ToolRoute.Ratings.route,
-        nameString = "Assisted Grading",
-        size = DpSize(width = 1200.dp, height = 720.dp)
-    )
 }

@@ -16,7 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.feature.desktop.home.HomeViewModel
+import com.feature.desktop.home.screen.HomeState
+import com.feature.desktop.home.screen.HomeViewModel
 import com.feature.desktop.home.task.TaskRoot
 import com.shared.ui.AcrylicCard
 
@@ -24,7 +25,7 @@ import com.shared.ui.AcrylicCard
 internal fun Content(
     padding: PaddingValues,
     viewModel: HomeViewModel,
-    state: HomeViewModel.HomeState,
+    state: HomeState,
     workspace: @Composable () -> Unit,
     toolsScreen: @Composable (Boolean, () -> Unit) -> Unit,
 ) {

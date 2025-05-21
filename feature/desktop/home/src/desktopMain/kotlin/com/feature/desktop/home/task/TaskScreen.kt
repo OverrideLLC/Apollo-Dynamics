@@ -64,6 +64,7 @@ fun TaskScreen(
             ) {
                 IconButton(
                     onClick = {
+                        onDockToLeft()
                     },
                     content = {
                         Icon(
@@ -81,7 +82,7 @@ fun TaskScreen(
                 )
                 IconButton(
                     onClick = {
-                        onDockToLeft()
+
                     },
                     content = {
                         Icon(

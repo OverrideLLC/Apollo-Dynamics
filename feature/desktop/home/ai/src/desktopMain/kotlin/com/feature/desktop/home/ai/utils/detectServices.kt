@@ -14,31 +14,61 @@ internal fun detectServices(
     valueChange: (TextFieldValue) -> Unit
 ) {
     when (detectedService) {
-        "run" -> {
+        "Classroom ejecutar" -> {
             viewModel.runCode(message)
             valueChange(TextFieldValue(""))
             onNewMessage("")
         }
 
-        "classroom announce" -> {
-            viewModel.announce(message)
+        "Classroom anunciar" -> {
+            viewModel.announceClassroom(message)
             valueChange(TextFieldValue(""))
             onNewMessage("")
         }
 
-        "classroom announcements" -> {
+        "Classroom anuncios" -> {
+            viewModel.getAnnouncementsClassroom()
+            valueChange(TextFieldValue(""))
+            onNewMessage("")
+        }
+
+        "Classroom reporte" -> {
+            viewModel.showReportClassroom()
+            valueChange(TextFieldValue(""))
+            onNewMessage("")
+        }
+
+        "Classroom subir tarea" -> {
+            viewModel.updateAssignmentClassroom(message)
+            valueChange(TextFieldValue(""))
+            onNewMessage("")
+        }
+
+        "Classroom analizar trabajo" -> {
+            viewModel.workerRanking()
+            valueChange(TextFieldValue(""))
+            onNewMessage("")
+        }
+
+        "anunciar" -> {
+            viewModel.announceLocal(message)
+            valueChange(TextFieldValue(""))
+            onNewMessage("")
+        }
+
+        "anuncios" -> {
             viewModel.getAnnouncements()
             valueChange(TextFieldValue(""))
             onNewMessage("")
         }
 
-        "classroom report" -> {
+        "reporte" -> {
             viewModel.showReport()
             valueChange(TextFieldValue(""))
             onNewMessage("")
         }
 
-        "classroom update assignment" -> {
+        "subir tarea" -> {
             viewModel.updateAssignment(message)
             valueChange(TextFieldValue(""))
             onNewMessage("")

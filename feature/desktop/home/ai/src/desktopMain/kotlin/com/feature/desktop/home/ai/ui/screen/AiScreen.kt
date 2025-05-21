@@ -22,7 +22,7 @@ internal fun Screen(viewModel: AiViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
     val initiallyVisible = state.messages.isNotEmpty()
     var showFileChooser by remember { mutableStateOf(false) }
-    val text = "Hello, how can I help you?"
+    val text = "Hola, ¿en qué puedo ayudarte?"
     var displayedText by remember(
         text,
         initiallyVisible
