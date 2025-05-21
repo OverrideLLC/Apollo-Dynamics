@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,41 +15,50 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.singleWindowApplication
 import androidx.navigation.compose.rememberNavController
 import com.feature.desktop.api.navhost.NavigationStart
-import com.shared.resources.LogoBlancoQuickness
+import com.network.init.initGcloudFromPath
 import com.shared.resources.Res
+import com.shared.resources.TTNegro
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinContext
 import org.quickness.dynamics.di.initKoin
-import org.quickness.dynamics.ui.components.TopWindows
 import org.quickness.dynamics.ui.theme.QuicknessDynamicsTheme
 
 fun main() = application {
     initKoin()
+    rememberCoroutineScope().launch {
+        initGcloudFromPath()
+    }
+
+    val viewModel = ApplicationViewModel()
+    val state by viewModel.state.collectAsState()
     val windowState = rememberWindowState(
         width = 1280.dp,
         height = 720.dp,
         placement = WindowPlacement.Maximized
     )
+
     Window(
-        onCloseRequest = ::exitApplication,
-        icon = painterResource(Res.drawable.LogoBlancoQuickness),
-        title = "Quickness Dynamics",
+        onCloseRequest = { viewModel.update { copy(isOpened = false) } },
+        icon = painterResource(Res.drawable.TTNegro),
+        title = state.name,
         state = windowState,
         resizable = true,
-        undecorated = true,
+        undecorated = false,
+        transparent = false,
     ) {
         KoinContext {
             QuicknessDynamicsTheme(
-                darkTheme = false
+                darkTheme = !state.darkTheme
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize().background(colorScheme.background),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TopWindows(windowState = windowState) { windowState.isMinimized = true }
                     NavigationStart(
                         navController = rememberNavController()
                     )

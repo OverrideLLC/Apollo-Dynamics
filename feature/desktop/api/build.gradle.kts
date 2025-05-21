@@ -15,7 +15,10 @@ kotlin {
                 implementation(projects.shared.utils)
                 implementation(projects.feature.desktop.start)
                 implementation(projects.feature.desktop.home)
+                implementation(projects.feature.desktop.home.ai)
+                implementation(projects.feature.desktop.home.tools)
                 implementation(projects.network)
+                implementation(projects.data)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(compose.runtime)

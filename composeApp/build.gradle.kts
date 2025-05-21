@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -18,6 +17,7 @@ kotlin {
             implementation(projects.feature.desktop.api)
             implementation(projects.shared.resources)
             implementation(projects.network)
+            implementation(projects.data)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -34,6 +34,11 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
+            implementation("com.google.firebase:firebase-admin:9.4.3")
+            implementation("com.google.guava:guava:31.1-jre")
+            implementation(project.dependencies.platform(libs.google.cloud.bom))
+            implementation(libs.google.cloud.firestore)
+            implementation(libs.google.cloud.secretmanager)
         }
     }
 }
